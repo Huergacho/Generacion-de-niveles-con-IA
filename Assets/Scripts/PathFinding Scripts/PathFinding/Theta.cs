@@ -1,11 +1,12 @@
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
-using System;
-
-public class Astar<T>
+class Theta<T> 
 {
-    public List<T> GetPath(T startPoint, Func<T, bool> condition, Func<T, List<T>> getNeighbours, Func<T, T, float> getConectionCost, Func<T, float> heuristic, int watchDog = 500)
+    public List<T> GetPath(T startPoint, Func<T, bool> condition, Func<T, List<T>> getNeighbours, Func<T, T, float> getConectionCost, Func<T, float> heuristic,Func<T,T,bool> inView, int watchDog = 500)
     {
         PriorityQueue<T> pending = new PriorityQueue<T>();
 
@@ -17,8 +18,7 @@ public class Astar<T>
 
         pending.Enqueue(startPoint, 0);
         cost[startPoint] = 0;
-        //cost.Add(startPoint, 0);
-        while (!pending.IsEmpty && watchDog > 0)
+        while (!pending.IsEmpty || watchDog <= 0)
         {
             T curr = pending.Dequeue();
             watchDog--;
@@ -36,11 +36,16 @@ public class Astar<T>
                     {
                         continue;
                     }
-                    var neightCost = cost[curr] + getConectionCost(curr, neight);
+                    T currParent = curr;
+                    if(parents.ContainsKey(curr) && inView(parents[curr],neight))
+                    {
+                        currParent = parents[curr];
+                    }
+                    var neightCost = cost[currParent] + getConectionCost(currParent, neight);
                     if (cost.ContainsKey(neight) && cost[neight] <= neightCost) { continue; }
                     cost[neight] = neightCost;
 
-                    parents[neight] = curr;
+                    parents[neight] = currParent;
                     pending.Enqueue(neight, neightCost + heuristic(neight));
                 }
             }
@@ -59,3 +64,4 @@ public class Astar<T>
         return path;
     }
 }
+

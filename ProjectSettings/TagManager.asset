@@ -13,10 +13,10 @@ TagManager:
   - UI
   - Node
   - Crash
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Enviroment
+  - Obstacles
   - 
   - 
   - 

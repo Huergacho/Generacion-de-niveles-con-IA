@@ -9,12 +9,14 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    [SerializeField]private int itemsPicked;
-    [SerializeField] private int maxItems;
+    [SerializeField]private int actualEnemies;
+    [SerializeField] private int maxEnemies;
     [SerializeField] private PlayerController _player;
     [SerializeField] private TextMeshProUGUI tmPro;
     private bool isPlayerAlive;
     public bool IsPlayerAlive => isPlayerAlive;
+    [SerializeField] private Dictionary<Scene, float> levels = new Dictionary<Scene, float>();
+
     private void Awake()
     {
         Instance = this;
@@ -26,11 +28,6 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        UiItems();
-        if(maxItems <= itemsPicked)
-        {
-            WinGame();
-        }
         if (Input.GetKeyDown(KeyCode.R))
         {
             RestartGame();
@@ -40,13 +37,13 @@ public class GameManager : MonoBehaviour
             Application.Quit();
         }
     }
-    public void SetMaxItems(int maxItemsToSet)
+    public void SetMaxEnemies(int maxItemsToSet)
     {
-        maxItems = maxItemsToSet;
+        maxEnemies = maxItemsToSet;
     }
-    public void AddItem()
+    public void KilledEnemie()
     {
-        itemsPicked++;
+        actualEnemies++;
     }
     private void WinGame()
     {
@@ -71,6 +68,15 @@ public class GameManager : MonoBehaviour
     }
     public void UiItems()
     {
-        tmPro.text = itemsPicked.ToString() + " / " + maxItems.ToString();
+        tmPro.text = actualEnemies.ToString() + " / " + maxEnemies.ToString();
     }
+    public void LevelChange()
+    {
+        var levelSelected = MyEngine.MyRandom.GetRandomWeight(levels);
+
+        SceneManager.LoadScene(levelSelected.buildIndex);
+
+        levels.Remove(levelSelected);
+    }
+
 }
