@@ -38,7 +38,7 @@ public class ObstacleAvoidance
     }
     public Vector3 GetDir()
     {
-        
+
         Collider[] obj = Physics.OverlapSphere(_self.position, _properties.Radius, _properties.ObstacleLayers);
         Collider closestObj = null;
         float nearDistance = 0;
