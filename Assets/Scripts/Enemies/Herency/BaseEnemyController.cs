@@ -41,7 +41,7 @@ public class BaseEnemyController : MonoBehaviour
     }
     protected bool CheckForPlayer()
     {
-        return GameManager.Instance.IsPlayerAlive;
+        return GameManager.instance.IsPlayerAlive;
     }
     protected virtual void DieActions()
     {

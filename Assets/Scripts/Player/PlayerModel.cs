@@ -22,8 +22,10 @@ public class PlayerModel : MonoBehaviour,IVel
         _gun = GetComponent<LazerGun>();
         _rb = GetComponent<Rigidbody>();
     }
+
     private void Start()
     {
+        GameManager.instance.SetPlayer(this);
     }
     #endregion
 
@@ -79,8 +81,8 @@ public class PlayerModel : MonoBehaviour,IVel
         controller._onShoot += Shoot;
         controller._onMove += Move;
     }
-    public void DestroyActions()
+    public void DestroyActions() //TODO make LifeController check this
     {
-        GameManager.Instance.PlayerIsDead();
+        GameManager.instance.PlayerIsDead();
     }
 }

@@ -8,14 +8,14 @@ public class LevelEnemyManager : MonoBehaviour
     [SerializeField] private Transform[] levelWayPoints;
     private void Start()
     {
-        GameManager.Instance.SetMaxEnemies(enemies.Length);
-        GameManager.Instance.UiItems();
+        GameManager.instance.SetMaxEnemies(enemies.Length);
+        GameManager.instance.UiItems();
 
     }
     public void DiscountEnemie()
     {
-        GameManager.Instance.KilledEnemie();
-        GameManager.Instance.UiItems();
+        GameManager.instance.KilledEnemie();
+        GameManager.instance.UiItems();
     }
 
 }
