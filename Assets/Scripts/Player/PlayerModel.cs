@@ -4,23 +4,29 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerModel : MonoBehaviour,IVel
 {
-    [SerializeField] private PlayerStats _stats;
-    [SerializeField] private LazerGun _gun;
+    [SerializeField] private ActorStats _actorStats;
     [SerializeField] private Transform _firePoint;
-    public PlayerStats Stats => _stats;
+
+    private LazerGun _gun;
     private Camera _camera;
     private Rigidbody _rb;
+
+    //Propierties
+    public ActorStats ActorStats => _actorStats;
+    public LifeController LifeController { get; private set; }
     public float GetVel => _rb.velocity.magnitude;
-
     public Vector3 GetFoward => _rb.velocity.normalized;
-
     public Transform GetTarget => transform;
+
     #region UnityMethods
     private void Awake()
     {
         _camera = Camera.main;
         _gun = GetComponent<LazerGun>();
         _rb = GetComponent<Rigidbody>();
+        LifeController = GetComponent<LifeController>();
+        LifeController.SetMaxLife(_actorStats.MaxLife);
+        LifeController.OnDie += OnDie;
     }
 
     private void Start()
@@ -44,7 +50,7 @@ public class PlayerModel : MonoBehaviour,IVel
         if (direction != Vector3.zero)
         {
             var rotDestiny = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotDestiny, _stats.RotSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotDestiny, ActorStats.RotSpeed * Time.deltaTime);
         }
     }
     private Vector3 GetMousePosition()
@@ -74,14 +80,15 @@ public class PlayerModel : MonoBehaviour,IVel
         _gun.Shoot(_firePoint.position,(GetMousePosition() - new Vector3(_firePoint.position.x,0,_firePoint.position.z)).normalized);
     }
     #endregion
+    
     public void SuscribeEvents(PlayerController controller)
     {
 
-        controller._onDie += DestroyActions;
         controller._onShoot += Shoot;
         controller._onMove += Move;
     }
-    public void DestroyActions() //TODO make LifeController check this
+
+    public void OnDie()
     {
         GameManager.instance.PlayerIsDead();
     }

@@ -32,7 +32,7 @@ public class SecurityEnemyController : BaseEnemyController
         _enemyModel = GetComponent<SecurityEnemyModel>();
         //_enemyView = GetComponent<SecurityEnemyView>();
         lifeController = GetComponent<LifeController>();
-        lifeController.actionToDo += DieActions;
+        lifeController.OnDie += DieActions;
     }
     protected override void Start()
     {

@@ -16,7 +16,7 @@ public class BaseEnemyController : MonoBehaviour
     {
         _lineOfSight = GetComponent<LineOfSight>();
         lifeController = GetComponent<LifeController>();
-        lifeController.actionToDo += DieActions;
+        lifeController.OnDie += DieActions;
         InitBehaviours();
         _obstacleAvoidance = new ObstacleAvoidance(transform, _actualTarget, obstacleAvoidanceSO, behaviours);
     }

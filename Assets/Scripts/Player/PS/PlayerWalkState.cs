@@ -6,43 +6,65 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class PlayerWalkState<T> : State<T>
 {
-    T _idleInput;
-    T _runInput;
-    Action<Vector2, float> _onWalk;
-    Action _onShoot;
-    Action _animation;
-    PlayerInputs _playerInputs;
+    private T _idleInput;
+    private T _runInput;
     private float _desiredSpeed;
-    public PlayerWalkState(T idleInput, T runInput, Action<Vector2,float> onWalk, Action onShoot, PlayerInputs playerInputs, float desiredSpeed,Action animation)
+
+    private Action<Vector2, float> _onWalk;
+    private Action _onShoot;
+    private Action _animation;
+
+    public PlayerWalkState(T idleInput, T runInput, Action<Vector2,float> onWalk, Action onShoot, float desiredSpeed, Action animation)
     {
         _idleInput = idleInput;
         _runInput = runInput;
         _onWalk = onWalk;
         _onShoot = onShoot;
-        _playerInputs = playerInputs;
         _desiredSpeed = desiredSpeed;
         _animation = animation;
     }
+
     public override void Execute()
     {
-        _playerInputs.UpdateInputs();
+        GameManager.instance.InputManager.PlayerUpdate();
+    }
 
-        if (!_playerInputs.IsMoving())
+    public override void Awake()
+    {
+        //Nos suscribimos a los eventos
+        GameManager.instance.InputManager.OnMove += OnMove;
+        GameManager.instance.InputManager.OnAttack += OnShoot;
+        GameManager.instance.InputManager.OnShiftSpeed += OnRun;
+    }
+
+    private void OnMove(Vector3 movement)
+    {
+        if(movement == Vector3.zero) // //if there is no movement... 
         {
             _parentFSM.Transition(_idleInput);
             return;
         }
-        if (_playerInputs.IsRunning())
-        {
-            _parentFSM.Transition(_runInput);
-            return;
-        }
-        if (_playerInputs.isShooting())
-        {
-            _onShoot?.Invoke();
-        }
-        _onWalk?.Invoke(new Vector2(_playerInputs.GetH,_playerInputs.GetV), _desiredSpeed);
+
+        _onWalk?.Invoke(new Vector2(movement.x, movement.z), _desiredSpeed);
         _animation?.Invoke();
+    }
+
+    private void OnRun(bool isRunning)
+    {
+        if(isRunning)
+            _parentFSM.Transition(_runInput);
+    }
+
+    private void OnShoot()
+    {
+        _onShoot?.Invoke();
+    }
+
+    public override void Sleep()
+    {
+        GameManager.instance.InputManager.OnMove -= OnMove;
+        GameManager.instance.InputManager.OnAttack -= OnShoot;
+        GameManager.instance.InputManager.OnShiftSpeed -= OnRun;
     }
 }
 

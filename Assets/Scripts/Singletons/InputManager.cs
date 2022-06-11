@@ -6,6 +6,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     #region KeyCodes
+    [SerializeField] private KeyCode shiftSpeed = KeyCode.LeftShift;
     [SerializeField] private KeyCode attack = KeyCode.Mouse0;
     [SerializeField] private KeyCode pause = KeyCode.Escape;
     
@@ -19,6 +20,7 @@ public class InputManager : MonoBehaviour
     public Action OnPause;
     public Action OnAttack;
     public Action<Vector3> OnMove;
+    public Action<bool> OnShiftSpeed;
     #endregion
 
     #region Unity
@@ -29,11 +31,11 @@ public class InputManager : MonoBehaviour
 
     public void PlayerUpdate()
     {
-        if (!GameManager.instance.IsGamePaused)
-        {
-            CheckAttack();
-            CheckMovement();
-        }
+        if (GameManager.instance.IsGamePaused) return;
+
+        CheckAttack();
+        CheckMovement();
+        CheckShiftSpeed();
     }
     #endregion
 
@@ -45,9 +47,19 @@ public class InputManager : MonoBehaviour
         IsMoving = (vertical != 0 || horizontal != 0) ? true : false;
         OnMove?.Invoke(new Vector3(horizontal, 0, vertical));
     }
+
+    private void CheckShiftSpeed()
+    {
+        if (Input.GetKeyDown(shiftSpeed))
+            OnShiftSpeed?.Invoke(true);
+        
+        if(Input.GetKeyUp(shiftSpeed))
+            OnShiftSpeed?.Invoke(false);
+    }
+
     private void CheckAttack()
     {
-        if (Input.GetKeyDown(attack))
+        if (Input.GetKey(attack))
             OnAttack?.Invoke();
     }
 

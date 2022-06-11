@@ -11,16 +11,18 @@ public class PlayerController : MonoBehaviour
         Walk,
         Run
     }
-    PlayerModel _playerModel;
-    PlayerInputs _playerInputs;
-    PlayerView _playerView;
-    FSM<PlayerHelper> _fsm;
+
+    private PlayerModel _playerModel;
+    private PlayerInputs _playerInputs;
+    private PlayerView _playerView;
+    private FSM<PlayerHelper> _fsm;
+
+    //EVENTS
     public event Action _onIdle;
     public event Action<Vector2,float> _onMove;
     public event Action _onShoot;
     public event Action _onDie;
 
-    private LifeController lifeController;
     private void Awake()
     {
         _playerInputs = GetComponent<PlayerInputs>();
@@ -28,18 +30,19 @@ public class PlayerController : MonoBehaviour
         _playerView = GetComponent<PlayerView>();
         InitFSM();
     }
+
     private void Start()
     {
-        lifeController = GetComponent<LifeController>();
-        lifeController.actionToDo = DieActions;
+        _playerModel.LifeController.OnDie = DieActions;
         _playerModel.SuscribeEvents(this);
         _playerView.SuscribeEvents(this);
     }
+
     private void InitFSM()
     {
-        var idle = new PlayerIdleState<PlayerHelper>(PlayerHelper.Walk, MovementCommand, ShootCommand, _playerInputs,_playerView.Idle);
-        var walk = new PlayerWalkState<PlayerHelper>(PlayerHelper.Idle, PlayerHelper.Run, MovementCommand, ShootCommand, _playerInputs, _playerModel.Stats.WalkSpeed,_playerView.Move);
-        var run = new PlayerRunState<PlayerHelper>(PlayerHelper.Walk, MovementCommand, ShootCommand, _playerInputs, _playerModel.Stats.RunSpeed,_playerView.Move);
+        var idle = new PlayerIdleState<PlayerHelper>(PlayerHelper.Walk, MovementCommand, ShootCommand, _playerView.Idle);
+        var walk = new PlayerWalkState<PlayerHelper>(PlayerHelper.Idle, PlayerHelper.Run, MovementCommand, ShootCommand, _playerModel.ActorStats.WalkSpeed,_playerView.Move);
+        var run = new PlayerRunState<PlayerHelper>(PlayerHelper.Walk,PlayerHelper.Run, PlayerHelper.Idle, MovementCommand, ShootCommand, _playerModel.ActorStats.RunSpeed,_playerView.Move);
 
         idle.AddTransition(PlayerHelper.Walk, walk);
         idle.AddTransition(PlayerHelper.Run, run);
@@ -48,26 +51,29 @@ public class PlayerController : MonoBehaviour
         walk.AddTransition(PlayerHelper.Run, run);
 
         run.AddTransition(PlayerHelper.Walk, walk);
+        run.AddTransition(PlayerHelper.Idle, idle);
 
         _fsm = new FSM<PlayerHelper>(idle);
     }
+
     private void Update()
     {
         _fsm.UpdateState();
-
     }
 
     private void MovementCommand(Vector2 dir, float desiredSpeed)
     {
         _onMove?.Invoke(dir, desiredSpeed);
     }
+
     private void ShootCommand()
     {
         _onShoot?.Invoke();
     }
+
     private void DieActions()
     {
         _onDie?.Invoke();
+        GameManager.instance.PlayerIsDead();
     }
-
 }

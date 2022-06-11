@@ -6,35 +6,50 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class PlayerIdleState<T> : State<T>
 {
-    T _walkInput;
+    private T _walkInput;
     private Action<Vector2, float> _onIdle;
-    private PlayerInputs _playerInputs;
-    Action _onShoot;
-    Action _animation;
-    public PlayerIdleState(T walkInput, Action<Vector2,float> onIdle, Action onShoot, PlayerInputs playerInputs, Action animation)
+    private Action _onShoot;
+    private Action _animation;
+    public PlayerIdleState(T walkInput, Action<Vector2,float> onIdle, Action onShoot, Action animation)
     {
         _walkInput = walkInput;
         _onIdle = onIdle;
-        _playerInputs = playerInputs;
         _onShoot = onShoot;
         _animation = animation;
     }
+
+    public override void Awake()
+    {
+        //Nos suscribimos a los eventos
+        GameManager.instance.InputManager.OnMove += OnMove;
+        GameManager.instance.InputManager.OnAttack += OnShoot;
+    }
+
     public override void Execute()
     {
-        _playerInputs.UpdateInputs();
+        GameManager.instance.InputManager.PlayerUpdate(); //Checkeo de inputs
+    }
 
-        if (_playerInputs.IsMoving())
+    private void OnMove(Vector3 move)
+    {
+        if(move != Vector3.zero) //if it´s moving....
         {
             _parentFSM.Transition(_walkInput);
             return;
         }
-        if (_playerInputs.isShooting())
-        {
-            _onShoot?.Invoke();
-        }
-        _onIdle?.Invoke(new Vector2(_playerInputs.GetH, _playerInputs.GetV), 0);
+
+        _onIdle?.Invoke(new Vector2(move.x, move.z), 0); //TODO: ...facu porque invoca algo aca? digoo.. esta quieto. 
         _animation?.Invoke();
     }
 
+    private void OnShoot()
+    {
+        _onShoot?.Invoke();
+    }
 
+    public override void Sleep()
+    {
+        GameManager.instance.InputManager.OnAttack -= OnShoot;
+        GameManager.instance.InputManager.OnMove -= OnMove;
+    }
 }
