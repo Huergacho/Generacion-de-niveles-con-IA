@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
+
+[RequireComponent(typeof(InputManager))]
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
@@ -17,12 +15,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private string menuScene = "MainMenu";
     [SerializeField] private string victoryScene = "Victory";
     [SerializeField] private string gameOverScene = "GameOver";
-
-
-    [Header("to move")] //MOVE SOMEWHERE ELSE
-    [SerializeField]private int actualEnemies;
-    [SerializeField] private int maxEnemies;
-    [SerializeField] private TextMeshProUGUI tmPro;
     
     private bool isPlayerAlive;
 
@@ -32,6 +24,7 @@ public class GameManager : MonoBehaviour
     public string MenuScene => menuScene;
     public string LevelScene => levelScene;
     public bool IsPlayerAlive => isPlayerAlive;
+    public InputManager InputManager { get; private set; }
 
     //Events
     public Action OnPause;
@@ -48,26 +41,8 @@ public class GameManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-    }
 
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.R)) 
-        //{
-        //    RestartGame();
-        //}
-        if (Input.GetKeyDown(KeyCode.Escape)) //TODO: Make Input Controller??
-        {
-            Pause(!IsGamePaused);
-        }
-    }
-    public void SetMaxEnemies(int maxItemsToSet)
-    {
-        maxEnemies = maxItemsToSet;
-    }
-    public void KilledEnemie()
-    {
-        actualEnemies++;
+        InputManager = GetComponent<InputManager>();
     }
 
     public void PlayerIsDead()
@@ -76,15 +51,6 @@ public class GameManager : MonoBehaviour
         GameOver();
     }
 
-    //private void RestartGame() //Moved to PauseMenu. 
-    //{
-    //    SceneManager.LoadScene(0);
-    //}
-
-    public void UiItems()
-    {
-        tmPro.text = actualEnemies.ToString() + " / " + maxEnemies.ToString();
-    }
     public void LevelChange()
     {
         var levelSelected = MyEngine.MyRandom.GetRandomWeight(levels);
@@ -97,7 +63,7 @@ public class GameManager : MonoBehaviour
     public void Pause(bool value)
     {
         IsGamePaused = value;
-        //SetCursorActive(value);
+        //SetCursorActive(value); //TODO: maybe change cursor look on not paused?
         if (value)
         {
             Time.timeScale = 0;
@@ -133,5 +99,4 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(gameOverScene);
     }
-
 }
