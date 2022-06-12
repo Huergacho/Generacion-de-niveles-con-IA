@@ -4,15 +4,30 @@ using UnityEngine;
 
 public class HUDManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject hud;
+    [SerializeField] private UIBarController lifeBar;
+
     void Start()
     {
-        
+        GameManager.instance.OnPause += OnPause;
+        GameManager.instance.OnPlayerInit += OnPlayerAssing;
+        GameManager.instance.Pause(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnPause()
     {
-        
+        hud.SetActive(!GameManager.instance.IsGamePaused);
+        pauseMenu.SetActive(GameManager.instance.IsGamePaused);
+    }
+
+    private void OnPlayerAssing(PlayerModel playerModel)
+    {
+        lifeBar.SetOwner(playerModel);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.instance.OnPause -= OnPause;
     }
 }

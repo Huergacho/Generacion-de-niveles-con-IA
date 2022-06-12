@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerModel : MonoBehaviour,IVel
+public class PlayerModel : EntityModel, IVel
 {
-    [SerializeField] private ActorStats _actorStats;
     [SerializeField] private Transform _firePoint;
 
     private LazerGun _gun;
@@ -12,21 +11,16 @@ public class PlayerModel : MonoBehaviour,IVel
     private Rigidbody _rb;
 
     //Propierties
-    public ActorStats ActorStats => _actorStats;
-    public LifeController LifeController { get; private set; }
     public float GetVel => _rb.velocity.magnitude;
     public Vector3 GetFoward => _rb.velocity.normalized;
-    public Transform GetTarget => transform;
 
     #region UnityMethods
-    private void Awake()
-    {
+    protected override void Awake()
+    { 
+        base.Awake();
         _camera = Camera.main;
         _gun = GetComponent<LazerGun>();
         _rb = GetComponent<Rigidbody>();
-        LifeController = GetComponent<LifeController>();
-        LifeController.SetMaxLife(_actorStats.MaxLife);
-        LifeController.OnDie += OnDie;
     }
 
     private void Start()
@@ -67,7 +61,7 @@ public class PlayerModel : MonoBehaviour,IVel
             }
             else
             {
-                return target;
+                return target; //TODO: Facuu que onda esto???
             }
         }
         else
@@ -83,12 +77,11 @@ public class PlayerModel : MonoBehaviour,IVel
     
     public void SuscribeEvents(PlayerController controller)
     {
-
         controller._onShoot += Shoot;
         controller._onMove += Move;
     }
 
-    public void OnDie()
+    public virtual void OnDie()
     {
         GameManager.instance.PlayerIsDead();
     }

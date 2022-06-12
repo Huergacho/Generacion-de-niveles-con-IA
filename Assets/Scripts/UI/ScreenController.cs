@@ -13,9 +13,9 @@ public class ScreenController : MonoBehaviour
 
     void Awake()
     {
-        levelButton.onClick.AddListener(OnClickLevelHandler);
-        menuButton.onClick.AddListener(OnClickMenuHandler);
-        quitButton.onClick.AddListener(OnClickQuitHandler);
+        levelButton?.onClick.AddListener(OnClickLevelHandler);
+        menuButton?.onClick.AddListener(OnClickMenuHandler);
+        quitButton?.onClick.AddListener(OnClickQuitHandler);
     }
 
     private void OnClickLevelHandler()
@@ -32,5 +32,12 @@ public class ScreenController : MonoBehaviour
     {
         print("Cerramos el juego");
         Application.Quit();
+    }
+
+    private void OnDestroy()
+    {
+        levelButton?.onClick.RemoveListener(OnClickLevelHandler);
+        menuButton?.onClick.RemoveListener(OnClickMenuHandler);
+        quitButton?.onClick.RemoveListener(OnClickQuitHandler);
     }
 }

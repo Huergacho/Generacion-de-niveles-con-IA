@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     }
 
     private PlayerModel _playerModel;
-    private PlayerInputs _playerInputs;
     private PlayerView _playerView;
     private FSM<PlayerHelper> _fsm;
 
@@ -25,7 +24,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        _playerInputs = GetComponent<PlayerInputs>();
         _playerModel = GetComponent<PlayerModel>();
         _playerView = GetComponent<PlayerView>();
         InitFSM();

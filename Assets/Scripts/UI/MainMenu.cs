@@ -16,7 +16,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button quitButton;
     [SerializeField] private Button goBackButton;
 
-
     void Awake()
     {
         playButton.onClick.AddListener(OnClickPlayHandler);
@@ -48,6 +47,7 @@ public class MainMenu : MonoBehaviour
         menu.SetActive(false);
         credits.SetActive(true);
     }
+
     private void OnClickGoBackHandler()
     {
         GoBack();
@@ -62,5 +62,9 @@ public class MainMenu : MonoBehaviour
     private void OnDestroy()
     {
         GameManager.instance.OnPause -= GoBack;
+        playButton.onClick.RemoveListener(OnClickPlayHandler);
+        creditsButton.onClick.RemoveListener(OnClickCreditsHandler);
+        quitButton.onClick.RemoveListener(OnClickQuitHandler);
+        goBackButton.onClick.RemoveListener(OnClickGoBackHandler);
     }
 }

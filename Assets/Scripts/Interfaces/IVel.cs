@@ -8,7 +8,6 @@ public interface IVel
 {
     float GetVel { get; }
     Vector3 GetFoward { get; }
-
-    Transform GetTarget { get; }
+    Transform transform { get; }
 }
 

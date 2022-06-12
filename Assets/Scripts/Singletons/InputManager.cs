@@ -36,6 +36,11 @@ public class InputManager : MonoBehaviour
         CheckAttack();
         CheckMovement();
         CheckShiftSpeed();
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            GameManager.instance.Player?.LifeController.TakeDamage(10f);
+        }
     }
     #endregion
 

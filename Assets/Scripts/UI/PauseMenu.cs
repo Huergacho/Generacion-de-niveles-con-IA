@@ -15,28 +15,36 @@ public class PauseMenu : MonoBehaviour
 
     void Awake()
     {
-        resumeButton?.onClick.AddListener(OnResume);
-        restartButton?.onClick.AddListener(OnRestart);
-        menuButton?.onClick.AddListener(OnMenu);
-        quitButton?.onClick.AddListener(OnQuit);
+        resumeButton?.onClick.AddListener(OnClickResumeHandler);
+        restartButton?.onClick.AddListener(OnClickRestartHandler);
+        menuButton?.onClick.AddListener(OnClickMenuHandler);
+        quitButton?.onClick.AddListener(OnClickQuitHandler);
     }
 
-    private void OnResume()
+    private void OnClickResumeHandler()
     {
         GameManager.instance.Pause(false);
     }
 
-    private void OnRestart()
+    private void OnClickRestartHandler()
     {
         SceneManager.LoadScene(GameManager.instance.LevelScene);
     }
 
-    private void OnMenu()
+    private void OnClickMenuHandler()
     {
         SceneManager.LoadScene(GameManager.instance.MenuScene);
     }
 
-    private void OnQuit()
+    private void OnDestroy()
+    {
+        resumeButton?.onClick.RemoveListener(OnClickResumeHandler);
+        restartButton?.onClick.RemoveListener(OnClickRestartHandler);
+        menuButton?.onClick.RemoveListener(OnClickMenuHandler);
+        quitButton?.onClick.RemoveListener(OnClickQuitHandler);
+    }
+
+    private void OnClickQuitHandler()
     {
         print("Quit Game");
         Application.Quit();

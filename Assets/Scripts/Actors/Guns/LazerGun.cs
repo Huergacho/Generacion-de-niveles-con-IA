@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class LazerGun : MonoBehaviour
 {
-    [SerializeField] private BulletStats _bulletStats;
+    [SerializeField] private BulletStats _bulletStats; //TODO make lazer gun stats into a scriptable object
     [SerializeField] private LayerMask contactLayer;
     [SerializeField] private float shootCooldown;
     [SerializeField] private TrailRenderer bulletTrail;

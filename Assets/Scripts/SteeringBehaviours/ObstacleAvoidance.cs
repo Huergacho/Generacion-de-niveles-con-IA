@@ -84,7 +84,7 @@ public class ObstacleAvoidance
     public void SetTarget(IVel target)
     {
         _target = target;
-        _actualBehaviour.SetTarget(target.GetTarget);
+        _actualBehaviour.SetTarget(target.transform);
     }
     public void SetTarget(Transform target)
     {
