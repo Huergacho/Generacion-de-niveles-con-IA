@@ -5,12 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "IAStats", menuName = "Stats/IAStats", order = 2)]
 public class IAStats : ScriptableObject
 {
-    public LayerMask TargetLayer => _targetLayer;
-    [SerializeField] private LayerMask _targetLayer;
-
-    public LayerMask ObstacleLayers => obstacleLayers;
-    [SerializeField] private LayerMask obstacleLayers;
-
     public float DetectionDistance => _detectionDistance;
     [SerializeField] private float _detectionDistance = 5;
 

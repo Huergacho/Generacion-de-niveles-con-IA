@@ -6,49 +6,37 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class EnemyShootState<T> : State<T>
 {
-    private Action _onShoot;
-    private Action<Vector3, float> _onMove;
-    private Action<Vector3> _onRotate;
+    private IArtificialMovement _ia;
     private INode _root;
     private SteeringType _obsEnum;
-    private ObstacleAvoidance _obstacleAvoidance;
     private Func<bool> _onDetect;
     private Func<bool> _onCheckDistance;
-    Transform _self;
-    float _desiredSpeed;
-    public EnemyShootState(Action onShoot, Action<Vector3, float> onMove, Action<Vector3> onRotate, INode root,ObstacleAvoidance obstacleAvoidance ,SteeringType steering, Func<bool> onDetect,Func<bool> onCheckDistance, Transform self, float desiredSpeed)
+
+    public EnemyShootState(IArtificialMovement ia, INode root, SteeringType steering, Func<bool> onDetect, Func<bool> onCheckDistance)
     {
-        _onShoot = onShoot;
+        _ia = ia;
         _root = root;
         _obsEnum = steering;
-        _obstacleAvoidance = obstacleAvoidance;
         _onDetect = onDetect;
         _onCheckDistance = onCheckDistance;
-        _onMove = onMove;
-        _self = self;
-        _onRotate = onRotate;
-        _desiredSpeed = desiredSpeed;
-    }
-    public override void Awake()
-    {
-        _obstacleAvoidance.SetActualBehaviour(_obsEnum);
-    }
-    public override void Execute()
-    {
-        if (!_onDetect())
-        {
-            _root.Execute();
-            return;
-        }
-        if (!_onCheckDistance())
-        {
-            _root.Execute();
-            return;
-        }
-        _onMove?.Invoke(_self.forward, _desiredSpeed);
-        _onRotate?.Invoke(_obstacleAvoidance.GetFixedDir());
-        _onShoot?.Invoke();
     }
 
+    public override void Awake()
+    {
+        _ia.Avoidance.SetActualBehaviour(_obsEnum);
+    }
+
+    public override void Execute()
+    {
+        if (!_onDetect() || !_onCheckDistance())
+        {
+            _root.Execute();
+            return;
+        }
+
+        _ia.Move(_ia.transform.forward, _ia.ActorStats.RunSpeed);
+        _ia.SmoothRotation(_ia.Avoidance.GetFixedDir());
+        _ia.Shoot();
+    }
 }
 

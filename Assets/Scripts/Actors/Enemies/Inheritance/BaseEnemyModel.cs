@@ -5,29 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[RequireComponent(typeof(LineOfSight))]
+[RequireComponent(typeof(LineOfSight), typeof(LazerGun))]
 public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
 {
-    [SerializeField] protected ObstacleAvoidanceSO obstacleAvoidanceSO;
     [SerializeField] protected IAStats _iaStats;
     [SerializeField] protected Transform _firePoint;
-    [SerializeField] protected LazerGun _gun;
     
-    protected LineOfSight _lineOfSight;
+    protected LazerGun _gun;
     protected Dictionary<SteeringType, ISteering> behaviours = new Dictionary<SteeringType, ISteering>();
-    protected PlayerModel _actualTarget = null;
     protected ObstacleAvoidance _obstacleAvoidance;
 
     public Dictionary<SteeringType, ISteering> Behaviours => behaviours;
-    public ObstacleAvoidance Avoidance => _obstacleAvoidance;
+    public ObstacleAvoidance Avoidance { get; private set; }
     public PlayerModel Target { get; private set; }
     public IAStats IAStats => _iaStats;
-    public LineOfSight LineOfSight => _lineOfSight;
+    public LineOfSight LineOfSight { get; private set; }
+    public bool HasTakenDamage { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
-        _lineOfSight = GetComponent<LineOfSight>();
+        _gun = GetComponent<LazerGun>();
+        LineOfSight = GetComponent<LineOfSight>();
         InitBehaviours();
     }
 
@@ -39,13 +38,13 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     protected virtual void OnPlayerInit(PlayerModel player)
     {
         GameManager.instance.OnPlayerInit -= OnPlayerInit;
-        _actualTarget = player;
-        _obstacleAvoidance = new ObstacleAvoidance(this);
+        Target = player;
+        Avoidance = new ObstacleAvoidance(this);
     }
 
     protected abstract void InitBehaviours();
 
-    protected virtual void Shoot()
+    public virtual void Shoot()
     {
         _gun.Shoot(_firePoint.position, _firePoint.forward);
     }
@@ -58,6 +57,11 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
 
     public bool CheckForPlayer()
     {
-        return !_actualTarget.LifeController.IsDead;
+        return !Target.LifeController.IsDead;
+    }
+
+    public void TakeHit()
+    {
+        HasTakenDamage = true; 
     }
 }

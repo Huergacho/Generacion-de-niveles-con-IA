@@ -5,6 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ActorStats", menuName = "Stats/ActorStats", order = 0)]
 public class ActorStats : ScriptableObject
 {
+    public LayerMask TargetLayer => _targetLayer;
+    [SerializeField] private LayerMask _targetLayer;
+    public LayerMask ObstacleLayers => obstacleLayers;
+    [SerializeField] private LayerMask obstacleLayers;
+
     [SerializeField] private float maxLife = 100f;
     public float MaxLife => maxLife;
 

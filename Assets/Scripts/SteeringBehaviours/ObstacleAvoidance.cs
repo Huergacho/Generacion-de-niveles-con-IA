@@ -15,7 +15,7 @@ public class ObstacleAvoidance
     public ObstacleAvoidance(IArtificialMovement self)
     {
         _self = self;
-        _target = self.Target;
+        SetTarget(self.Target);
     }
 
     public void SetActualBehaviour(SteeringType desiredBehaviour)
@@ -37,7 +37,7 @@ public class ObstacleAvoidance
     public Vector3 GetDir()
     {
 
-        Collider[] obj = Physics.OverlapSphere(_self.transform.position, _self.IAStats.RangeAvoidance, _self.IAStats.ObstacleLayers);
+        Collider[] obj = Physics.OverlapSphere(_self.transform.position, _self.IAStats.RangeAvoidance, _self.ActorStats.ObstacleLayers);
         Collider closestObj = null;
         float nearDistance = 0;
         for (int i = 0; i < obj.Length; i++)

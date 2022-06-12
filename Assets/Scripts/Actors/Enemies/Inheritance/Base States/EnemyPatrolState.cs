@@ -22,7 +22,8 @@ public class EnemyPatrolState<T> : State<T>
 
     public override void Awake()
     {
-        _ia.Avoidance.SetActualBehaviour(_obsEnum);
+        _ia.LifeController.OnTakeDamage += TakeHit;
+        _ia.Avoidance.SetActualBehaviour(_obsEnum); //TODO: its somehow broken????
     }
 
     public override void Execute() //TODO: Add to check that if receives damage, the start chasing?
@@ -64,5 +65,16 @@ public class EnemyPatrolState<T> : State<T>
                 currWayPoint = _wayPoints[currentWayPointIndex];
             }
         }
+    }
+
+    private void TakeHit()
+    {
+        _ia.TakeHit();
+        _root.Execute();
+    }
+
+    public override void Sleep()
+    {
+        _ia.LifeController.OnTakeDamage -= TakeHit;
     }
 }

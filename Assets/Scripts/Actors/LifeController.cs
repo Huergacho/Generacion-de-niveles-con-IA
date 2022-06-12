@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class LifeController : MonoBehaviour
 {
-    [SerializeField] private float _maxLife;
-    [SerializeField] private float _currentLife;
+    private float _maxLife;
+    private float _currentLife;
 
     //PROPIEDADES
     public float MaxLife => _maxLife;
@@ -60,13 +60,13 @@ public class LifeController : MonoBehaviour
         }
     }
 
-    public void Respawn()
-    {
-        _currentLife = MaxLife;
-        IsDead = false;
-        UpdateLifeBar?.Invoke(CurrentLife, MaxLife);
-        OnRespawn?.Invoke();
-    }
+    //public void Respawn()
+    //{
+    //    _currentLife = MaxLife;
+    //    IsDead = false;
+    //    UpdateLifeBar?.Invoke(CurrentLife, MaxLife);
+    //    OnRespawn?.Invoke();
+    //}
 
     private void Die()
     {

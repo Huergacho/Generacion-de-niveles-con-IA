@@ -125,6 +125,7 @@ public class UIBarController : MonoBehaviour
 
     private void OnDestroy()
     {
-        _owner.LifeController.UpdateLifeBar -= UpdateLifeBar;
+        if(_owner != null)
+           _owner.LifeController.UpdateLifeBar -= UpdateLifeBar;
     }
 }

@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(LifeController))]
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(LifeController), typeof(Rigidbody))]
 public abstract class EntityModel : MonoBehaviour
 {
     [SerializeField] protected ActorStats _actorStats;

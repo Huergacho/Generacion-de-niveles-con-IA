@@ -7,10 +7,14 @@ using UnityEngine;
 
 public class LineOfSight : MonoBehaviour
 {
-    [SerializeField] private Transform origin;
-    [SerializeField] private LineOfSightProperties _properties;
     private int _lastFrame;
     private bool cache;
+    private EntityModel _self;
+
+    public void Awake()
+    {
+        _self = GetComponent<EntityModel>();
+    }
 
     public bool CanSeeTarget(Transform target)
     {
@@ -19,16 +23,16 @@ public class LineOfSight : MonoBehaviour
         _lastFrame = Time.frameCount;
         cache = false;
 
-        Vector3 diff = target.position - origin.position;
+        Vector3 diff = target.position - _self.transform.position;
         float distance = diff.magnitude;
-        if (distance > _properties.DetectionDistance)
+        if (distance > _self.ActorStats.RangeVision)
             return false;
 
-        var angleToTarget = Vector3.Angle(diff, origin.forward);
-        if (angleToTarget > _properties.Aperture / 2)
+        var angleToTarget = Vector3.Angle(diff, _self.transform.forward);
+        if (angleToTarget > _self.ActorStats.AngleVision / 2)
             return false;
 
-        if (Physics.Raycast(origin.position, diff.normalized, distance, _properties.ObstacleLayer))
+        if (Physics.Raycast(_self.transform.position, diff.normalized, distance, _self.ActorStats.ObstacleLayers))
             return false;
 
         cache = true;
@@ -37,7 +41,7 @@ public class LineOfSight : MonoBehaviour
 
     public List<Transform> CheckTargets()
     {
-        Collider[] colls = Physics.OverlapSphere(origin.position, _properties.DetectionDistance, _properties.TargetLayer);
+        Collider[] colls = Physics.OverlapSphere(_self.transform.position, _self.ActorStats.RangeVision, _self.ActorStats.TargetLayer);
         List<Transform> targets = new List<Transform>();
 
         for (int i = 0; i < colls.Length; i++)
@@ -52,10 +56,10 @@ public class LineOfSight : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _properties.DetectionDistance);
+        Gizmos.DrawWireSphere(transform.position, _self.ActorStats.RangeVision);
 
-        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, _properties.Aperture / 2, 0) * transform.forward * _properties.DetectionDistance);
-        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, -_properties.Aperture / 2, 0) * transform.forward * _properties.DetectionDistance);
+        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, _self.ActorStats.AngleVision / 2, 0) * transform.forward * _self.ActorStats.RangeVision);
+        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, -_self.ActorStats.AngleVision / 2, 0) * transform.forward * _self.ActorStats.RangeVision);
     }
 
     public bool CanSeeManyTargets()

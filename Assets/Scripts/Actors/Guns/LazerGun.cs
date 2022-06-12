@@ -7,36 +7,27 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class LazerGun : MonoBehaviour
 {
-    [SerializeField] private BulletStats _bulletStats; //TODO make lazer gun stats into a scriptable object
-    [SerializeField] private LayerMask contactLayer;
-    [SerializeField] private float shootCooldown;
-    [SerializeField] private TrailRenderer bulletTrail;
-    [SerializeField] private ParticleSystem bulletExplodeParticles;
+    [SerializeField] private BulletStats _bulletStats;
+    [SerializeField] private GunStats _gunStats;
     private float currentTime;
 
     private void Awake()
     {
-        
+        currentTime = _gunStats.ShootCooldown; //TODO fix null warning?
     }
-    private void Start()
-    {
-        currentTime = shootCooldown;
-    }
+
     private void Update()
     {
-        if(currentTime < shootCooldown)
-        {
+        if (GameManager.instance.IsGamePaused) return;
+        if(currentTime < _gunStats.ShootCooldown)
             currentTime += Time.deltaTime;
-        }
     }
+
     public void Shoot(Vector3 startPos, Vector3 dir)
     {
+        if (currentTime < _gunStats.ShootCooldown) return;
 
-        if (currentTime < shootCooldown)
-        {
-            return;
-        }
-        if (Physics.Raycast(startPos,dir, out RaycastHit hit, float.MaxValue,contactLayer))
+        if (Physics.Raycast(startPos,dir, out RaycastHit hit, float.MaxValue,_gunStats.ContactLayer))
         {
             if ((_bulletStats.DamageLayer & 1 << hit.collider.gameObject.layer) == 1 << hit.collider.gameObject.layer)
             {
@@ -44,7 +35,7 @@ public class LazerGun : MonoBehaviour
                 enemyLife.TakeDamage(_bulletStats.Damage);
                 enemyLife.CheckCurrentLife();
             }
-                TrailRenderer trail = Instantiate(bulletTrail, startPos, Quaternion.identity);
+                TrailRenderer trail = Instantiate(_gunStats.BulletTrail, startPos, Quaternion.identity);
             StartCoroutine(SpawnTrail(trail, hit));
 
         }
