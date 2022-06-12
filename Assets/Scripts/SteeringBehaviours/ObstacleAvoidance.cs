@@ -6,50 +6,44 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class ObstacleAvoidance
 {
-    private Transform _self;
-    private IVel _target;
-    private ObstacleAvoidanceSO _properties;
-    private Dictionary<Steerings, ISteering> _behaviourDict = new Dictionary<Steerings, ISteering>();
+    private IArtificialMovement _self;
+    private ITarget _target;
     private ISteering _actualBehaviour;
     public ISteering ActualBehaviour => _actualBehaviour;
-    public ObstacleAvoidance(Transform self, IVel target, ObstacleAvoidanceSO properties, Dictionary<Steerings, ISteering> behaviourDict)
+    public ObstacleAvoidance(IArtificialMovement self)
     {
-        _properties = properties;
         _self = self;
-        _target = target;
-        _behaviourDict = behaviourDict;
+        _target = self.Target;
     }
-    public void SetActualBehaviour(Steerings desiredBehaviour)
+    public void SetActualBehaviour(SteeringType desiredBehaviour)
     {
-        _actualBehaviour = _behaviourDict[desiredBehaviour];
+        _actualBehaviour = _self.Behaviours[desiredBehaviour];
     }
-    public ISteering GetBehaviour(Steerings behaviour)
+    public ISteering GetBehaviour(SteeringType behaviour)
     {
-        if (!_behaviourDict.ContainsKey(behaviour))
+        if (!_self.Behaviours.ContainsKey(behaviour))
         {
-            Debug.Log("No existe ese Behaviour");
+            Debug.LogError("No existe ese Behaviour");
             return null;
+        }
 
-        }
-        else
-        {
-            return _behaviourDict[behaviour];
-        }
+        return _self.Behaviours[behaviour];
     }
+
     public Vector3 GetDir()
     {
 
-        Collider[] obj = Physics.OverlapSphere(_self.position, _properties.Radius, _properties.ObstacleLayers);
+        Collider[] obj = Physics.OverlapSphere(_self.transform.position, _self.ObstacleAvoidanceSO.Radius, _self.ObstacleAvoidanceSO.ObstacleLayers);
         Collider closestObj = null;
         float nearDistance = 0;
         for (int i = 0; i < obj.Length; i++)
         {
             Collider currObs = obj[i];
-            Vector3 dir = currObs.transform.position - _self.position;
-            float currentAngle = Vector3.Angle(_self.forward, dir);
-            if (currentAngle < _properties.Angle / 2)
+            Vector3 dir = currObs.transform.position - _self.transform.position;
+            float currentAngle = Vector3.Angle(_self.transform.forward, dir);
+            if (currentAngle < _self.ObstacleAvoidanceSO.Angle / 2)
             {
-                float currentDistance = Vector3.Distance(_self.position, currObs.transform.position);
+                float currentDistance = Vector3.Distance(_self.transform.position, currObs.transform.position);
                 if (closestObj == null || currentDistance < nearDistance)
                 {
                     closestObj = currObs;
@@ -59,12 +53,12 @@ public class ObstacleAvoidance
         }
         if (closestObj != null)
         {
-            if (nearDistance == _properties.Radius)
+            if (nearDistance == _self.ObstacleAvoidanceSO.Radius)
             {
-                nearDistance = _properties.Radius - 0.00001f;
+                nearDistance = _self.ObstacleAvoidanceSO.Radius - 0.00001f;
             }
-            var point = closestObj.ClosestPoint(_self.position);
-            Vector3 dir = ((_self.position + _self.right * 0.0000000001f) - point);
+            var point = closestObj.ClosestPoint(_self.transform.position);
+            Vector3 dir = ((_self.transform.position + _self.transform.right * 0.0000000001f) - point);
             return dir.normalized;
         }
 
@@ -72,22 +66,18 @@ public class ObstacleAvoidance
     }
     public Vector3 GetFixedDir()
     {
-        var direction = (GetDir() * _properties.AvoidanceMult + _actualBehaviour.GetDir() * _properties.BehaviourMult).normalized;
+        var direction = (GetDir() * _self.ObstacleAvoidanceSO.AvoidanceMult + _actualBehaviour.GetDir() * _self.ObstacleAvoidanceSO.BehaviourMult).normalized;
         return direction;
     }
     public Vector3 GetFixedDir(Vector3 dir)
     {
-        var direction = (GetDir() * _properties.AvoidanceMult + dir * _properties.BehaviourMult).normalized;
+        var direction = (GetDir() * _self.ObstacleAvoidanceSO.AvoidanceMult + dir * _self.ObstacleAvoidanceSO.BehaviourMult).normalized;
         return direction;
     }
 
-    public void SetTarget(IVel target)
+    public void SetTarget(ITarget target)
     {
         _target = target;
-        _actualBehaviour.SetTarget(target.transform);
-    }
-    public void SetTarget(Transform target)
-    {
         _actualBehaviour.SetTarget(target);
     }
 }

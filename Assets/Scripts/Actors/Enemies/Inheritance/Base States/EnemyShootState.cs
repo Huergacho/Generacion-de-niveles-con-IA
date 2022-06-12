@@ -10,13 +10,13 @@ public class EnemyShootState<T> : State<T>
     private Action<Vector3, float> _onMove;
     private Action<Vector3> _onRotate;
     private INode _root;
-    private Steerings _obsEnum;
+    private SteeringType _obsEnum;
     private ObstacleAvoidance _obstacleAvoidance;
     private Func<bool> _onDetect;
     private Func<bool> _onCheckDistance;
     Transform _self;
     float _desiredSpeed;
-    public EnemyShootState(Action onShoot, Action<Vector3, float> onMove, Action<Vector3> onRotate, INode root,ObstacleAvoidance obstacleAvoidance ,Steerings steering, Func<bool> onDetect,Func<bool> onCheckDistance, Transform self, float desiredSpeed)
+    public EnemyShootState(Action onShoot, Action<Vector3, float> onMove, Action<Vector3> onRotate, INode root,ObstacleAvoidance obstacleAvoidance ,SteeringType steering, Func<bool> onDetect,Func<bool> onCheckDistance, Transform self, float desiredSpeed)
     {
         _onShoot = onShoot;
         _root = root;

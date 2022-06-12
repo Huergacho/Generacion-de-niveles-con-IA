@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-[CreateAssetMenu(fileName = "BulletStat", menuName = "Bullets", order = 0)]
+[CreateAssetMenu(fileName = "BulletStat", menuName = "Stats/Bullets", order = 0)]
 public class BulletStats : ScriptableObject
 {
     [SerializeField] private float _damage;

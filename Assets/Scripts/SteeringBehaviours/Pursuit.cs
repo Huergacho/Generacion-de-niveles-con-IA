@@ -4,22 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-class Chase : ISteering
+class Pursuit : ISteering
 {
     private Transform _self;
     private ITarget _target;
     private float _predictionTime;
-
-    public Chase(Transform self, ITarget target, float predictionTime)
+    public Pursuit(ITarget target, Transform self, float predictionTime)
     {
         _self = self;
         _predictionTime = predictionTime;
         SetTarget(target);
     }
+
     public void SetTarget(ITarget target)
-    {
+    {     
         _target = target;
     }
+
     public Vector3 GetDir()
     {
         var predictMult = _target.GetVel * _predictionTime;

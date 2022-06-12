@@ -8,9 +8,9 @@ public class EnemySeekState<T> : State<T>
 {
     private Action _onSeek;
     private INode _root;
-    private Steerings _obsEnum;
+    private SteeringType _obsEnum;
     private ObstacleAvoidance _obs;
-    public EnemySeekState(Action onSeek, INode root, ObstacleAvoidance obs, Steerings obsEnum)
+    public EnemySeekState(Action onSeek, INode root, ObstacleAvoidance obs, SteeringType obsEnum)
     {
         _onSeek = onSeek;
         _root = root;

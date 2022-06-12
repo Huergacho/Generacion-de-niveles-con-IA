@@ -15,7 +15,7 @@ class EnemyIdleStates<T> : State<T>
         _root = root;
         _outOfIdleCommand = outOfIdleCommand;
     }
-    public override void Execute()
+    public override void Execute() //TODO: check line of sight? check if receives damage? something
     {
         if (_outOfIdleCommand())
         {

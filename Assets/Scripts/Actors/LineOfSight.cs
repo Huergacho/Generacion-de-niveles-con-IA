@@ -22,23 +22,21 @@ public class LineOfSight : MonoBehaviour
             _lastFrame = Time.frameCount;
             Vector3 diff = target.position - origin.position;
             float distance = diff.magnitude;
+            cache = false;
 
             if (distance > _properties.DetectionDistance)
             {
-                cache = false;
                 return false;
             }
 
             var angleToTarget = Vector3.Angle(diff, origin.forward);
             if (angleToTarget > _properties.Aperture / 2)
             {
-                cache = false;
                 return false;
             }
 
             if (Physics.Raycast(origin.position, diff.normalized, distance, _properties.ObstacleLayer)) 
             {
-                cache = false;
                 return false; 
             }
             cache = true;

@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class SecurityEnemyModel : BaseEnemyModel
 {
-    public void SuscribeEvents(SecurityEnemyController myController)
+
+    protected override void InitBehaviours()
     {
-        myController.onRotate += LookDir;
-        myController.onMove += Move;
-        myController.onShoot += Shoot;
+
     }
+
+    //    public void SuscribeEvents(SecurityEnemyController myController)
+    //    {
+    //        myController.onRotate += LookDir;
+    //        myController.onMove += Move;
+    //        myController.onShoot += Shoot;
+    //    }
 }
 

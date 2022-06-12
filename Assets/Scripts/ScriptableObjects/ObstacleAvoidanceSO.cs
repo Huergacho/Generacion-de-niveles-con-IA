@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-[CreateAssetMenu(fileName = "ObstacleAvoidance",menuName = "ObstacleAvoidance", order = 0)]
+[CreateAssetMenu(fileName = "ObstacleAvoidance",menuName = "Stats/ObstacleAvoidance", order = 0)]
 public class ObstacleAvoidanceSO : ScriptableObject
 {
     [SerializeField]private LayerMask obstacleLayers;

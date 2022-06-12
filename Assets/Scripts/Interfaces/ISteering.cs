@@ -5,5 +5,5 @@ using UnityEngine;
 public interface ISteering
 {
     Vector3 GetDir();
-    void SetTarget(Transform target);
+    void SetTarget(ITarget target);
 }

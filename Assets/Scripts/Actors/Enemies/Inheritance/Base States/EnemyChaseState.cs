@@ -10,12 +10,12 @@ public class EnemyChaseState<T> : State<T>
     private Func<bool> _isOnSight;
     private INode _root;
     private ObstacleAvoidance _obs;
-    private Steerings _obsEnum;
+    private SteeringType _obsEnum;
     private Transform _self;
     private float _desiredSpeed;
     private Func<bool> _canShoot;
     private Action<Vector3> _onRotate;
-    public EnemyChaseState(Action<Vector3, float> onChase,Action<Vector3> onRotate, Func<bool> canShoot, INode root, ObstacleAvoidance obs, Steerings obsEnum, Func<bool> isOnSight,Transform self ,float desiredSpeed)
+    public EnemyChaseState(Action<Vector3, float> onChase,Action<Vector3> onRotate, Func<bool> canShoot, INode root, ObstacleAvoidance obs, SteeringType obsEnum, Func<bool> isOnSight,Transform self ,float desiredSpeed)
     {
         _onChase = onChase;
         _root = root;
