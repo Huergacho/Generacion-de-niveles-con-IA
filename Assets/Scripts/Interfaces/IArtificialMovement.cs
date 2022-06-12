@@ -4,8 +4,8 @@ using UnityEngine;
 
 public interface IArtificialMovement
 {
+    ActorStats ActorStats { get; }
     IAStats IAStats { get; }
-    ObstacleAvoidanceSO ObstacleAvoidanceSO { get; }
     Dictionary<SteeringType, ISteering> Behaviours { get; }
     ObstacleAvoidance Avoidance { get; }
     Transform transform { get; }

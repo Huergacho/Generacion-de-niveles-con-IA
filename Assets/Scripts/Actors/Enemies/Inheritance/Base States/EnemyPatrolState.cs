@@ -35,7 +35,7 @@ public class EnemyPatrolState<T> : State<T>
 
         CheckWayPoint();
 
-        _ia.Move((currWayPoint.position - _ia.transform.position).normalized, _ia.IAStats.SteeringSpeed[_obsEnum]);
+        _ia.Move((currWayPoint.position - _ia.transform.position).normalized, _ia.ActorStats.RunSpeed);
         _ia.SmoothRotation((currWayPoint.position - _ia.transform.position).normalized);        
     }
 

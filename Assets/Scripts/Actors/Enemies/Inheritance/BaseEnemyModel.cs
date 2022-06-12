@@ -19,12 +19,10 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     protected ObstacleAvoidance _obstacleAvoidance;
 
     public Dictionary<SteeringType, ISteering> Behaviours => behaviours;
-    public ObstacleAvoidanceSO ObstacleAvoidanceSO => obstacleAvoidanceSO;
     public ObstacleAvoidance Avoidance => _obstacleAvoidance;
     public PlayerModel Target { get; private set; }
     public IAStats IAStats => _iaStats;
     public LineOfSight LineOfSight => _lineOfSight;
-
 
     protected override void Awake()
     {

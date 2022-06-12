@@ -25,11 +25,11 @@ public class PlayerController : MonoBehaviour
     {
         _playerModel = GetComponent<PlayerModel>();
         _playerView = GetComponent<PlayerView>();
-        InitFSM();
     }
 
     private void Start()
     {
+        InitFSM();
         _playerModel.SuscribeEvents(this);
         _playerView.SuscribeEvents(this);
     }

@@ -10,6 +10,7 @@ public class PlayerIdleState<T> : State<T>
     private Action<Vector2, float> _onIdle;
     private Action _onShoot;
     private Action _animation;
+
     public PlayerIdleState(T walkInput, Action<Vector2,float> onIdle, Action onShoot, Action animation)
     {
         _walkInput = walkInput;

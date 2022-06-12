@@ -14,8 +14,6 @@ public abstract class EntityModel : MonoBehaviour
     public ActorStats ActorStats => _actorStats;
     public LifeController LifeController { get; private set; }
 
-    public Action OnDie;
-
     protected virtual void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -41,7 +39,6 @@ public abstract class EntityModel : MonoBehaviour
 
     public virtual void Die()
     {
-        OnDie?.Invoke();
         Destroy(gameObject); //When they die.. destroy.
     }
 }

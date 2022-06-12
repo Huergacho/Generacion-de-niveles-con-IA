@@ -39,7 +39,7 @@ public class SecurityEnemyController : BaseEnemyController
     {
         var seek =  new Seek(_model.Target, transform);
         _model.Behaviours.Add(SteeringType.Seek,seek);
-        var pursuit = new Chase(transform, _model.Target, _model.ObstacleAvoidanceSO.PredictionTime);
+        var pursuit = new Chase(transform, _model.Target, _model.IAStats.PredictionTime);
         _model.Behaviours.Add(SteeringType.Chase, pursuit);
     }
 
@@ -100,10 +100,11 @@ public class SecurityEnemyController : BaseEnemyController
     {
         onMove(transform.forward, 0);
     }
+
     private bool CheckForShooting()
     {
         var distance = Vector3.Distance(transform.position, _model.Target.transform.position);
-        if(distance > _model.ObstacleAvoidanceSO.ShootDistance)
+        if(distance > _model.IAStats.ShootDistance)
         {
             return false;
         }
@@ -115,14 +116,17 @@ public class SecurityEnemyController : BaseEnemyController
     {
         onShoot?.Invoke();
     }
+
     private void MovementCommand(Vector3 moveDir, float desiredSpeed)
     {
         onMove?.Invoke(moveDir, desiredSpeed);
     }
+
     private void RotateCommand(Vector3 rotationDir)
     {
         onRotate?.Invoke(_model.Avoidance.GetFixedDir(rotationDir));
     }
+
     public void OnDrawGizmosSelected()
     {
 
@@ -132,10 +136,11 @@ public class SecurityEnemyController : BaseEnemyController
             var dir = _model.Avoidance.ActualBehaviour.GetDir(); 
             Gizmos.DrawRay(transform.position, dir * 2);
         }
-        Gizmos.DrawWireSphere(transform.position, _model.ObstacleAvoidanceSO.Radius);
-        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, _model.ObstacleAvoidanceSO.Angle / 2, 0) * transform.forward * _model.ObstacleAvoidanceSO.Radius);
-        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, -_model.ObstacleAvoidanceSO.Angle / 2, 0) * transform.forward * _model.ObstacleAvoidanceSO.Radius);
+        Gizmos.DrawWireSphere(transform.position, _model.IAStats.RangeAvoidance);
+        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, _model.IAStats.AngleAvoidance / 2, 0) * transform.forward * _model.IAStats.RangeAvoidance);
+        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, -_model.IAStats.AngleAvoidance / 2, 0) * transform.forward * _model.IAStats.RangeAvoidance);
     }
+
     private void Update()
     {
         _fsm.UpdateState();
