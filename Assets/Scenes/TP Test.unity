@@ -147,7 +147,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &32292189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,12 +309,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletStats: {fileID: 0}
-  contactLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  shootCooldown: 0
-  bulletTrail: {fileID: 0}
-  bulletExplodeParticles: {fileID: 0}
   _gunStats: {fileID: 0}
 --- !u!4 &88122142 stripped
 Transform:
