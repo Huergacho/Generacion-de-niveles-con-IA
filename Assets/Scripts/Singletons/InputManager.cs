@@ -41,6 +41,11 @@ public class InputManager : MonoBehaviour
         {
             GameManager.instance.Player?.LifeController.TakeDamage(10f);
         }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            GameManager.instance.Player?.LifeController.Heal(5f);
+        }
     }
     #endregion
 

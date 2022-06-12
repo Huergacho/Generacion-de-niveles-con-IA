@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     public event Action _onIdle;
     public event Action<Vector2,float> _onMove;
     public event Action _onShoot;
-    public event Action _onDie;
 
     private void Awake()
     {
@@ -31,7 +30,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        _playerModel.LifeController.OnDie = DieActions;
         _playerModel.SuscribeEvents(this);
         _playerView.SuscribeEvents(this);
     }
@@ -67,11 +65,5 @@ public class PlayerController : MonoBehaviour
     private void ShootCommand()
     {
         _onShoot?.Invoke();
-    }
-
-    private void DieActions()
-    {
-        _onDie?.Invoke();
-        GameManager.instance.PlayerIsDead();
     }
 }

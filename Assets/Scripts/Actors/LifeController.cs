@@ -27,7 +27,7 @@ public class LifeController : MonoBehaviour
         _currentLife = _maxLife;
     }
 
-    public void Heal(int heal)
+    public void Heal(float heal)
     {
         if (_currentLife < MaxLife && _currentLife > 0)
         {

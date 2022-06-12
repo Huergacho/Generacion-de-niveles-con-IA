@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,14 +17,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private string victoryScene = "Victory";
     [SerializeField] private string gameOverScene = "GameOver";
     
-    private bool isPlayerAlive;
-
     //Properties
     public bool IsGamePaused { get => _isGamePaused; private set => _isGamePaused = value; } //TODO: Make Everytone check if game is paused to update or something. 
     public PlayerModel Player { get; private set; }
     public string MenuScene => menuScene;
     public string LevelScene => levelScene;
-    public bool IsPlayerAlive => isPlayerAlive;
+    public bool IsSceneReadyToChange { get; set; }
     public InputManager InputManager { get; private set; }
 
     //Events
@@ -43,12 +42,6 @@ public class GameManager : MonoBehaviour
         }
 
         InputManager = GetComponent<InputManager>();
-    }
-
-    public void PlayerIsDead()
-    {
-        isPlayerAlive = false;
-        GameOver();
     }
 
     public void LevelChange()
@@ -90,13 +83,27 @@ public class GameManager : MonoBehaviour
         OnPlayerInit?.Invoke(Player);
     }
 
-    private void Victory()
+    public void Victory()
     {
         SceneManager.LoadScene(victoryScene);
     }
 
-    private void GameOver()
+    public void GameOver()
     {
+        if (IsSceneReadyToChange)
+            SceneManager.LoadScene(gameOverScene);
+        else
+            StartCoroutine(WaitForGameOver());
+    }
+
+    private IEnumerator WaitForGameOver()
+    {
+        while (!IsSceneReadyToChange)
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
+
         SceneManager.LoadScene(gameOverScene);
+        yield return null;
     }
 }

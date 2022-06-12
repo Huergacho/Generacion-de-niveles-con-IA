@@ -81,8 +81,8 @@ public class PlayerModel : EntityModel, IVel
         controller._onMove += Move;
     }
 
-    public virtual void OnDie()
+    public override void Die()
     {
-        GameManager.instance.PlayerIsDead();
+        GameManager.instance.GameOver();
     }
 }
