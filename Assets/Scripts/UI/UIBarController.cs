@@ -74,7 +74,7 @@ public class UIBarController : MonoBehaviour
 
     private IEnumerator DecreaseLife()
     {
-        while (_nextHealth < _currentHealth)
+        while (_nextHealth < _currentHealth && _currentHealth >= 0)
         {
             _currentHealth--;
             InternalUpdateLifeBar();
@@ -95,7 +95,7 @@ public class UIBarController : MonoBehaviour
 
     private IEnumerator IncreaseLife()
     {
-        while (_nextHealth > _currentHealth)
+        while (_nextHealth > _currentHealth && _currentHealth <= _maxHealth)
         {
             _currentHealth++;
             InternalUpdateLifeBar();
