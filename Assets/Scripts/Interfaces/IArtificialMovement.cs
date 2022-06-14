@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ public interface IArtificialMovement
     Transform transform { get; }
     PlayerModel Target { get; }
     LineOfSight LineOfSight { get; }
+    Action<bool> OnDetect { get; set; }
     bool HasTakenDamage { get; }
     GameObject[] PatrolRoute { get; }
     void Move(Vector2 dir, float desiredSpeed);

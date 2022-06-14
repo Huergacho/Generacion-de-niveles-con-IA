@@ -25,7 +25,8 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     public GameObject[] PatrolRoute { get; private set; }
 
     //Events
-    public event Action<bool> onDetect;
+    public Action<bool> OnDetect { get => _onDetect; set => _onDetect = value; } //Este modo me lo mostro el profe para poder hacer que tuvieran eventos las interfaces.. dejalo asi?
+    private Action<bool> _onDetect = delegate { };
 
     protected override void Awake()
     {
@@ -77,7 +78,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     public bool IsTargetInSight()
     {
         bool value = LineOfSight.CheckForOneTarget();
-        onDetect?.Invoke(value);
+        OnDetect?.Invoke(value);
         return value;
     }
 

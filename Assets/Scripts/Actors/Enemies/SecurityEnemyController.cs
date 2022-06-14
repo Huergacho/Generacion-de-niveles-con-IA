@@ -8,9 +8,6 @@ public class SecurityEnemyController : BaseEnemyController
     private SecurityEnemyModel _model;
     //private SecurityEnemyView _enemyView;
 
-    //Events
-    public event Action<bool> onDetect;
-
     protected override void Awake()
     {
         base.Awake();
@@ -74,7 +71,7 @@ public class SecurityEnemyController : BaseEnemyController
         _root = QPlayerAlive;
     }
 
-    private void IdleCommand()
+    private void IdleCommand() //TODO FACU pondria un public virtual void Idle() en BaseEnemyModel (y en IArtificalMovement) 
     {
         _model.Move(transform.forward, 0);
     }

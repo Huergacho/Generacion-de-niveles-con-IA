@@ -10,7 +10,7 @@ public class SecurityEnemyView : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _model = GetComponent<SecurityEnemyModel>();
-        _model.onDetect += DetectAnimation;
+        _model.OnDetect += DetectAnimation;
     }
     void DetectAnimation(bool detectBool)
     {
@@ -19,6 +19,6 @@ public class SecurityEnemyView : MonoBehaviour
 
     private void OnDestroy()
     {
-        _model.onDetect -= DetectAnimation;
+        _model.OnDetect -= DetectAnimation;
     }
 }
