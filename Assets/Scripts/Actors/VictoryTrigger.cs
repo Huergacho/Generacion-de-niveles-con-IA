@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableController : MonoBehaviour
+public class VictoryTrigger : MonoBehaviour
 {
-    public IItem interactable;
     [SerializeField] private bool isTrigger = true;
 
-    private void Start()
+    private void Awake()
     {
         var collider = GetComponent<Collider>();
         if (collider != null)
@@ -18,11 +17,9 @@ public class InteractableController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var player = other.GetComponent<PlayerModel>();
-
-        if (player) //Si es un player
+        if (other.gameObject.layer == 6)
         {
-            interactable.Interact(player);
+            GameManager.instance.Victory();
         }
     }
 
