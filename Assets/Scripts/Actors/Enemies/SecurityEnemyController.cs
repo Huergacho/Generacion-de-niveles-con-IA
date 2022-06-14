@@ -11,32 +11,35 @@ public class SecurityEnemyController : BaseEnemyController
     //Events
     public event Action<bool> onDetect;
 
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _model = GetComponent<SecurityEnemyModel>();
         //_enemyView = GetComponent<SecurityEnemyView>();
     }
 
-    protected override void Start()
+    protected void Start()
     {
         //_enemyView.SuscribeEvents(this);
-        base.Start();
+        InitBehaviours();
+        InitDesitionTree();
+        InitFSM();
     }
 
-    protected virtual void InitBehaviours()
+    protected override void InitBehaviours()
     {
-        var seek =  new Seek(_model.Target, transform);
+        var seek =  new Seek(_model.Target, transform); //for when is attacking, predicting is not good here cuz he needs to look at the player constantly, not "calculate" where he could be?
         _model.Behaviours.Add(SteeringType.Seek,seek);
-        var pursuit = new Chase(transform, _model.Target, _model.IAStats.PredictionTime);
+        var pursuit = new Chase(transform, _model.Target, _model.IAStats.PredictionTime); //for when its chasing. 
         _model.Behaviours.Add(SteeringType.Chase, pursuit);
     }
 
     protected override void InitFSM() //TODO: FIX FSM
     {
         //var idle = new EnemyIdleStates<enemyStates>(_model, IdleCommand, _root );
-        var patrol = new EnemyPatrolState<enemyStates>(_model, _root, wayPoints, SteeringType.Seek, DetectCommand);
-        var chase = new EnemyChaseState<enemyStates>(_model, CheckForShooting, _root, SteeringType.Chase, DetectCommand);
-        var shoot = new EnemyShootState<enemyStates>(_model, _root, SteeringType.Seek, DetectCommand, CheckForShooting);
+        var patrol = new EnemyPatrolState<enemyStates>(_model, _root,SteeringType.Seek);
+        var chase = new EnemyChaseState<enemyStates>(_model, _root, SteeringType.Chase);
+        var shoot = new EnemyShootState<enemyStates>(_model, _root, SteeringType.Seek);
 
         //idle.AddTransition(enemyStates.Patrol, patrol);
         //idle.AddTransition(enemyStates.Chase, chase);
@@ -64,59 +67,15 @@ public class SecurityEnemyController : BaseEnemyController
         INode pursuit = new ActionNode(() => _fsm.Transition(enemyStates.Chase));
 
         //LOGIC: Is Player dead? -> Have I Taken Damage-> Can I See You? -> Can I Attack You?
-        INode QCanShoot = new QuestionNode(CheckForShooting, shoot, chase);
-        INode QOnSight = new QuestionNode(DetectCommand, QCanShoot, patrol);
+        INode QCanShoot = new QuestionNode(() =>_model.IsInShootingRange(), shoot, chase);
+        INode QOnSight = new QuestionNode(() => _model.IsTargetInSight(), QCanShoot, patrol);
         INode QReceivedDamage = new QuestionNode(() => _model.HasTakenDamage, pursuit, QOnSight); //if i have damage, then pursuit player.
-        INode QPlayerAlive = new QuestionNode(_model.CheckForPlayer, QReceivedDamage, patrol);
+        INode QPlayerAlive = new QuestionNode(()=>_model.CheckForPlayer(), QReceivedDamage, patrol);
         _root = QPlayerAlive;
-    }
-
-    private bool DetectCommand()
-    {
-        if (!_model.LineOfSight.CheckForOneTarget())
-        {
-            onDetect?.Invoke(false);
-
-            return false;
-        }
-
-        onDetect?.Invoke(true);
-        return true;
-
     }
 
     private void IdleCommand()
     {
         _model.Move(transform.forward, 0);
-    }
-
-    private bool CheckForShooting()
-    {
-        var distance = Vector3.Distance(transform.position, _model.Target.transform.position);
-        if(distance > _model.IAStats.ShootDistance)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public void OnDrawGizmosSelected()
-    {
-        if (_model == null) 
-        {
-            Debug.LogWarning("Model is null");
-            return;
-        }
-
-        Gizmos.color = Color.red;
-        if(_model?.Avoidance != null && _model?.Avoidance.ActualBehaviour != null)
-        {
-            var dir = _model.Avoidance.ActualBehaviour.GetDir(); 
-            Gizmos.DrawRay(transform.position, dir * 2);
-        }
-        Gizmos.DrawWireSphere(transform.position, _model.IAStats.RangeAvoidance);
-        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, _model.ActorStats.AngleVision / 2, 0) * transform.forward * _model.ActorStats.RangeVision);
-        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, -_model.ActorStats.AngleVision / 2, 0) * transform.forward * _model.ActorStats.RangeVision);
     }
 }

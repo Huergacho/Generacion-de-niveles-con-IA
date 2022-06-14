@@ -13,9 +13,12 @@ public interface IArtificialMovement
     PlayerModel Target { get; }
     LineOfSight LineOfSight { get; }
     bool HasTakenDamage { get; }
-    public void Move(Vector2 dir, float desiredSpeed);
-    public void SmoothRotation(Vector3 dest);
-    public void TakeHit();
-    public void Shoot();
-
+    GameObject[] PatrolRoute { get; }
+    void Move(Vector2 dir, float desiredSpeed);
+    void SmoothRotation(Vector3 dest);
+    void TakeHit(bool value =  true);
+    void Shoot();
+    bool IsInShootingRange();
+    bool IsTargetInSight();
+    void LookDir(Vector3 dir);
 }

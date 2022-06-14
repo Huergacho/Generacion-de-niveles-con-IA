@@ -53,14 +53,14 @@ public class LineOfSight : MonoBehaviour
         return targets;
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _self.ActorStats.RangeVision);
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawWireSphere(transform.position, _self.ActorStats.RangeVision);
 
-        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, _self.ActorStats.AngleVision / 2, 0) * transform.forward * _self.ActorStats.RangeVision);
-        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, -_self.ActorStats.AngleVision / 2, 0) * transform.forward * _self.ActorStats.RangeVision);
-    }
+    //    Gizmos.DrawRay(transform.position, Quaternion.Euler(0, _self.ActorStats.AngleVision / 2, 0) * transform.forward * _self.ActorStats.RangeVision);
+    //    Gizmos.DrawRay(transform.position, Quaternion.Euler(0, -_self.ActorStats.AngleVision / 2, 0) * transform.forward * _self.ActorStats.RangeVision);
+    //}
 
     public bool CanSeeManyTargets()
     {

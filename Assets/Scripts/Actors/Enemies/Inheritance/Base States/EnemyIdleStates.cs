@@ -23,7 +23,7 @@ class EnemyIdleStates<T> : State<T>
         _self.LifeController.OnTakeDamage += TakeHit;
     }
 
-    public override void Execute() //TODO: check line of sight? check if receives damage? something
+    public override void Execute() //TODO: FACU check line of sight? check if receives damage? something
     {
         if (_outOfIdleCommand())
         {

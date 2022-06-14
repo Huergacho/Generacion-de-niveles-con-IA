@@ -38,4 +38,10 @@ public class FSM<T>
         if(_currentState != null)
         _currentState.Execute();
     }
+
+    public void PrintState()
+    {
+        Console.WriteLine(CurrentState.ToString());
+        //Debug.Log(CurrentState.ToString());
+    }
 }

@@ -17,17 +17,20 @@ public abstract class BaseEnemyController : EntityController
     protected INode _root;
     protected FSM<enemyStates> _fsm;
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
-        GameManager.instance.OnPlayerInit += OnPlayerInit;
+        //_fsm = new FSM<enemyStates>(); //Facu hizo que la FSM cuando se crea si o si tiene que tener un state asignado en el constructor.
     }
 
-    protected virtual void OnPlayerInit(PlayerModel player) 
-    {
-        GameManager.instance.OnPlayerInit -= OnPlayerInit;
-        InitDesitionTree();
-        InitFSM();
-    }
-
+    protected abstract void InitBehaviours();
     protected abstract void InitDesitionTree();
+
+    protected virtual void Update()
+    {
+        if(!GameManager.instance.IsGamePaused)
+        {
+            _fsm?.UpdateState();
+            _fsm?.PrintState();
+        }
+    }
 }

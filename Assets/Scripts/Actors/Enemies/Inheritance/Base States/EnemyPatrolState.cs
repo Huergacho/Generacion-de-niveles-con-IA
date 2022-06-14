@@ -6,63 +6,78 @@ public class EnemyPatrolState<T> : State<T>
     private IArtificialMovement _ia;
     private INode _root;
     private SteeringType _obsEnum;
-    private Func<bool> _isOnSight;
-    private Transform[] _wayPoints;
-    private Transform currWayPoint;
-    private int currentWayPointIndex = 0;
+    private int currentPosition = 0;
+    private bool isDoingReverse = false;
 
-    public EnemyPatrolState(IArtificialMovement ia, INode root, Transform[] wayPoints, SteeringType obsEnum, Func<bool> isOnSight)
+    public EnemyPatrolState(IArtificialMovement ia, INode root, SteeringType obsEnum)
     {
         _ia = ia;
         _root = root;
-        _wayPoints = wayPoints;
         _obsEnum = obsEnum;
-        _isOnSight = isOnSight;
     }
 
     public override void Awake()
     {
         _ia.LifeController.OnTakeDamage += TakeHit;
-        _ia.Avoidance.SetActualBehaviour(_obsEnum); //TODO: its somehow broken????
+        _ia.Avoidance.SetActualBehaviour(_obsEnum);
     }
 
-    public override void Execute() //TODO: Add to check that if receives damage, the start chasing?
+    public override void Execute()
     {
-        if (_isOnSight())
+        if (_ia.IsTargetInSight())
         {
             _root.Execute();
-            return;
         }
 
-        CheckWayPoint();
-
-        _ia.Move((currWayPoint.position - _ia.transform.position).normalized, _ia.ActorStats.RunSpeed);
-        _ia.SmoothRotation((currWayPoint.position - _ia.transform.position).normalized);        
+        Movement();
     }
 
-    private void CheckWayPoint()
+    private void Movement()
     {
+        Vector3 currentTarget = _ia.PatrolRoute[currentPosition].transform.position;
+        Vector3 dir = (currentTarget - _ia.transform.position).normalized;
+        _ia.Move((dir - _ia.transform.position).normalized, _ia.ActorStats.RunSpeed);
+        _ia.LookDir((dir - _ia.transform.position).normalized);   
 
-        if (currWayPoint != _wayPoints[currentWayPointIndex])
+        var distance = Vector3.Distance(_ia.transform.position, currentTarget);
+        if (distance <= 1f)
         {
-            currWayPoint = _wayPoints[currentWayPointIndex];
+            ChangeCurrentPosition();
+            //_root.Execute(); //Esto es si queremos que al llegar a cada waypoint recorra de nuevo el behaveiour tree (lo usaba para generar random animations en el tp1)
         }
+    }
 
-        var posWay = currWayPoint.position;
-        posWay.y = _ia.transform.position.y;
-        var distance = Vector3.Distance(_ia.transform.position, posWay);
-
-        if (distance <= 0.25f)
+    private void ChangeCurrentPosition()
+    {
+        if (!isDoingReverse) //Si no hace reverse, esto va a dar siempre falso!
         {
-            if (currWayPoint == _wayPoints[_wayPoints.Length - 1])
+            if (currentPosition < _ia.PatrolRoute.Length - 1) //Si es menor al total, sumale
             {
-                currentWayPointIndex = 0;
-                currWayPoint = _wayPoints[currentWayPointIndex];
+                currentPosition++;
             }
             else
             {
-                currentWayPointIndex++;
-                currWayPoint = _wayPoints[currentWayPointIndex];
+                if (_ia.IAStats.CanReversePatrol) //Si ya llego al final... Fijate si puede revertir
+                {
+                    isDoingReverse = true; //Activa la vuelva atras
+                    currentPosition--; //Y resta una posicion
+                }
+                else
+                {
+                    currentPosition = 0; //Sino mandalo a la posicion inicial
+                }
+            }
+        }
+        else //Si esta haciendo el reverse
+        {
+            if (currentPosition > 0) //Y todavia no llego a 0
+            {
+                currentPosition--; //Segui restando
+            }
+            else
+            {
+                isDoingReverse = false; //Si llego a cero, sacalo de aca
+                currentPosition++; //y ya sumale una para que valla caminando
             }
         }
     }

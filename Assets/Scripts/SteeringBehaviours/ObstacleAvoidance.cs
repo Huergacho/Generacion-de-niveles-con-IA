@@ -7,7 +7,6 @@ using UnityEngine;
 public class ObstacleAvoidance
 {
     private IArtificialMovement _self;
-    private ITarget _target;
     private ISteering _actualBehaviour;
 
     public ISteering ActualBehaviour => _actualBehaviour;
@@ -15,7 +14,6 @@ public class ObstacleAvoidance
     public ObstacleAvoidance(IArtificialMovement self)
     {
         _self = self;
-        SetTarget(self.Target);
     }
 
     public void SetActualBehaviour(SteeringType desiredBehaviour)
@@ -58,7 +56,7 @@ public class ObstacleAvoidance
 
         if (closestObj != null)
         {
-            if (nearDistance == _self.IAStats.RangeAvoidance)
+            if (nearDistance == _self.IAStats.RangeAvoidance) //TODO: Facu is this even in use????
             {
                 nearDistance = _self.IAStats.RangeAvoidance - 0.00001f;
             }
@@ -80,11 +78,5 @@ public class ObstacleAvoidance
     {
         var direction = (GetDir() * _self.IAStats.AvoidanceWeight + dir * _self.IAStats.SteeringWeight).normalized;
         return direction;
-    }
-
-    public void SetTarget(ITarget target)
-    {
-        _target = target;
-        _actualBehaviour.SetTarget(target);
     }
 }

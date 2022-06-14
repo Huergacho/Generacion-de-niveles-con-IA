@@ -4,17 +4,21 @@ using UnityEngine;
 public class SecurityEnemyView : MonoBehaviour
 {
     private Animator _animator;
+    private SecurityEnemyModel _model;
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
+        _model = GetComponent<SecurityEnemyModel>();
+        _model.onDetect += DetectAnimation;
     }
     void DetectAnimation(bool detectBool)
     {
         _animator.SetBool("Detect",detectBool);
     }
-    public void SuscribeEvents(SecurityEnemyController controller)
+
+    private void OnDestroy()
     {
-        controller.onDetect += DetectAnimation;
+        _model.onDetect -= DetectAnimation;
     }
 }
