@@ -25,9 +25,9 @@ public class SecurityEnemyController : BaseEnemyController
 
     protected override void InitBehaviours()
     {
-        var seek =  new Seek(_model.Target, transform); //for when is attacking, predicting is not good here cuz he needs to look at the player constantly, not "calculate" where he could be?
+        var seek =  new Seek(_model); //for when is attacking, predicting is not good here cuz he needs to look at the player constantly, not "calculate" where he could be?
         _model.Behaviours.Add(SteeringType.Seek,seek);
-        var pursuit = new Chase(transform, _model.Target, _model.IAStats.PredictionTime); //for when its chasing. 
+        var pursuit = new Chase(_model, _model.IAStats.PredictionTime); //for when its chasing. 
         _model.Behaviours.Add(SteeringType.Chase, pursuit);
     }
 
@@ -67,7 +67,7 @@ public class SecurityEnemyController : BaseEnemyController
         INode QCanShoot = new QuestionNode(() =>_model.IsInShootingRange(), shoot, chase);
         INode QOnSight = new QuestionNode(() => _model.IsTargetInSight(), QCanShoot, patrol);
         INode QReceivedDamage = new QuestionNode(() => _model.HasTakenDamage, pursuit, QOnSight); //if i have damage, then pursuit player.
-        INode QPlayerAlive = new QuestionNode(()=>_model.CheckForPlayer(), QReceivedDamage, patrol);
+        INode QPlayerAlive = new QuestionNode(()=>_model.IsPlayerDead(), patrol, QReceivedDamage);
         _root = QPlayerAlive;
     }
 

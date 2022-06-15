@@ -6,31 +6,28 @@ using System.Threading.Tasks;
 using UnityEngine;
 class Chase : ISteering
 {
-    private Transform _self;
-    private ITarget _target;
+    private IArtificialMovement _self;
     private float _predictionTime;
 
-    public Chase(Transform self, ITarget target, float predictionTime)
+    public Chase(IArtificialMovement self, float predictionTime)
     {
         _self = self;
         _predictionTime = predictionTime;
-        SetTarget(target);
     }
     public void SetTarget(ITarget target)
     {
-        _target = target;
     }
     public Vector3 GetDir()
     {
-        var predictMult = _target.GetVel * _predictionTime;
-       var dist = Vector3.Distance(_target.transform.position, _self.position) - 0.1f;
+        var predictMult = _self.Target.GetVel * _predictionTime;
+        var dist = Vector3.Distance(_self.Target.transform.position, _self.transform.position) - 0.1f;
         if (predictMult >= dist)
         {
             predictMult = dist / 2;
         }
-        Vector3 point = _target.transform.position + _target.GetFoward * Mathf.Clamp(predictMult,-dist, dist);
+        Vector3 point = _self.Target.transform.position + _self.Target.GetFoward * Mathf.Clamp(predictMult,-dist, dist);
 
-        Vector3 dir = (point - _self.position).normalized;
+        Vector3 dir = (point - _self.transform.position).normalized;
         return dir;
     }
 }

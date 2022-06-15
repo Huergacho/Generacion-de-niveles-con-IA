@@ -11,7 +11,7 @@ public class PlayerModel : EntityModel, ITarget
 
     //Propierties
     public float GetVel => _rb.velocity.magnitude;
-    public Vector3 GetFoward => _rb.velocity.normalized;
+    public Vector3 GetFoward => transform.forward;
 
     #region UnityMethods
     protected override void Awake()

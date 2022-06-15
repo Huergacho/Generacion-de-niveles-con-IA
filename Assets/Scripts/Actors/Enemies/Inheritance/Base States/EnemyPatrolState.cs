@@ -27,17 +27,19 @@ public class EnemyPatrolState<T> : State<T>
         if (_ia.IsTargetInSight())
         {
             _root.Execute();
+            return;
         }
 
         Movement();
+        return;
     }
 
     private void Movement()
     {
         Vector3 currentTarget = _ia.PatrolRoute[currentPosition].transform.position;
         Vector3 dir = (currentTarget - _ia.transform.position).normalized;
-        _ia.Move((dir - _ia.transform.position).normalized, _ia.ActorStats.RunSpeed);
-        _ia.LookDir((dir - _ia.transform.position).normalized);   
+        _ia.Move(dir, _ia.ActorStats.RunSpeed);
+        _ia.LookDir(dir);   
 
         var distance = Vector3.Distance(_ia.transform.position, currentTarget);
         if (distance <= 1f)

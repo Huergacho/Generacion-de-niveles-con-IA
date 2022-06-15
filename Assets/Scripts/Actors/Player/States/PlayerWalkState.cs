@@ -10,11 +10,11 @@ public class PlayerWalkState<T> : State<T>
     private T _runInput;
     private float _desiredSpeed;
 
-    private Action<Vector2, float> _onWalk;
+    private Action<Vector3, float> _onWalk;
     private Action _onShoot;
     private Action _animation;
 
-    public PlayerWalkState(T idleInput, T runInput, Action<Vector2,float> onWalk, Action onShoot, float desiredSpeed, Action animation)
+    public PlayerWalkState(T idleInput, T runInput, Action<Vector3,float> onWalk, Action onShoot, float desiredSpeed, Action animation)
     {
         _idleInput = idleInput;
         _runInput = runInput;
@@ -45,7 +45,7 @@ public class PlayerWalkState<T> : State<T>
             return;
         }
 
-        _onWalk?.Invoke(new Vector2(movement.x, movement.z), _desiredSpeed);
+        _onWalk?.Invoke(new Vector3(movement.x, 0,movement.z), _desiredSpeed);
         _animation?.Invoke();
     }
 

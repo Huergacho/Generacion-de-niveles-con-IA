@@ -16,7 +16,7 @@ public interface IArtificialMovement
     Action<bool> OnDetect { get; set; }
     bool HasTakenDamage { get; }
     GameObject[] PatrolRoute { get; }
-    void Move(Vector2 dir, float desiredSpeed);
+    void Move(Vector3 dir, float desiredSpeed);
     void SmoothRotation(Vector3 dest);
     void TakeHit(bool value =  true);
     void Shoot();

@@ -30,7 +30,7 @@ public abstract class BaseEnemyController : EntityController
         if(!GameManager.instance.IsGamePaused)
         {
             _fsm?.UpdateState();
-            _fsm?.PrintState();
+            //_fsm?.PrintState();
         }
     }
 }

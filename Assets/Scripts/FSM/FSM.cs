@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using UnityEngine;
 public class FSM<T>
 {
     private IState<T> _currentState;
@@ -41,7 +41,7 @@ public class FSM<T>
 
     public void PrintState()
     {
-        Console.WriteLine(CurrentState.ToString());
-        //Debug.Log(CurrentState.ToString());
+        // Console.WriteLine(CurrentState.ToString());
+        Debug.Log(CurrentState.ToString());
     }
 }

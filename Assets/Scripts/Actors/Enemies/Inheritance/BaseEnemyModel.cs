@@ -65,7 +65,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         transform.forward = Vector3.Lerp(transform.forward, dir, ActorStats.RotSpeed);
     }
 
-    public bool CheckForPlayer()
+    public bool IsPlayerDead()
     {
         return GameManager.instance.Player.LifeController.IsDead;
     }
@@ -99,6 +99,8 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
             Gizmos.DrawRay(transform.position, dir * 2);
         }
         Gizmos.DrawWireSphere(transform.position, IAStats.RangeAvoidance);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, IAStats.DetectionDistance);
         Gizmos.DrawRay(transform.position, Quaternion.Euler(0, ActorStats.AngleVision / 2, 0) * transform.forward * ActorStats.RangeVision);
         Gizmos.DrawRay(transform.position, Quaternion.Euler(0, -ActorStats.AngleVision / 2, 0) * transform.forward * ActorStats.RangeVision);
     }

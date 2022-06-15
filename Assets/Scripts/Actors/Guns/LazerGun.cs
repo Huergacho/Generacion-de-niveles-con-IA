@@ -29,13 +29,10 @@ public class LazerGun : MonoBehaviour
 
         if (Physics.Raycast(startPos,dir, out RaycastHit hit, float.MaxValue,_gunStats.ContactLayer))
         {
-            if ((_bulletStats.DamageLayer & 1 << hit.collider.gameObject.layer) == 1 << hit.collider.gameObject.layer)
-            {
-                var enemyLife = hit.collider.gameObject.GetComponent<LifeController>();
+            var enemyLife = hit.collider.gameObject.GetComponent<LifeController>();
+            if(enemyLife != null)
                 enemyLife.TakeDamage(_bulletStats.Damage);
-                enemyLife.CheckCurrentLife();
-            }
-                TrailRenderer trail = Instantiate(_gunStats.BulletTrail, startPos, Quaternion.identity);
+            TrailRenderer trail = Instantiate(_gunStats.BulletTrail, startPos, Quaternion.identity);
             StartCoroutine(SpawnTrail(trail, hit));
 
         }

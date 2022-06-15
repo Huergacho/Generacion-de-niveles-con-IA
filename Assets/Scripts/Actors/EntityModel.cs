@@ -21,9 +21,9 @@ public abstract class EntityModel : MonoBehaviour
         LifeController.OnDie += Die;
     }
 
-    public void Move(Vector2 dir, float desiredSpeed)
+    public void Move(Vector3 dir, float desiredSpeed)
     {
-        _rb.velocity = new Vector3(desiredSpeed * dir.normalized.x, _rb.velocity.y, desiredSpeed * dir.normalized.y);
+        _rb.velocity = new Vector3(desiredSpeed * dir.normalized.x, _rb.velocity.y, desiredSpeed * dir.normalized.z);
     }
 
     public void SmoothRotation(Vector3 dest)

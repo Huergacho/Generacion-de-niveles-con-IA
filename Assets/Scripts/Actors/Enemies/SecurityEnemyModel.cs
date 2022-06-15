@@ -8,7 +8,6 @@ public class SecurityEnemyModel : BaseEnemyModel
 {
     protected override void InitBehaviours()
     {
-
     }
 }
 

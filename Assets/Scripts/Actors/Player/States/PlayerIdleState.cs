@@ -7,11 +7,11 @@ using UnityEngine;
 public class PlayerIdleState<T> : State<T>
 {
     private T _walkInput;
-    private Action<Vector2, float> _onIdle;
+    private Action<Vector3, float> _onIdle;
     private Action _onShoot;
     private Action _animation;
 
-    public PlayerIdleState(T walkInput, Action<Vector2,float> onIdle, Action onShoot, Action animation)
+    public PlayerIdleState(T walkInput, Action<Vector3,float> onIdle, Action onShoot, Action animation)
     {
         _walkInput = walkInput;
         _onIdle = onIdle;

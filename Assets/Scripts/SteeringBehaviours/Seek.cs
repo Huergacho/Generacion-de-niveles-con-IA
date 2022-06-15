@@ -4,27 +4,24 @@ using UnityEngine;
 
 public class Seek : ISteering
 {
-    private ITarget _target;
-    private Transform _self;
+    private IArtificialMovement _self;
 
-    public Seek(ITarget target, Transform self)
+    public Seek(IArtificialMovement self)
     {
         _self = self;
-        SetTarget(target);
     }
 
     public Vector3 GetDir()
     {
-        if(_target == null)
+        if(_self.Target == null)
         {
             return Vector3.zero;
         }
-        Vector3 dir = _target.transform.position - _self.position;
+        Vector3 dir = _self.Target.transform.position - _self.transform.position;
         return dir.normalized;
     }
 
     public void SetTarget(ITarget newTarget)
     {
-        _target = newTarget;
     }
 }

@@ -25,11 +25,13 @@ public class EnemyChaseState<T> : State<T>
 
     public override void Execute()
     {
-        bool playerSeen = _self.IsTargetInSight();
-        if (!playerSeen || (playerSeen && _self.IsInShootingRange()))
+        if (!_self.IsTargetInSight() || _self.IsInShootingRange())
+        {
             _root.Execute();
+            return;
+        }
 
         _self.Move(_self.transform.forward, _self.ActorStats.RunSpeed);
-        _self.LookDir(_self.Avoidance.GetFixedDir());
+        _self.LookDir(_self.Avoidance.GetDir());
     }
 }

@@ -12,10 +12,10 @@ class PlayerRunState<T> : State<T>
     private PlayerInputs _playerInputs;
 
     private Action _onShoot;
-    private Action<Vector2, float> _onRun;
+    private Action<Vector3, float> _onRun;
     private Action _animation;
 
-    public PlayerRunState(T walkInput, T runInput, T idleInput, Action<Vector2, float> onRun, Action onShoot, float desiredSpeed, Action animation)
+    public PlayerRunState(T walkInput, T runInput, T idleInput, Action<Vector3, float> onRun, Action onShoot, float desiredSpeed, Action animation)
     {
         _walkInput = walkInput;
         _runInput = runInput;
@@ -48,7 +48,7 @@ class PlayerRunState<T> : State<T>
             return;
         }
 
-        _onRun?.Invoke(new Vector2(movement.x, movement.z), _desiredSpeed);
+        _onRun?.Invoke(new Vector3(movement.x, 0,movement.z), _desiredSpeed);
         _animation?.Invoke();
     }
 

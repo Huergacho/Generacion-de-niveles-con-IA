@@ -32,7 +32,7 @@ public class PlayerWalkStates<T> : State<T>
             _parentFSM.Transition(_runInput);
             return;
         }
-        _onWalk?.Invoke(new Vector2(_playerInputs.GetH,_playerInputs.GetV));
+        _onWalk?.Invoke(new Vector3(_playerInputs.GetH,0,_playerInputs.GetV));
     }
 }
 

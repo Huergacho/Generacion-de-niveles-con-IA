@@ -25,10 +25,14 @@ public class EnemyShootState<T> : State<T>
     public override void Execute()
     {
         if (!_ia.IsTargetInSight()|| !_ia.IsInShootingRange())
+        {
             _root.Execute();
+            return;
+        }
 
-        _ia.Move(_ia.transform.forward, _ia.ActorStats.RunSpeed);
         _ia.LookDir(_ia.Avoidance.GetFixedDir());
+        _ia.Move(_ia.transform.forward, _ia.ActorStats.RunSpeed);
+
         _ia.Shoot();
     }
 }
