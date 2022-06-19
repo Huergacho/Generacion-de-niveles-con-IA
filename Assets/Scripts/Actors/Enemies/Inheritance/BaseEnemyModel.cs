@@ -92,7 +92,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     public bool IsInShootingRange()
     {
         var distance = Vector3.Distance(transform.position, Target.transform.position);
-        print($"Is in shooting range?: distance: {distance} Stats: {IAStats.ShootDistance} result: {distance <= IAStats.ShootDistance}");
+        //print($"Is in shooting range?: distance: {distance} Stats: {IAStats.ShootDistance} result: {distance <= IAStats.ShootDistance}");
         return distance <= IAStats.ShootDistance;
     }
 
