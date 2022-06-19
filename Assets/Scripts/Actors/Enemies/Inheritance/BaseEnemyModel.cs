@@ -11,6 +11,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     [SerializeField] protected IAStats _iaStats;
     [SerializeField] protected Transform _firePoint;
     [SerializeField] protected bool drawGizmos;
+    protected bool hasTakenDamage;
 
     protected LazerGun _gun;
     protected Dictionary<SteeringType, ISteering> behaviours = new Dictionary<SteeringType, ISteering>();
@@ -21,7 +22,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     public PlayerModel Target { get; private set; }
     public IAStats IAStats => _iaStats;
     public LineOfSight LineOfSight { get; private set; }
-    public bool HasTakenDamage { get; private set; }
+    public bool HasTakenDamage => hasTakenDamage;
     public GameObject[] PatrolRoute { get; private set; }
 
     //Events
@@ -40,7 +41,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     protected virtual void Start()
     {
         GameManager.instance.OnPlayerInit += OnPlayerInit;
-
+        LifeController.OnTakeDamage += TakeDamage;
         var patrol = GetComponentInChildren<PatrolRoute>();
         patrol.Initialize();
         PatrolRoute = patrol.PatrolNodes;
@@ -59,7 +60,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         _gun.Shoot(_firePoint.position, _firePoint.forward);
     }
 
-    public virtual void LookDir(Vector3 dir) //TODO: Facu este no se esta usando cuando tenes el SmoothRotation, no?
+    public virtual void LookDir(Vector3 dir)
     {
         dir.y = 0;
         transform.forward = Vector3.Lerp(transform.forward, dir, ActorStats.RotSpeed);
@@ -70,9 +71,15 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         return GameManager.instance.Player.LifeController.IsDead;
     }
 
-    public void TakeHit(bool value = true)
+    public void TakeHit(bool value)
     {
-        HasTakenDamage = value; 
+        print("TakeHit value " + value);
+        hasTakenDamage = value; 
+    }
+
+    private void TakeDamage()
+    {
+        TakeHit(true);
     }
 
     public bool IsTargetInSight()
@@ -86,6 +93,13 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     {
         var distance = Vector3.Distance(transform.position, Target.transform.position);
         return distance > IAStats.ShootDistance;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        LifeController.OnTakeDamage -= TakeDamage;
+
     }
 
     public void OnDrawGizmosSelected()

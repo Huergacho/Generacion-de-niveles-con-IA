@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 using UnityEngine;
     public class Evade : ISteering
     {
-    private Transform _self;
+    private IArtificialMovement _self;
     private ITarget _target;
-    private float _predictionTime;
 
-    public Evade(ITarget target, Transform self, float predictionTime)
+    public Evade(IArtificialMovement self)
     {
         _self = self;
-        _predictionTime = predictionTime;
-        SetTarget(target);
+        SetTarget(_self.Target);
     }
     public void SetTarget(ITarget target)
     {
@@ -22,12 +20,12 @@ using UnityEngine;
     }
     public Vector3 GetDir()
     {
-        var predictMult = _target.GetVel * _predictionTime;
-        var dist = Vector3.Distance(_self.position, _target.transform.position);
+        var predictMult = _target.GetVel * _self.IAStats.PredictionTime;
+        var dist = Vector3.Distance(_self.transform.position, _target.transform.position);
         Vector3 point = _target.transform.position + _target.GetFoward * Mathf.Clamp(predictMult, -dist, dist);
 
 
-        Vector3 dir = _self.position - point;
+        Vector3 dir = _self.transform.position - point;
         return dir.normalized;
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public abstract class EntityController : MonoBehaviour
 {
+    [SerializeField] protected bool showFSMTransitionInConsole;
+
     //EVENTS
     public event Action _onIdle;
     public event Action<Vector3, float> _onMove;

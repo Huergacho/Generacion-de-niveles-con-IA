@@ -8,40 +8,40 @@ public class FSM<T>
 {
     private IState<T> _currentState;
     public IState<T> CurrentState => _currentState;
+
     public FSM(State<T> initalState)
     {
         SetInitialState(initalState);
     }
+
     public void SetInitialState(State<T> stateToSet)
     {
         _currentState = stateToSet;
         _currentState.Awake();
         _currentState._parentFSM = this;
     }
-    public void Transition(T input)
+
+    public void Transition(T input, bool value = false)
     {
         IState<T> stateToTransit = _currentState.GetTransition(input);
-        if (stateToTransit == null) 
-        { 
-            return; 
-        } 
-        else
-        {
-            _currentState.Sleep();
-            _currentState = stateToTransit;
-            _currentState._parentFSM = this;
-            _currentState.Awake();
-        }
+        if (stateToTransit == null) return;
+
+        _currentState.Sleep();
+        _currentState = stateToTransit;
+        if (value)
+            PrintState();
+        _currentState._parentFSM = this;
+        _currentState.Awake();
     }
+
     public void UpdateState()
     {
         if(_currentState != null)
-        _currentState.Execute();
+            _currentState.Execute();
     }
 
     public void PrintState()
     {
-        // Console.WriteLine(CurrentState.ToString());
         Debug.Log(CurrentState.ToString());
     }
 }

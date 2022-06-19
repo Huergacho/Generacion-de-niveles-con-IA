@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-class PlayerShootState<T> : State<T>
+class PlayerShootState<T> : State<T> 
 {
     T _walkInput;
     private Action _onShoot;

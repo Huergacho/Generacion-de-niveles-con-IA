@@ -25,13 +25,9 @@ public class EnemyPatrolState<T> : State<T>
     public override void Execute()
     {
         if (_ia.IsTargetInSight())
-        {
             _root.Execute();
-            return;
-        }
 
         Movement();
-        return;
     }
 
     private void Movement()
@@ -86,7 +82,7 @@ public class EnemyPatrolState<T> : State<T>
 
     private void TakeHit()
     {
-        _ia.TakeHit();
+        _ia.TakeHit(true);
         _root.Execute();
     }
 

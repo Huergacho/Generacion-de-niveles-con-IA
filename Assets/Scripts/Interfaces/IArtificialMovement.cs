@@ -18,7 +18,7 @@ public interface IArtificialMovement
     GameObject[] PatrolRoute { get; }
     void Move(Vector3 dir, float desiredSpeed);
     void SmoothRotation(Vector3 dest);
-    void TakeHit(bool value =  true);
+    void TakeHit(bool value);
     void Shoot();
     bool IsInShootingRange();
     bool IsTargetInSight();

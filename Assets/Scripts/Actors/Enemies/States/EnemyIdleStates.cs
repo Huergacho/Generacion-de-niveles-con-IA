@@ -26,15 +26,14 @@ class EnemyIdleStates<T> : State<T>
     public override void Execute() //TODO: FACU check line of sight? check if receives damage? something
     {
         if (_outOfIdleCommand())
-        {
             _root.Execute();
-        }
+
         _onIdle?.Invoke();
     }
 
     private void TakeHit()
     {
-        _self.TakeHit();
+        _self.TakeHit(true);
         _root.Execute();
     }
 

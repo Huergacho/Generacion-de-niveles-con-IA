@@ -28,9 +28,6 @@ public abstract class BaseEnemyController : EntityController
     protected virtual void Update()
     {
         if(!GameManager.instance.IsGamePaused)
-        {
             _fsm?.UpdateState();
-            //_fsm?.PrintState();
-        }
     }
 }

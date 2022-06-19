@@ -12,17 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c787a6cc08852ff4da14e7fefeac3131, type: 3}
   m_Name: EnemyBaseIAStats
   m_EditorClassIdentifier: 
-  _targetLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  obstacleLayers:
-    serializedVersion: 2
-    m_Bits: 3072
   _detectionDistance: 5
   shootCooldown: 1
   shootDistance: 2
   _timeRoot: 1
-  _canReversePatrol: 0
+  _canReversePatrol: 1
   _maxDistanceFromTarget: 5
   steeringTime: 5
   _angleAvoidance: 270

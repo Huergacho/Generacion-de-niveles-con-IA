@@ -8,6 +8,7 @@ class PlayerRunState<T> : State<T>
     private T _runInput;
     private T _idleInput;
     private float _desiredSpeed;
+    private bool _showFSMTransitionInConsole;
 
     private PlayerInputs _playerInputs;
 
@@ -15,7 +16,7 @@ class PlayerRunState<T> : State<T>
     private Action<Vector3, float> _onRun;
     private Action _animation;
 
-    public PlayerRunState(T walkInput, T runInput, T idleInput, Action<Vector3, float> onRun, Action onShoot, float desiredSpeed, Action animation)
+    public PlayerRunState(T walkInput, T runInput, T idleInput, Action<Vector3, float> onRun, Action onShoot, float desiredSpeed, Action animation, bool showFSMTransitionInConsole)
     {
         _walkInput = walkInput;
         _runInput = runInput;
@@ -24,6 +25,7 @@ class PlayerRunState<T> : State<T>
         _onShoot = onShoot;
         _desiredSpeed = desiredSpeed;
         _animation = animation;
+        _showFSMTransitionInConsole = showFSMTransitionInConsole;
     }
 
     public override void Awake()
@@ -44,7 +46,7 @@ class PlayerRunState<T> : State<T>
     {
         if (movement == Vector3.zero) //if there is no movement... 
         {
-            _parentFSM.Transition(_idleInput);
+            _parentFSM.Transition(_idleInput, _showFSMTransitionInConsole);
             return;
         }
 
@@ -55,7 +57,7 @@ class PlayerRunState<T> : State<T>
     private void OnWalk(bool isRunning)
     {
         if(!isRunning)
-        _parentFSM.Transition(_walkInput);
+        _parentFSM.Transition(_walkInput, _showFSMTransitionInConsole);
     }
 
     private void OnShoot()

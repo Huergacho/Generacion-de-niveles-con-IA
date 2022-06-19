@@ -40,4 +40,9 @@ public abstract class EntityModel : MonoBehaviour
     {
         Destroy(gameObject); //When they die.. destroy.
     }
+
+    protected virtual void OnDestroy()
+    {
+        LifeController.OnDie -= Die;
+    }
 }

@@ -7,13 +7,13 @@ using UnityEngine;
 
 public class Flee : ISteering
 {
-    private Transform _self;
+    private IArtificialMovement _self;
     private ITarget _target;
 
-    public Flee(ITarget target, Transform self)
+    public Flee(IArtificialMovement self)
     {
         _self = self;
-        SetTarget(target);
+        SetTarget(_self.Target);
     }
 
     public void SetTarget(ITarget target)
@@ -23,7 +23,7 @@ public class Flee : ISteering
 
     public Vector3 GetDir()
     {
-        Vector3 dir = _self.position - _target.transform.position;
+        Vector3 dir = _self.transform.position - _target.transform.position;
         return dir;
     }
 

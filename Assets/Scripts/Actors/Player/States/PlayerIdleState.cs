@@ -10,13 +10,15 @@ public class PlayerIdleState<T> : State<T>
     private Action<Vector3, float> _onIdle;
     private Action _onShoot;
     private Action _animation;
+    private bool _showFSMTransitionInConsole;
 
-    public PlayerIdleState(T walkInput, Action<Vector3,float> onIdle, Action onShoot, Action animation)
+    public PlayerIdleState(T walkInput, Action<Vector3,float> onIdle, Action onShoot, Action animation, bool showFSMTransitionInConsole)
     {
         _walkInput = walkInput;
         _onIdle = onIdle;
         _onShoot = onShoot;
         _animation = animation;
+        _showFSMTransitionInConsole = showFSMTransitionInConsole;
     }
 
     public override void Awake()
@@ -35,7 +37,7 @@ public class PlayerIdleState<T> : State<T>
     {
         if(move != Vector3.zero) //if it´s moving....
         {
-            _parentFSM.Transition(_walkInput);
+            _parentFSM.Transition(_walkInput, _showFSMTransitionInConsole);
             return;
         }
 

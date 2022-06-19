@@ -32,9 +32,8 @@ public class ObstacleAvoidance
         return _self.Behaviours[behaviour];
     }
 
-    public Vector3 GetDir()
+    private Vector3 GetAvoidanceDir()
     {
-
         Collider[] obj = Physics.OverlapSphere(_self.transform.position, _self.IAStats.RangeAvoidance, _self.ActorStats.ObstacleLayers);
         Collider closestObj = null;
         float nearDistance = 0;
@@ -57,9 +56,8 @@ public class ObstacleAvoidance
         if (closestObj != null)
         {
             if (nearDistance == _self.IAStats.RangeAvoidance) //TODO: Facu is this even in use????
-            {
                 nearDistance = _self.IAStats.RangeAvoidance - 0.00001f;
-            }
+
             var point = closestObj.ClosestPoint(_self.transform.position);
             Vector3 dir = ((_self.transform.position + _self.transform.right * 0.0000000001f) - point);
             return dir.normalized;
@@ -68,15 +66,15 @@ public class ObstacleAvoidance
         return Vector3.zero;
     }
 
-    public Vector3 GetFixedDir()
+    public Vector3 GetSteeringDir()
     {
-        var direction = (GetDir() * _self.IAStats.AvoidanceWeight + _actualBehaviour.GetDir() * _self.IAStats.SteeringWeight).normalized;
+        var direction = (GetAvoidanceDir() * _self.IAStats.AvoidanceWeight + _actualBehaviour.GetDir() * _self.IAStats.SteeringWeight).normalized;
         return direction;
     }
 
-    public Vector3 GetFixedDir(Vector3 dir)
+    public Vector3 GetDir(Vector3 dir)
     {
-        var direction = (GetDir() * _self.IAStats.AvoidanceWeight + dir * _self.IAStats.SteeringWeight).normalized;
+        var direction = (GetAvoidanceDir() * _self.IAStats.AvoidanceWeight + dir * _self.IAStats.SteeringWeight).normalized;
         return direction;
     }
 }

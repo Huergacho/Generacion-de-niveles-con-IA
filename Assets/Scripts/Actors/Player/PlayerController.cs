@@ -31,9 +31,9 @@ public class PlayerController : EntityController
 
     protected override void InitFSM()
     {
-        var idle = new PlayerIdleState<PlayerHelper>(PlayerHelper.Walk, Move, Shoot, _playerView.Idle);
-        var walk = new PlayerWalkState<PlayerHelper>(PlayerHelper.Idle, PlayerHelper.Run, Move, Shoot, _playerModel.ActorStats.WalkSpeed,_playerView.Move);
-        var run = new PlayerRunState<PlayerHelper>(PlayerHelper.Walk,PlayerHelper.Run, PlayerHelper.Idle, Move, Shoot, _playerModel.ActorStats.RunSpeed,_playerView.Move);
+        var idle = new PlayerIdleState<PlayerHelper>(PlayerHelper.Walk, Move, Shoot, _playerView.Idle, showFSMTransitionInConsole);
+        var walk = new PlayerWalkState<PlayerHelper>(PlayerHelper.Idle, PlayerHelper.Run, Move, Shoot, _playerModel.ActorStats.WalkSpeed,_playerView.Move, showFSMTransitionInConsole);
+        var run = new PlayerRunState<PlayerHelper>(PlayerHelper.Walk,PlayerHelper.Run, PlayerHelper.Idle, Move, Shoot, _playerModel.ActorStats.RunSpeed,_playerView.Move, showFSMTransitionInConsole);
 
         idle.AddTransition(PlayerHelper.Walk, walk);
         idle.AddTransition(PlayerHelper.Run, run);
