@@ -5,12 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "IAStats", menuName = "Stats/IAStats", order = 2)]
 public class IAStats : ScriptableObject
 {
-    public float DetectionDistance => _detectionDistance;
-    [SerializeField] private float _detectionDistance = 5;
-
-    public float ShootCoooldown => shootCooldown;
-    [SerializeField] private float shootCooldown = 1f;
-
     public float ShootDistance => shootDistance;
     [SerializeField] private float shootDistance = 2f;
 

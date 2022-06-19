@@ -8,9 +8,6 @@ public class GunStats : ScriptableObject
     public LayerMask ContactLayer => _contactLayer;
     [SerializeField] private LayerMask _contactLayer;
 
-    public float ShootCooldown => _shootCooldown;
-    [SerializeField] private float _shootCooldown;
-
     public TrailRenderer BulletTrail => _bulletTrail;
     [SerializeField] private TrailRenderer _bulletTrail;
 

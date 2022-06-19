@@ -201,6 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e83248bef1aefc48b391f6e9e6d53fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showFSMTransitionInConsole: 0
   wayPoints:
   - {fileID: 1769047591286375266}
   - {fileID: 1769047590564780396}
@@ -217,7 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletStats: {fileID: 11400000, guid: 67026c69e36587f4ba85fca2b6370d96, type: 2}
-  _gunStats: {fileID: 11400000, guid: 6f84836525518154d8557a4a26e06ca4, type: 2}
+  _gunStats: {fileID: 11400000, guid: 88af9ed5ea3e11242a57d659cfa62efa, type: 2}
 --- !u!1 &1769047590564780397
 GameObject:
   m_ObjectHideFlags: 0

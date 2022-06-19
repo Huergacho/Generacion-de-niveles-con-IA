@@ -12,13 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c787a6cc08852ff4da14e7fefeac3131, type: 3}
   m_Name: EnemyBaseIAStats
   m_EditorClassIdentifier: 
-  _detectionDistance: 5
-  shootCooldown: 1
-  shootDistance: 2
+  shootDistance: 4
   _timeRoot: 1
   _canReversePatrol: 1
   _maxDistanceFromTarget: 5
-  steeringTime: 5
+  steeringTime: 3
   _angleAvoidance: 270
   _rangeAvoidance: 1
   _steeringWeight: 1

@@ -442,6 +442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dde268ded3158442a65969fa2aba9bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showFSMTransitionInConsole: 0
 --- !u!114 &1406491573843192937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,13 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b74455e79d1dd449a15a0492b90d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletStats: {fileID: 11400000, guid: 85418c1ebc18f38438dfb58d387a2c54, type: 2}
-  contactLayer:
-    serializedVersion: 2
-    m_Bits: 3585
-  shootCooldown: 0.1
-  bulletTrail: {fileID: 3801340997333012015, guid: a6aa0a828606f0342bbbb7e90a4b9b45, type: 3}
-  bulletExplodeParticles: {fileID: 3168718373101738633, guid: 1d5191c89c839e349ae1bb6605d7b8bf, type: 3}
+  _bulletStats: {fileID: 11400000, guid: f5414a3386e22b74b83d47c8c66c1b82, type: 2}
   _gunStats: {fileID: 11400000, guid: 6f84836525518154d8557a4a26e06ca4, type: 2}
 --- !u!114 &1406491573843192939
 MonoBehaviour:

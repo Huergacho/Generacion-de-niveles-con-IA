@@ -1478,10 +1478,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1406491573843192940, guid: f3df105aa78b81b4b975c961f2e7b940, type: 3}
-      propertyPath: _gunStats
-      value: 
-      objectReference: {fileID: 11400000, guid: 6f84836525518154d8557a4a26e06ca4, type: 2}
     - target: {fileID: 1406491573843192949, guid: f3df105aa78b81b4b975c961f2e7b940, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -1530,10 +1526,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 1406491573843192958, guid: f3df105aa78b81b4b975c961f2e7b940, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3df105aa78b81b4b975c961f2e7b940, type: 3}
 --- !u!1001 &1769047590082181963
@@ -1549,6 +1541,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1769047590062999061, guid: 1768acaf14f1b8c448c084d3472dd5ed, type: 3}
       propertyPath: drawGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1769047590062999062, guid: 1768acaf14f1b8c448c084d3472dd5ed, type: 3}
+      propertyPath: showFSMTransitionInConsole
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1769047590062999063, guid: 1768acaf14f1b8c448c084d3472dd5ed, type: 3}

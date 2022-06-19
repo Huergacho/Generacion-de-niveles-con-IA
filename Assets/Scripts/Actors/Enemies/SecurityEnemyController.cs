@@ -94,9 +94,9 @@ public class SecurityEnemyController : BaseEnemyController
         return _model.IsPlayerDead();
     }
 
-    private bool HasTakenDamage()
+    private bool HasTakenDamage() //If I have receive damage and I'm not doing something about it then... return true
     {
-        Debug.Log("Do I have damage " + (_model.HasTakenDamage && !isChasing));
+        //Debug.Log("Do I have damage " + (_model.HasTakenDamage && !isChasing));
         return _model.HasTakenDamage && !isChasing;
     }
 

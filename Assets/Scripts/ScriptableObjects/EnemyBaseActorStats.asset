@@ -22,6 +22,6 @@ MonoBehaviour:
   walkSpeed: 1
   runSpeed: 2
   rotationSpeed: 0.1
-  shootCooldown: 0.5
+  shootCooldown: 1
   _angleVision: 90
-  _rangeVision: 5
+  _rangeVision: 7

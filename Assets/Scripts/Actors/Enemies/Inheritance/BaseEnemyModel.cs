@@ -33,6 +33,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     {
         base.Awake();
         _gun = GetComponent<LazerGun>();
+        _gun.SetGunCD(_actorStats.ShootCooldown);
         LineOfSight = GetComponent<LineOfSight>();
         Avoidance = new ObstacleAvoidance(this);
         InitBehaviours();
@@ -73,7 +74,6 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
 
     public void TakeHit(bool value)
     {
-        print("TakeHit value " + value);
         hasTakenDamage = value; 
     }
 
@@ -92,7 +92,8 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     public bool IsInShootingRange()
     {
         var distance = Vector3.Distance(transform.position, Target.transform.position);
-        return distance > IAStats.ShootDistance;
+        print($"Is in shooting range?: distance: {distance} Stats: {IAStats.ShootDistance} result: {distance <= IAStats.ShootDistance}");
+        return distance <= IAStats.ShootDistance;
     }
 
     protected override void OnDestroy()
@@ -114,7 +115,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         }
         Gizmos.DrawWireSphere(transform.position, IAStats.RangeAvoidance);
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, IAStats.DetectionDistance);
+        Gizmos.DrawWireSphere(transform.position, ActorStats.RangeVision);
         Gizmos.DrawRay(transform.position, Quaternion.Euler(0, ActorStats.AngleVision / 2, 0) * transform.forward * ActorStats.RangeVision);
         Gizmos.DrawRay(transform.position, Quaternion.Euler(0, -ActorStats.AngleVision / 2, 0) * transform.forward * ActorStats.RangeVision);
     }

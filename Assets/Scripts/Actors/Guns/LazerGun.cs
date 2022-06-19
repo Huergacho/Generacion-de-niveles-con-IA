@@ -10,22 +10,25 @@ public class LazerGun : MonoBehaviour
     [SerializeField] private BulletStats _bulletStats;
     [SerializeField] private GunStats _gunStats;
     private float currentTime;
-
-    private void Awake()
-    {
-        currentTime = _gunStats.ShootCooldown; //TODO fix null warning?
-    }
+    private float shootCooldown;
 
     private void Update()
     {
         if (GameManager.instance.IsGamePaused) return;
-        if(currentTime < _gunStats.ShootCooldown)
+        if (shootCooldown == 0) return;
+        if(currentTime < shootCooldown)
             currentTime += Time.deltaTime;
+    }
+
+    public void SetGunCD(float cooldown)
+    {
+        shootCooldown = cooldown;
+        currentTime = shootCooldown;
     }
 
     public void Shoot(Vector3 startPos, Vector3 dir)
     {
-        if (currentTime < _gunStats.ShootCooldown) return;
+        if (currentTime < shootCooldown) return;
 
         if (Physics.Raycast(startPos,dir, out RaycastHit hit, float.MaxValue,_gunStats.ContactLayer))
         {
@@ -38,6 +41,7 @@ public class LazerGun : MonoBehaviour
         }
         currentTime = 0;
     }
+
     private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit ray)
     {
         float time = 0;

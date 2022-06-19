@@ -19,6 +19,7 @@ public class PlayerModel : EntityModel, ITarget
         base.Awake();
         _camera = Camera.main;
         _gun = GetComponent<LazerGun>();
+        _gun.SetGunCD(_actorStats.ShootCooldown);
     }
 
     private void Start()

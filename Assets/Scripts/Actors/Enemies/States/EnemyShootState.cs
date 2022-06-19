@@ -21,6 +21,7 @@ public class EnemyShootState<T> : State<T>
     {
         _ia.Avoidance.SetActualBehaviour(_obsEnum);
         _ia.Avoidance.ActualBehaviour.SetTarget(_ia.Target); //Lets set the player as target;
+        _ia.Move(Vector3.zero, 0);
     }
 
     public override void Execute()
@@ -29,7 +30,8 @@ public class EnemyShootState<T> : State<T>
             _root.Execute();
 
         _ia.LookDir(_ia.Avoidance.GetSteeringDir());
-        _ia.Move(_ia.transform.forward, _ia.ActorStats.RunSpeed);
+        _ia.Move(Vector3.zero, 0);
+        //_ia.Move(_ia.transform.forward, _ia.ActorStats.RunSpeed);
         _ia.Shoot();
     }
 }
