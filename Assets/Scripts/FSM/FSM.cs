@@ -42,6 +42,6 @@ public class FSM<T>
 
     public void PrintState()
     {
-        Debug.Log(CurrentState.ToString());
+        //Debug.Log(CurrentState.ToString());
     }
 }
