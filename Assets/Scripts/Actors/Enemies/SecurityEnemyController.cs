@@ -38,6 +38,7 @@ public class SecurityEnemyController : BaseEnemyController
         var patrol = new EnemyPatrolState<enemyStates>(_model, _root,SteeringType.Seek);
         var chase = new EnemyChaseState<enemyStates>(_model, _root, SteeringType.Chase);
         var shoot = new EnemyShootState<enemyStates>(_model, _root, SteeringType.Seek);
+        var travelHome = new PathFindingState<enemyStates>(_model, _root, SteeringType.Seek, _model.IAStats.RangeHome); //TODO: rework this???
 
         //idle.AddTransition(enemyStates.Patrol, patrol);
         //idle.AddTransition(enemyStates.Chase, chase);
@@ -53,6 +54,14 @@ public class SecurityEnemyController : BaseEnemyController
         shoot.AddTransition(enemyStates.Chase, chase);
         shoot.AddTransition(enemyStates.Patrol, patrol);
 
+        travelHome.AddTransition(enemyStates.Chase, chase);
+        travelHome.AddTransition(enemyStates.Shoot, shoot);
+        travelHome.AddTransition(enemyStates.Patrol, patrol);
+
+        shoot.AddTransition(enemyStates.PathFinding, travelHome);
+        chase.AddTransition(enemyStates.PathFinding, travelHome);
+        //patrol.AddTransition(enemyStates.PathFinding, travelHome); //en teoria si esto es volver a casa, si patruya, no lo necesitaria, ya esta en casa.
+
         _fsm = new FSM<enemyStates>(patrol);
     }
     protected override void InitDesitionTree() 
@@ -61,10 +70,12 @@ public class SecurityEnemyController : BaseEnemyController
         INode chase = new ActionNode(ChaseState);
         INode patrol = new ActionNode(PatrolState);
         INode shoot = new ActionNode(ShootState);
+        INode travelHome = new ActionNode(TravelHome);
 
         //LOGIC: Is Player dead? -> Have I Taken Damage-> Can I See You? -> Can I Attack You?
         INode QCanShoot = new QuestionNode(() =>_model.IsInShootingRange(), shoot, chase); //if is range.... shoot, else chase. 
-        INode QOnSight = new QuestionNode(() => _model.IsTargetInSight(), QCanShoot, patrol); //check if player is in line of sight
+        INode QFarFromHome = new QuestionNode(() => _model.FarFromHome(), travelHome, patrol); //if I am in starting pos, then patrol, else return home first
+        INode QOnSight = new QuestionNode(() => _model.IsTargetInSight(), QCanShoot, QFarFromHome); //check if player is in line of sight
         INode QReceivedDamage = new QuestionNode(HasTakenDamage, chase, QOnSight); //if i have damage, then chase player, else check if I have seen him
         INode QPlayerAlive = new QuestionNode(IsPlayerDead, patrol, QReceivedDamage); //if player is not dead
         _root = QPlayerAlive;
@@ -74,6 +85,12 @@ public class SecurityEnemyController : BaseEnemyController
     {
         isChasing = true;
         _fsm.Transition(enemyStates.Chase, showFSMTransitionInConsole);
+    }
+
+    protected void TravelHome()
+    {
+        isChasing = false;
+        _fsm.Transition(enemyStates.PathFinding, showFSMTransitionInConsole);
     }
 
     protected void PatrolState()

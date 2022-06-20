@@ -96,6 +96,12 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         return distance <= IAStats.ShootDistance;
     }
 
+    public bool FarFromHome()
+    {
+        var distance = Vector3.Distance(transform.position, PatrolRoute[0].transform.position); //PatrolRoute[0] is alway starting position, and we are thinking that they will always have PatrolPoints, if not, then add spawning point vector to Model
+        return distance >= IAStats.RangeHome;
+    }
+
     protected override void OnDestroy()
     {
         base.OnDestroy();
@@ -113,6 +119,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
             var dir = Avoidance.ActualBehaviour.GetDir();
             Gizmos.DrawRay(transform.position, dir * 2);
         }
+
         Gizmos.DrawWireSphere(transform.position, IAStats.RangeAvoidance);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, ActorStats.RangeVision);

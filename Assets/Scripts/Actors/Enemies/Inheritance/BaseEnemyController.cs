@@ -11,7 +11,8 @@ public abstract class BaseEnemyController : EntityController
         Patrol,
         Seek,
         Chase,
-        Shoot
+        Shoot,
+        PathFinding
     }
 
     protected INode _root;

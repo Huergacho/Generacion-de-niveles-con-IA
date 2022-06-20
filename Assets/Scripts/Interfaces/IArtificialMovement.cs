@@ -23,4 +23,5 @@ public interface IArtificialMovement
     bool IsInShootingRange();
     bool IsTargetInSight();
     void LookDir(Vector3 dir);
+    bool FarFromHome();
 }
