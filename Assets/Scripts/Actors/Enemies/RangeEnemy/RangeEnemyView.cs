@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class SecurityEnemyView : MonoBehaviour
+public class RangeEnemyView : MonoBehaviour
 {
     private Animator _animator;
-    private SecurityEnemyModel _model;
+    private RangeEnemyModel _model;
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
-        _model = GetComponent<SecurityEnemyModel>();
+        _model = GetComponent<RangeEnemyModel>();
         _model.OnDetect += DetectAnimation;
     }
     void DetectAnimation(bool detectBool)

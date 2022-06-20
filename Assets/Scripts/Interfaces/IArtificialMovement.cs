@@ -17,11 +17,11 @@ public interface IArtificialMovement
     bool HasTakenDamage { get; }
     GameObject[] PatrolRoute { get; }
     void Move(Vector3 dir, float desiredSpeed);
-    void SmoothRotation(Vector3 dest);
     void TakeHit(bool value);
     void Shoot();
     bool IsInShootingRange();
     bool IsTargetInSight();
     void LookDir(Vector3 dir);
     bool FarFromHome();
+    bool IsEnemyFar();
 }

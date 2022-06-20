@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyPatrolState<T> : State<T>
 {
-    private IArtificialMovement _ia;
+    private IArtificialMovement _self;
     private INode _root;
     private SteeringType _obsEnum;
     private int currentPosition = 0;
@@ -11,20 +11,20 @@ public class EnemyPatrolState<T> : State<T>
 
     public EnemyPatrolState(IArtificialMovement ia, INode root, SteeringType obsEnum)
     {
-        _ia = ia;
+        _self = ia;
         _root = root;
         _obsEnum = obsEnum;
     }
 
     public override void Awake()
     {
-        _ia.LifeController.OnTakeDamage += TakeHit;
-        _ia.Avoidance.SetActualBehaviour(_obsEnum);
+        _self.LifeController.OnTakeDamage += TakeHit;
+        _self.Avoidance.SetActualBehaviour(_obsEnum);
     }
 
     public override void Execute()
     {
-        if (_ia.IsTargetInSight())
+        if (_self.IsTargetInSight())
             _root.Execute();
 
         Movement();
@@ -32,12 +32,12 @@ public class EnemyPatrolState<T> : State<T>
 
     private void Movement()
     {
-        Vector3 currentTarget = _ia.PatrolRoute[currentPosition].transform.position;
-        Vector3 dir = (currentTarget - _ia.transform.position).normalized;
-        _ia.Move(dir, _ia.ActorStats.RunSpeed);
-        _ia.LookDir(dir);   
+        Vector3 currentTarget = _self.PatrolRoute[currentPosition].transform.position;
+        Vector3 dir = (currentTarget - _self.transform.position).normalized;
+        _self.Move(dir, _self.ActorStats.RunSpeed);
+        _self.LookDir(dir);   
 
-        var distance = Vector3.Distance(_ia.transform.position, currentTarget);
+        var distance = Vector3.Distance(_self.transform.position, currentTarget);
         if (distance <= 1f)
         {
             ChangeCurrentPosition();
@@ -49,13 +49,13 @@ public class EnemyPatrolState<T> : State<T>
     {
         if (!isDoingReverse) //Si no hace reverse, esto va a dar siempre falso!
         {
-            if (currentPosition < _ia.PatrolRoute.Length - 1) //Si es menor al total, sumale
+            if (currentPosition < _self.PatrolRoute.Length - 1) //Si es menor al total, sumale
             {
                 currentPosition++;
             }
             else
             {
-                if (_ia.IAStats.CanReversePatrol) //Si ya llego al final... Fijate si puede revertir
+                if (_self.IAStats.CanReversePatrol) //Si ya llego al final... Fijate si puede revertir
                 {
                     isDoingReverse = true; //Activa la vuelva atras
                     currentPosition--; //Y resta una posicion
@@ -82,12 +82,12 @@ public class EnemyPatrolState<T> : State<T>
 
     private void TakeHit()
     {
-        _ia.TakeHit(true);
+        _self.TakeHit(true);
         _root.Execute();
     }
 
     public override void Sleep()
     {
-        _ia.LifeController.OnTakeDamage -= TakeHit;
+        _self.LifeController.OnTakeDamage -= TakeHit;
     }
 }

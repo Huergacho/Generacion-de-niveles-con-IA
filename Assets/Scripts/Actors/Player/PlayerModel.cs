@@ -57,7 +57,7 @@ public class PlayerModel : EntityModel, ITarget
     }
     #endregion
     
-    public void SuscribeEvents(PlayerController controller)
+    public void SuscribeEvents(PlayerController controller) // TODO: Facu esto esta mal porque o guardo la referencia del controller, o cuando me destruyo, no hago en el OnDestroy la desuscripcion del player controller
     {
         controller._onShoot += Shoot;
         controller._onMove += Move;
@@ -66,5 +66,15 @@ public class PlayerModel : EntityModel, ITarget
     public override void Die()
     {
         GameManager.instance.GameOver();
+    }
+
+    public void SmoothRotation(Vector3 dest)
+    {
+        var direction = (dest - transform.position);
+        if (direction != Vector3.zero)
+        {
+            var rotDestiny = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotDestiny, ActorStats.RotSpeed * Time.deltaTime);
+        }
     }
 }

@@ -36,7 +36,6 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         _gun.SetGunCD(_actorStats.ShootCooldown);
         LineOfSight = GetComponent<LineOfSight>();
         Avoidance = new ObstacleAvoidance(this);
-        InitBehaviours();
     }
 
     protected virtual void Start()
@@ -53,9 +52,6 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         GameManager.instance.OnPlayerInit -= OnPlayerInit;
         Target = player;
     }
-
-    protected abstract void InitBehaviours();
-
     public virtual void Shoot() //Habria que determinar si esto se queda aca o no porque el player tambien lo tiene pero si no todos los enemgios van disparar...
     {
         _gun.Shoot(_firePoint.position, _firePoint.forward);
@@ -96,17 +92,22 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         return distance <= IAStats.ShootDistance;
     }
 
-    public bool FarFromHome()
+    public bool FarFromHome() //No soooy mega fan de este, pero lo agregue por el PathFinding
     {
         var distance = Vector3.Distance(transform.position, PatrolRoute[0].transform.position); //PatrolRoute[0] is alway starting position, and we are thinking that they will always have PatrolPoints, if not, then add spawning point vector to Model
-        return distance >= IAStats.RangeHome;
+        return distance >= IAStats.NearTargetRange;
+    }
+
+    public bool IsEnemyFar()
+    {
+        var distance = Vector3.Distance(transform.position, Target.transform.position);
+        return distance >= IAStats.MaxDistanceFromTarget;
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
         LifeController.OnTakeDamage -= TakeDamage;
-
     }
 
     public void OnDrawGizmosSelected()

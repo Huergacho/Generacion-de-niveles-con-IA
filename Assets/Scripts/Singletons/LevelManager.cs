@@ -9,9 +9,11 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private Transform enemyNodesParent;
     private int collectableItemCounter;
+    private List<IStealable> _itemsInLevel = new List<IStealable>(); //if later on we need to check items per room, then we do a dictionary?
 
     //Propierties
     public Transform PatrolNodeParent => enemyNodesParent;
+    public List<IStealable> Items => _itemsInLevel;
 
     //Events
     public Action<int> OnCollectable;
@@ -33,5 +35,11 @@ public class LevelManager : MonoBehaviour
     {
         collectableItemCounter += value;
         OnCollectable?.Invoke(collectableItemCounter);
+    }
+
+    public void AddItem(IStealable item)
+    {
+        if(!_itemsInLevel.Contains(item)) //si el item no estaba ya en el listado... (cuenta los repetidos???? no deberia)
+            _itemsInLevel.Add(item);
     }
 }

@@ -35,6 +35,6 @@ public class IAStats : ScriptableObject
     public float PredictionTime => predictionTime;
     [SerializeField] private float predictionTime = 1f;
 
-    public float RangeHome => _rangeHome;
+    public float NearTargetRange => _rangeHome;
     [SerializeField] private float _rangeHome = 0.5f;
 }

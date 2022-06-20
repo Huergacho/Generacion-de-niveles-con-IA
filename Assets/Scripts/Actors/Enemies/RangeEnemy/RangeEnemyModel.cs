@@ -4,10 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-public class SecurityEnemyModel : BaseEnemyModel
+public class RangeEnemyModel : BaseEnemyModel
 {
-    protected override void InitBehaviours()
-    {
-    }
-}
 
+}

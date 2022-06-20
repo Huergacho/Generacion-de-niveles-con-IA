@@ -1,27 +1,24 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(SecurityEnemyModel))]
-public class SecurityEnemyController : BaseEnemyController
+[RequireComponent(typeof(RangeEnemyModel))]
+public class RangeEnemyController : BaseEnemyController
 {
     [SerializeField] private Transform[] wayPoints;
-    private SecurityEnemyModel _model;
-    private bool isChasing;
+    //private RangeEnemyModel _model;
     //private SecurityEnemyView _enemyView;
 
     protected override void Awake()
     {
         base.Awake();
-        _model = GetComponent<SecurityEnemyModel>();
+        //_model = GetComponent<RangeEnemyModel>();
         //_enemyView = GetComponent<SecurityEnemyView>();
     }
 
-    protected void Start()
+    protected override void Start()
     {
+        base.Start();
         //_enemyView.SuscribeEvents(this);
-        InitBehaviours();
-        InitDesitionTree();
-        InitFSM();
     }
 
     protected override void InitBehaviours()
@@ -38,7 +35,7 @@ public class SecurityEnemyController : BaseEnemyController
         var patrol = new EnemyPatrolState<enemyStates>(_model, _root,SteeringType.Seek);
         var chase = new EnemyChaseState<enemyStates>(_model, _root, SteeringType.Chase);
         var shoot = new EnemyShootState<enemyStates>(_model, _root, SteeringType.Seek);
-        var travelHome = new PathFindingState<enemyStates>(_model, _root, SteeringType.Seek, _model.IAStats.RangeHome); //TODO: rework this???
+        var travelHome = new PathFindingState<enemyStates>(_model, _root, SteeringType.Seek, _model.IAStats.NearTargetRange); //TODO: rework this???
 
         //idle.AddTransition(enemyStates.Patrol, patrol);
         //idle.AddTransition(enemyStates.Chase, chase);
@@ -79,46 +76,28 @@ public class SecurityEnemyController : BaseEnemyController
         INode QReceivedDamage = new QuestionNode(HasTakenDamage, chase, QOnSight); //if i have damage, then chase player, else check if I have seen him
         INode QPlayerAlive = new QuestionNode(IsPlayerDead, patrol, QReceivedDamage); //if player is not dead
         _root = QPlayerAlive;
-    } 
+    }
 
     protected void ChaseState()
     {
-        isChasing = true;
+        isReacting = true;
         _fsm.Transition(enemyStates.Chase, showFSMTransitionInConsole);
     }
-
     protected void TravelHome()
     {
-        isChasing = false;
+        isReacting = false;
         _fsm.Transition(enemyStates.PathFinding, showFSMTransitionInConsole);
     }
 
     protected void PatrolState()
     {
-        isChasing = false;
+        isReacting = false;
         _fsm.Transition(enemyStates.Patrol, showFSMTransitionInConsole);
     }
 
     protected void ShootState()
     {
-        isChasing = false;
+        isReacting = false;
         _fsm.Transition(enemyStates.Shoot, showFSMTransitionInConsole);
     }
-
-    private bool IsPlayerDead()
-    {
-        //Debug.Log("Player is Dead " + _model.IsPlayerDead());
-        return _model.IsPlayerDead();
-    }
-
-    private bool HasTakenDamage() //If I have receive damage and I'm not doing something about it then... return true
-    {
-        //Debug.Log("Do I have damage " + (_model.HasTakenDamage && !isChasing));
-        return _model.HasTakenDamage && !isChasing;
-    }
-
-    //private void IdleCommand() //TODO FACU fijate si esto se va a usar o no? pondria un public virtual void Idle() en BaseEnemyModel (y en IArtificalMovement) 
-    //{
-    //    _model.Move(transform.forward, 0);
-    //}
 }
