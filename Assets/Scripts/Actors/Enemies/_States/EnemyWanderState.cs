@@ -31,7 +31,7 @@ public class EnemyWanderState<T> : State<T>
     }
     public override void Execute()
     {
-        if (_ia.IsTargetInSight()) //if we took damage or we saw the player....
+        if (_ia.IsTargetInSight() || _self.IsThereAnItemToSteal()) //if we took damage or we saw the player....
             _root.Execute();
 
         _self.LookDir(_self.Avoidance.GetDir(_dir));

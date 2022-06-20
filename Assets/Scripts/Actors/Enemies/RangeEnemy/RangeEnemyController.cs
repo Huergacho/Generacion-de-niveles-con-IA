@@ -71,7 +71,7 @@ public class RangeEnemyController : BaseEnemyController
 
         //LOGIC: Is Player dead? -> Have I Taken Damage-> Can I See You? -> Can I Attack You?
         INode QCanShoot = new QuestionNode(() =>_model.IsInShootingRange(), shoot, chase); //if is range.... shoot, else chase. 
-        INode QFarFromHome = new QuestionNode(() => _model.FarFromHome(), travelHome, patrol); //if I am in starting pos, then patrol, else return home first
+        INode QFarFromHome = new QuestionNode(() => _model.FarFromDestination(), travelHome, patrol); //if I am in starting pos, then patrol, else return home first
         INode QOnSight = new QuestionNode(() => _model.IsTargetInSight(), QCanShoot, QFarFromHome); //check if player is in line of sight
         INode QReceivedDamage = new QuestionNode(HasTakenDamage, chase, QOnSight); //if i have damage, then chase player, else check if I have seen him
         INode QPlayerAlive = new QuestionNode(IsPlayerDead, patrol, QReceivedDamage); //if player is not dead
