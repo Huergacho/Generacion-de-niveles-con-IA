@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class LevelGenerator : MonoBehaviour
 {
     [SerializeField] private Room[] levels;
@@ -20,21 +21,13 @@ public class LevelGenerator : MonoBehaviour
     {
         foreach (Room item in levels)
         {
-            item.GetNeightboursLinealy();
-        }
-    }
-    public void ResetLevelData()
-    {
-        foreach (Room item in levels)
-        {
-            item.ClearData();
+            MyEngine.MyRandom.Shuffle(levels);
         }
     }
     #endregion
-
     public void RunLevelRoullete()
     {
-        MyEngine.MyRandom.Shuffle(levels);
+
         var startPoint = levels[0];
         _finalPoint = levels[levels.Length - 1];
         AstarLevel =_astar.GetPath(startPoint, CheckRoom, GetNeightbours, GetCost, GetHeuristic);

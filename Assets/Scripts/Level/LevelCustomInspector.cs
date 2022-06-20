@@ -1,5 +1,8 @@
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEditor;
 [CustomEditor(typeof(LevelGenerator))]
@@ -7,19 +10,13 @@ public class LevelCustomInspector : Editor
 {
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
         LevelGenerator levelGen = (LevelGenerator)target;
-        if (GUILayout.Button("Bake Neighbours"))
+        if (GUILayout.Button("Bake Level"))
         {
             levelGen.BakeLevels();
         }
-        if (GUILayout.Button("Remove Neighbours"))
-        {
-            levelGen.ResetLevelData();
-        }
-        if(GUILayout.Button("Bake Level"))
-        {
-            levelGen.RunLevelRoullete();
-        }
+        serializedObject.ApplyModifiedProperties();
+        DrawDefaultInspector();
     }
+
 }

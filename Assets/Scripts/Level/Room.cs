@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+[System.Serializable]
 public class Room : MonoBehaviour
 {
-    [SerializeField] private List<Room> neighBours;
+
+    [SerializeField]private List<Room> neighBours;
     public List<Room> NeightBours => neighBours;
 
-    [SerializeField] private LayerMask roomLayer;
-    [SerializeField] private float detectDistance;
+    [SerializeField] private RoomProperties properties;
     public void GetNeightBoursRadially()
     {
-        Collider[] colls = Physics.OverlapSphere(transform.position, detectDistance,roomLayer);
+        Collider[] colls = Physics.OverlapSphere(transform.position, properties.DetectDistance, properties.RoomLayer);
         for (int i = 0; i < colls.Length; i++)
         {
             var curr = colls[i];
@@ -25,6 +26,11 @@ public class Room : MonoBehaviour
 
         }
     }
+
+    public void GetRandomized()
+    {
+
+    }
     public void GetNeightboursLinealy()
     {
         GetNeightbourd(Vector3.right);
@@ -35,12 +41,12 @@ public class Room : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectDistance);
+        Gizmos.DrawWireSphere(transform.position, properties.DetectDistance);
     }
     void GetNeightbourd(Vector3 dir)
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, dir, out hit, detectDistance,roomLayer))
+        if (Physics.Raycast(transform.position, dir, out hit, properties.DetectDistance, properties.RoomLayer))
         {
             var room = hit.collider.GetComponent<Room>();
             if(room != null && room != this)
