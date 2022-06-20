@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IStealable
 {
-    GameObject gameObject { get; set; }
-    Transform transform { get; set; }
+    GameObject gameObject { get; }
+    Transform transform { get; }
 }

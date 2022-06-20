@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StealingEnemyModel : BaseEnemyModel, IThief
+public class ThiefEnemyModel : BaseEnemyModel, IThief
 {
     private IStealable _itemTarget;
     private IStealable _itemStolen;

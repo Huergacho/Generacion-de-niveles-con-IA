@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StealingEnemyController : BaseEnemyController
+public class ThiefEnemyController : BaseEnemyController
 {
     protected override void Awake()
     {
@@ -86,5 +86,10 @@ public class StealingEnemyController : BaseEnemyController
     protected bool IsThereAnItemToSteal() //if there is a item in the room to steal, check from level manager?
     {
         return LevelManager.instance.Items.Count > 0; //definetly rework this when Facu adds the rooms.
+    }
+
+    private Vector3 GetItemToStealCommand() //TODO FACU fijate si esto se va a usar o no? pondria un public virtual void Idle()  en IArtificalMovement
+    {
+        return (_model as IThief).ItemTarget.transform.position;
     }
 }

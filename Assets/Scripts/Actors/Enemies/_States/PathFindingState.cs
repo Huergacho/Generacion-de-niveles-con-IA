@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,12 @@ using UnityEngine;
 public class PathFindingState<T> : State<T>
 {
     IArtificialMovement _self;
+    IThief _thief;
     private INode _root;
     private SteeringType _obsEnum;
-
     private Astar<Vector3> _ast;
     private List<Vector3> _path;
-    private Vector3 _homePos;
+    private Vector3 _target;
     private float _homeRange;
     private int _index;
     private float _minDistance = 0.5f;
@@ -23,14 +24,20 @@ public class PathFindingState<T> : State<T>
 
         _homeRange = homeRange;
         _ast = new Astar<Vector3>();
+
+        if (_self is IThief)
+            _thief = _self as IThief;
     }
 
     public override void Awake()
     {
         _self.LifeController.OnTakeDamage += TakeHit;
-        _homePos = _self.PatrolRoute[0].transform.position;
         _self.Avoidance.SetActualBehaviour(_obsEnum);
-        //_self.Avoidance.ActualBehaviour.SetTarget(_self.Target); //Lets set the player as target;
+
+        if (_thief != null)
+            _target = _thief.ItemTarget.transform.position;
+        else
+            _target = _self.PatrolRoute[0].transform.position;
 
         SetPath();
     }
@@ -78,7 +85,7 @@ public class PathFindingState<T> : State<T>
     float Heuristic(Vector3 curr)
     {
         float heuristic = 0;
-        heuristic += Vector3.Distance(curr, _homePos);
+        heuristic += Vector3.Distance(curr, _target);
         return heuristic;
     }
 
@@ -111,7 +118,7 @@ public class PathFindingState<T> : State<T>
 
     bool IsSatisfied(Vector3 curr)
     {
-        float distance = Vector3.Distance(curr, _homePos);
+        float distance = Vector3.Distance(curr, _target);
         return distance <= _homeRange;
     }
     #endregion
