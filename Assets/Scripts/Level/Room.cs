@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+
 [System.Serializable]
 public class Room : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class Room : MonoBehaviour
     public List<Room> NeightBours => neighBours;
 
     [SerializeField] private RoomProperties properties;
+    [SerializeField] private GameObject currentPreset;
     public void GetNeightBoursRadially()
     {
         Collider[] colls = Physics.OverlapSphere(transform.position, properties.DetectDistance, properties.RoomLayer);
@@ -29,7 +31,14 @@ public class Room : MonoBehaviour
 
     public void GetRandomized()
     {
-
+        var currRoom = UnityEngine.Random.Range(0, properties.Presets.Length);
+        if(currentPreset != null)
+        {
+            Destroy(currentPreset);
+            currentPreset = null;
+        }
+        currentPreset = properties.Presets[currRoom];
+        Instantiate(currentPreset, transform);
     }
     public void GetNeightboursLinealy()
     {

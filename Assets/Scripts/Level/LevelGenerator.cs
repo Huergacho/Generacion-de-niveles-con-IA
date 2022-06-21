@@ -19,15 +19,11 @@ public class LevelGenerator : MonoBehaviour
     #region Bake
     public void BakeLevels()
     {
-        foreach (Room item in levels)
-        {
-            MyEngine.MyRandom.Shuffle(levels);
-        }
+        MyEngine.MyRandom.Shuffle(levels);
     }
     #endregion
     public void RunLevelRoullete()
     {
-
         var startPoint = levels[0];
         _finalPoint = levels[levels.Length - 1];
         AstarLevel =_astar.GetPath(startPoint, CheckRoom, GetNeightbours, GetCost, GetHeuristic);
@@ -40,6 +36,7 @@ public class LevelGenerator : MonoBehaviour
             var curr = levels[i];
             if (AstarLevel.Contains(curr))
             {
+                curr.GetRandomized();
                 continue;
             }
             else
