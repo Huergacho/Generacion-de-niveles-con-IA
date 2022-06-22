@@ -13,12 +13,18 @@ MonoBehaviour:
   m_Name: Room
   m_EditorClassIdentifier: 
   _presets:
-  - {fileID: 2084026324974856649, guid: 5a89e3b6a89097349a8c4ad64361399f, type: 3}
   - {fileID: 2084026324974856649, guid: 3afaa8c81ce029b43882fb84e7cceec0, type: 3}
   - {fileID: 2084026324974856649, guid: 098a4f7c5e3820a42ad7d017a32bc5bf, type: 3}
   - {fileID: 2084026324974856649, guid: 8bbc689c16442a0428b67e0bf60a5c28, type: 3}
-  - {fileID: 2084026324974856649, guid: c7b86e87502d850419cac03699fc2039, type: 3}
+  - {fileID: 2084026324974856649, guid: 5a89e3b6a89097349a8c4ad64361399f, type: 3}
   _roomLayer:
     serializedVersion: 2
     m_Bits: 4096
   _detectDistance: 21.7
+  _instanciableObjects:
+  - probability: 50
+    objectToSpawn: {fileID: 8640187892706222255, guid: 4c81d93a91d42dc40a765b0870b9b34e, type: 3}
+  - probability: 25
+    objectToSpawn: {fileID: 7460643273639543670, guid: 2bc7083f901b84d40b4b7a6252485100, type: 3}
+  - probability: 25
+    objectToSpawn: {fileID: 0}

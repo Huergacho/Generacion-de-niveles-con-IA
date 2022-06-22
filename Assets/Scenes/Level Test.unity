@@ -45614,10 +45614,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 1514812623}
     m_Modifications:
     - target: {fileID: 652751313, guid: c7b86e87502d850419cac03699fc2039, type: 3}
-      propertyPath: properties
-      value: 
-      objectReference: {fileID: 11400000, guid: 696ab3c6f5bbd5a4d8c4a39b76fe8226, type: 2}
-    - target: {fileID: 652751313, guid: c7b86e87502d850419cac03699fc2039, type: 3}
       propertyPath: detectDistance
       value: 21.7
       objectReference: {fileID: 0}
