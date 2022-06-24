@@ -13,12 +13,22 @@ public class LevelGenerator : MonoBehaviour
 
     private void Start()
     {
-        _astar = new Astar<Room>();
-        RunLevelRoullete();
     }
     #region Bake
+    public void RunLevel()
+    {
+        _astar = new Astar<Room>();
+
+        RunLevelRoullete();
+    }
     public void BakeLevels()
     {
+        foreach (var item in levels)
+        {
+            item.gameObject.SetActive(true);
+            item.ResetLevel();
+
+        }
         MyEngine.MyRandom.Shuffle(levels);
     }
     #endregion
@@ -34,12 +44,7 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 0; i < levels.Length; i++)
         {
             var curr = levels[i];
-            if (AstarLevel.Contains(curr))
-            {
-                curr.GetRandomized();
-                continue;
-            }
-            else
+            if (!AstarLevel.Contains(curr))
             {
                 curr.gameObject.SetActive(false);
             }

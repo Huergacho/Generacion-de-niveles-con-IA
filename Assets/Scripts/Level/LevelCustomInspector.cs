@@ -15,6 +15,10 @@ public class LevelCustomInspector : Editor
         {
             levelGen.BakeLevels();
         }
+        if (GUILayout.Button("RunLevel"))
+        {
+            levelGen.RunLevel();
+        }
         serializedObject.ApplyModifiedProperties();
         DrawDefaultInspector();
     }

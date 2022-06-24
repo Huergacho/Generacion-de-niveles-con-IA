@@ -27,4 +27,4 @@ MonoBehaviour:
   - probability: 25
     objectToSpawn: {fileID: 7460643273639543670, guid: 2bc7083f901b84d40b4b7a6252485100, type: 3}
   - probability: 25
-    objectToSpawn: {fileID: 0}
+    objectToSpawn: {fileID: 8374169021864658410, guid: 763e96f66f8a5f64d9cd78fd4f121a94, type: 3}

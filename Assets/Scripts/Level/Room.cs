@@ -8,58 +8,44 @@ using UnityEngine;
 [System.Serializable]
 public class Room : MonoBehaviour
 {
-
+    [System.Serializable]
+    public class Doors
+    {
+        public GameObject door;
+        public Vector3 dir;
+    }
+    [SerializeField] private List<Doors> _doors;
     [SerializeField]private List<Room> neighBours;
     [SerializeField] private Dictionary<GameObject,float> objectsToInstatiate = new Dictionary<GameObject, float>();
     [SerializeField] private List<Transform> instatiateWayPoints;
+    private Dictionary<Room, Vector3> neightBoursWithDir = new Dictionary<Room, Vector3>();
+    [SerializeField] private List<GameObject> instancedGameObjects;
     public List<Room> NeightBours => neighBours;
 
     [SerializeField] private RoomProperties properties;
-    //[SerializeField] private GameObject currentPreset; // Esto queda por si en algun momento queremos volver a meter lo de los presets :D
     private void Start()
+    {
+        InstantiateRandomEntities();
+        RemoveDoors();
+    }
+    public void InstantiateRandomEntities()
     {
         for (int i = 0; i < properties.InstanciableObjects.Count; i++)
         {
             objectsToInstatiate.Add(properties.InstanciableObjects[i].ObjectToSpawn, properties.InstanciableObjects[i].Probability);
 
         }
-    }
-    public void GetNeightBoursRadially()
-    {
-        Collider[] colls = Physics.OverlapSphere(transform.position, properties.DetectDistance, properties.RoomLayer);
-        for (int i = 0; i < colls.Length; i++)
-        {
-            var curr = colls[i];
-            Room currentRoom = curr.gameObject.GetComponent<Room>();
-            if(currentRoom != null && currentRoom != this)
-            { 
-              neighBours.Add(currentRoom);
-            }
-        }   
-    }
-    public void InstantiateRandomEntities()
-    {
-
         for (int i = 0; i < instatiateWayPoints.Count; i++)
         {
             var spawnPos = instatiateWayPoints[i];
             var newObj = MyEngine.MyRandom.GetRandomWeight(objectsToInstatiate);
-            Instantiate(newObj, spawnPos);
+            if (newObj != null)
+            {
+                GameObject clone = Instantiate(newObj, spawnPos);
+                instancedGameObjects.Add(clone);
+            }
             instatiateWayPoints.RemoveAt(i);
         }
-    }
-    public void GetRandomized()
-    {
-        //var currRoom = UnityEngine.Random.Range(0, properties.Presets.Length);     // Esto queda por si en algun momento queremos volver a meter lo de los presets :D
-        //if(currentPreset != null)
-        //{
-        //    Destroy(currentPreset);
-        //    currentPreset = null;
-        //}
-        //currentPreset = properties.Presets[currRoom];
-        //Instantiate(currentPreset, transform);
-
-        InstantiateRandomEntities();
     }
     public void GetNeightboursLinealy()
     {
@@ -79,15 +65,52 @@ public class Room : MonoBehaviour
         if (Physics.Raycast(transform.position, dir, out hit, properties.DetectDistance, properties.RoomLayer))
         {
             var room = hit.collider.GetComponent<Room>();
-            if(room != null && room != this)
-            neighBours.Add(room);
+            if (room != null && room != this)
+            {
+                neighBours.Add(room);
+                neightBoursWithDir.Add(room, dir);
+            }
+
         }
     }
     public void ClearData()
     {
-        for (int i = 0; i < neighBours.Count; i++)
+            neighBours.Clear();
+            neightBoursWithDir.Clear();
+    }
+    public void ResetLevel()
+    {
+        for (int i = 0; i < instancedGameObjects.Count; i++)
         {
-            neighBours.RemoveAt(i);
+            var item = instancedGameObjects[i];
+            Destroy(item);  
         }
+        objectsToInstatiate.Clear();
+    }
+    private void RemoveDoors()
+    {
+        foreach (var item in neightBoursWithDir)
+        {
+            //if (item.Key.gameObject.activeInHierarchy)
+            //{
+            //    for (int i = 0; i < _doors.Count; i++)
+            //    {
+            //        var currDoor = _doors[i];
+            //        if(_doors == item.Value)
+            //        {
+            //            currDoor.door.SetActive(false);
+            //        }
+            //    }
+            //}
+        }
+        //for (int i = 0; i < _doors.Count; i++)
+        //{
+        //    var currDoor = _doors[i];
+        //    if (neightBoursWithDir.ContainsValue(currDoor.dir))
+        //    {
+        //        print("destrui");
+        //        Destroy(currDoor.door.gameObject);
+        //    }
+        //}
     }
 }
