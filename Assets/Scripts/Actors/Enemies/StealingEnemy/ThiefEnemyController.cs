@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ThiefEnemyModel))]
 public class ThiefEnemyController : BaseEnemyController
 {
     protected override void Awake()
@@ -30,9 +31,9 @@ public class ThiefEnemyController : BaseEnemyController
         
         //INode QCanShoot = new QuestionNode(() => _model.IsInShootingRange(), shoot, chase); //if is range.... shoot, else chase. 
         //INode QEscapeRoom = new QuestionNode(() => _model.FarFromHome(), travelHome, patrol); //if I am in starting pos, then patrol, else return home first
-        INode QItemToSteal = new QuestionNode(IsThereAnItemToSteal, travelToItem, wander);
-        INode QDoIHaveAnItem = new QuestionNode(DoIHaveStolenAnItem, wander, QItemToSteal);
-        INode QReceivedDamage = new QuestionNode(HasTakenDamage, evade, QDoIHaveAnItem); //if i have damage, then chase player, else check if I have seen him
+        INode QItemToSteal = new QuestionNode(IsThereAnItemToSteal, travelToItem, wander); // if there is a item to steal, go for it, else wander around. 
+        INode QDoIHaveAnItem = new QuestionNode(DoIHaveStolenAnItem, wander, QItemToSteal); // If I have an item... errr Wander? Else, check if there is a item to steal
+        INode QReceivedDamage = new QuestionNode(HasTakenDamage, evade, QDoIHaveAnItem); //if i have damage, then evade player, else check if I I have an item already
         INode QPlayerAlive = new QuestionNode(IsPlayerDead, wander, QReceivedDamage); //if player is not dead
         _root = QPlayerAlive;
     }
@@ -80,16 +81,15 @@ public class ThiefEnemyController : BaseEnemyController
 
     protected bool DoIHaveStolenAnItem() //if I already stole an item
     {
+        //Debug.Log("Do I have an item already? " + (_model as IThief).ItemStolen != null);
         return (_model as IThief).ItemStolen != null;
     }
 
-    protected bool IsThereAnItemToSteal() //if there is a item in the room to steal, check from level manager?
+    protected bool IsThereAnItemToSteal()
     {
-        return LevelManager.instance.Items.Count > 0; //definetly rework this when Facu adds the rooms.
+        //Debug.Log("Is there an item to steal " + (_model as IThief).IsThereAnItemToSteal());
+        return (_model as IThief).IsThereAnItemToSteal();
     }
 
-    private Vector3 GetItemToStealCommand() //TODO FACU fijate si esto se va a usar o no? pondria un public virtual void Idle()  en IArtificalMovement
-    {
-        return (_model as IThief).ItemTarget.transform.position;
-    }
+
 }

@@ -10,5 +10,6 @@ public class HealingItem : MonoBehaviour, IItem
     public void Interact(PlayerModel player)
     {
         player.LifeController.Heal(healing);
+        Destroy(gameObject);
     }
 }

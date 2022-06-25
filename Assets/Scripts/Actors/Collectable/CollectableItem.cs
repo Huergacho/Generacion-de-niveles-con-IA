@@ -10,5 +10,6 @@ public class CollectableItem : MonoBehaviour, IItem
     public void Interact(PlayerModel player)
     {
         LevelManager.instance.CollectablePickUp(value);
+        Destroy(gameObject);
     }
 }
