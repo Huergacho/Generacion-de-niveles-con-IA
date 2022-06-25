@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(InteractableController))]
-public class CollectableItem : MonoBehaviour, IItem
+[RequireComponent(typeof(InteractableController), typeof(RoomActor))]
+public class CollectableItem : MonoBehaviour, IItem, IStealable
 {
     [SerializeField] private int value = 1;
 

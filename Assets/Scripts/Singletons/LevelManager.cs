@@ -8,15 +8,16 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance;
 
     [SerializeField] private Transform enemyNodesParent;
+    [SerializeField] private LevelGenerator _levelGenerator;
     private int collectableItemCounter;
-    private List<IStealable> _itemsInLevel = new List<IStealable>(); //if later on we need to check items per room, then we do a dictionary?
 
     //Propierties
     public Transform PatrolNodeParent => enemyNodesParent;
-    public List<IStealable> Items => _itemsInLevel;
+    public List<IStealable> Items => CurrentRoom.Items;
 
-    public Transform PlayerSpawnPoint { get; set; }
-    public GameObject victoryItem { get; set; }
+    public LevelGenerator LevelGenerator { get; private set; }
+
+    public Room CurrentRoom { get; private set; }
 
     //Events
     public Action<int> OnCollectable;
@@ -39,9 +40,13 @@ public class LevelManager : MonoBehaviour
         OnCollectable?.Invoke(collectableItemCounter);
     }
 
-    public void AddItem(IStealable item)
+    public void SetLevelGenerator(LevelGenerator levelGenerator)
     {
-        if(!_itemsInLevel.Contains(item)) //si el item no estaba ya en el listado... (cuenta los repetidos???? no deberia)
-            _itemsInLevel.Add(item);
+        _levelGenerator = levelGenerator;
+    }
+
+    public void SetCurrentLastOpenedRoom(Room currentRoom)
+    {
+        CurrentRoom = currentRoom;
     }
 }

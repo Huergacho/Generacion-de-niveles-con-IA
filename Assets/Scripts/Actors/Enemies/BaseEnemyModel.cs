@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[RequireComponent(typeof(LineOfSight), typeof(LazerGun))]
+[RequireComponent(typeof(LineOfSight), typeof(LazerGun), typeof(RoomActor))]
 public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
 {
     [SerializeField] protected IAStats _iaStats;

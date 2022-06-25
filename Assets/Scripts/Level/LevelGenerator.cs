@@ -34,6 +34,11 @@ public class LevelGenerator : MonoBehaviour
     }
     #endregion
 
+    private void Start()
+    {
+        LevelManager.instance.SetLevelGenerator(this);
+    }
+
     public void RunLevelRoullete()
     {
         _startPoint = levels[0];

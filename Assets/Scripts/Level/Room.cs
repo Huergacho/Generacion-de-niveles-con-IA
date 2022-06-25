@@ -22,12 +22,15 @@ public class Room : MonoBehaviour
     [SerializeField] private List<Transform> instatiateWayPoints;
     [SerializeField] private List<GameObject> instancedGameObjects;
     [SerializeField] private Transform _playerSpawnPoint;
-    [SerializeField] private Transform _victorySpawnPoint;
     [SerializeField] private RoomProperties properties;
 
     private GameObject _victoryItem;
     private int randomVictory;
     private Dictionary<Room, Vector3> neightBoursWithDir = new Dictionary<Room, Vector3>();
+    private int enemyCount;
+    private List<IStealable> _itemsInLevel = new List<IStealable>();
+
+    public List<IStealable> Items => _itemsInLevel;
     public List<Room> NeightBours => neighBours;
     public Transform PlayerSpawnPoint => _playerSpawnPoint;
     public bool IsEndRoom { get; set; }
@@ -36,8 +39,14 @@ public class Room : MonoBehaviour
     {
         InstantiateRandomEntities();
         RemoveDoors();
+        
         if (IsEndRoom)
+        {
             Debug.Assert(_victoryItem != null, "The victory item was never assigned");
+            _victoryItem.SetActive(false);
+        }
+
+        CheckEnemyCount();    
     }
 
     #region Private
@@ -58,6 +67,7 @@ public class Room : MonoBehaviour
             if (newObj != null)
             {
                 GameObject clone = Instantiate(newObj, spawnPos);
+
                 instancedGameObjects.Add(clone);
             }
             instatiateWayPoints.RemoveAt(i);
@@ -66,6 +76,7 @@ public class Room : MonoBehaviour
     
     private void RemoveDoors()
     {
+
         foreach (var item in _doors)
         {
             if(item.asignatedNeighBour != null && item.asignatedNeighBour.gameObject.activeInHierarchy)
@@ -73,6 +84,8 @@ public class Room : MonoBehaviour
                     item.door.SetActive(false);
             }
         }
+
+        //LevelManager.instance.SetCurrentLastOpenedRoom() //TODO: Add when RoomDoor is remove, move the current room in level manager to the next opened room for reference.
     }
 
     private void GetNeightbourd(Vector3 dir)
@@ -97,6 +110,17 @@ public class Room : MonoBehaviour
         }
     }
 
+    private void CheckEnemyCount()
+    {
+        if(enemyCount <= 0)
+        {
+            if (IsEndRoom)
+                _victoryItem.SetActive(true);
+            else
+                RemoveDoors();
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -116,10 +140,27 @@ public class Room : MonoBehaviour
     {
         _victoryItem = victoryItem;
         randomVictory = (int)MyEngine.MyRandom.Range(0, instatiateWayPoints.Count - 1);
-        //_victoryItem.transform.parent = instatiateWayPoints[randomVictory];
         _victoryItem.transform.position = instatiateWayPoints[randomVictory].position;
-        //_victoryItem.transform.position = Vector3.zero;
-        Debug.Log("Crown point: " + _victoryItem.transform.position + " parent " + instatiateWayPoints[randomVictory].transform.position);
+    }
+
+    public void UpdateEnemyCounter(int value)
+    {
+        enemyCount += value;
+        CheckEnemyCount();
+    }
+
+    public void UpdateCollectableItem(IStealable item, bool isDestroyed = false)
+    {
+        if (!isDestroyed)
+        {
+            if (!_itemsInLevel.Contains(item)) //si el item no estaba ya en el listado... (cuenta los repetidos???? no deberia)
+                _itemsInLevel.Add(item);
+        }
+        else
+        {
+            if (_itemsInLevel.Contains(item)) //si el item esta en el listado y fue destruido
+                _itemsInLevel.Remove(item);
+        }
     }
 
     public void GetNeightboursLinealy()
@@ -143,6 +184,7 @@ public class Room : MonoBehaviour
             var item = instancedGameObjects[i];
             Destroy(item);  
         }
+
         IsEndRoom = false;
         objectsToInstatiate.Clear();
     }
