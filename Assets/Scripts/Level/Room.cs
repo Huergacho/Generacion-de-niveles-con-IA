@@ -13,6 +13,7 @@ public class Room : MonoBehaviour
     {
         public GameObject door;
         public Vector3 dir;
+        public Room asignatedNeighBour;
     }
     [SerializeField] private List<Doors> _doors;
     [SerializeField]private List<Room> neighBours;
@@ -67,8 +68,20 @@ public class Room : MonoBehaviour
             var room = hit.collider.GetComponent<Room>();
             if (room != null && room != this)
             {
+                //foreach (var item in _doors)
+                //{
+                //    if(item.dir == dir)
+                //    item.asignatedNeighBour = room;
+                //}
+                for (int i = 0; i < _doors.Count; i++)
+                {
+                    var currDoor = _doors[i];
+                    if(currDoor.dir == dir)
+                    {
+                        currDoor.asignatedNeighBour = room;
+                    }
+                }
                 neighBours.Add(room);
-                neightBoursWithDir.Add(room, dir);
             }
 
         }
@@ -89,20 +102,20 @@ public class Room : MonoBehaviour
     }
     private void RemoveDoors()
     {
-        foreach (var item in neightBoursWithDir)
-        {
-            //if (item.Key.gameObject.activeInHierarchy)
-            //{
-            //    for (int i = 0; i < _doors.Count; i++)
-            //    {
-            //        var currDoor = _doors[i];
-            //        if(_doors == item.Value)
-            //        {
-            //            currDoor.door.SetActive(false);
-            //        }
-            //    }
-            //}
-        }
+        //foreach (var item in neightBoursWithDir)
+        //{
+        //    if (item.Key.gameObject.activeInHierarchy)
+        //    {
+        //        for (int i = 0; i < _doors.Count; i++)
+        //        {
+        //            var currDoor = _doors[i];
+        //            if (currDoor.dir == item.Value)
+        //            {
+        //                currDoor.door.SetActive(false);
+        //            }
+        //        }
+        //    }
+        //}
         //for (int i = 0; i < _doors.Count; i++)
         //{
         //    var currDoor = _doors[i];
@@ -112,5 +125,13 @@ public class Room : MonoBehaviour
         //        Destroy(currDoor.door.gameObject);
         //    }
         //}
+        foreach (var item in _doors)
+        {
+            if(item.asignatedNeighBour != null)
+            {
+                if (item.asignatedNeighBour.gameObject.activeInHierarchy)
+                    item.door.SetActive(false);
+            }
+        }
     }
 }

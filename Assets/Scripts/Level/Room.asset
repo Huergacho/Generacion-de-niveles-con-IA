@@ -20,7 +20,7 @@ MonoBehaviour:
   _roomLayer:
     serializedVersion: 2
     m_Bits: 4096
-  _detectDistance: 21.7
+  _detectDistance: 100
   _instanciableObjects:
   - probability: 50
     objectToSpawn: {fileID: 8640187892706222255, guid: 4c81d93a91d42dc40a765b0870b9b34e, type: 3}
