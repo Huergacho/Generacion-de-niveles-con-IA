@@ -5,48 +5,32 @@ using UnityEngine;
 public class InteractableController : MonoBehaviour
 {
     public IItem interactable;
-    
     [SerializeField] private bool isTrigger = true;
-    
-    private StealableScript stealable;
-    private Collider _collider;
 
     private void Start()
     {
-        _collider = GetComponent<Collider>();
-        if (_collider != null)
-            _collider.isTrigger = isTrigger;
+        var collider = GetComponent<Collider>();
+        if (collider != null)
+            collider.isTrigger = isTrigger;
         else
             Debug.LogWarning($"{gameObject.name} Collider is missing!");
-
-        stealable = GetComponent<StealableScript>();
-        interactable = GetComponent<IItem>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        DoYourThing(other);
+        var player = other.GetComponent<PlayerModel>();
+
+        if (player) //Si es un player
+        {
+            interactable.Interact(player);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        var collider = GetComponent<Collider>();
-        if (collider != null)
-            DoYourThing(collider);
-    }
-
-    private void DoYourThing(Collider other)
-    {
-        PlayerModel player = other.GetComponent<PlayerModel>();
-        IThief thief = other.GetComponent<IThief>();
-
-        if (player != null)
+        if (collision.gameObject.layer == 6)
         {
-            interactable.Interact(player);
-        }
-        else if (stealable != null && thief != null)
-        {
-            thief.StealItem(stealable);
+            GameManager.instance.Victory();
         }
     }
 }

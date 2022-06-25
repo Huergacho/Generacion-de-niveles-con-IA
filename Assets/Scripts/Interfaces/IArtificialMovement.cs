@@ -16,13 +16,12 @@ public interface IArtificialMovement
     Action<bool> OnDetect { get; set; }
     bool HasTakenDamage { get; }
     GameObject[] PatrolRoute { get; }
-    Vector3 Destination { get; }
     void Move(Vector3 dir, float desiredSpeed);
     void TakeHit(bool value);
     void Shoot();
     bool IsInShootingRange();
     bool IsTargetInSight();
     void LookDir(Vector3 dir);
-    bool FarFromDestination();
+    bool FarFromHome();
     bool IsEnemyFar();
 }

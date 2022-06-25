@@ -18,18 +18,15 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     protected ObstacleAvoidance _obstacleAvoidance;
 
     public Dictionary<SteeringType, ISteering> Behaviours => behaviours;
-    public ObstacleAvoidance Avoidance { get; protected set; }
-    public PlayerModel Target { get; protected set; }
+    public ObstacleAvoidance Avoidance { get; private set; }
+    public PlayerModel Target { get; private set; }
     public IAStats IAStats => _iaStats;
-    public LineOfSight LineOfSight { get; protected set; }
+    public LineOfSight LineOfSight { get; private set; }
     public bool HasTakenDamage => hasTakenDamage;
-    public GameObject[] PatrolRoute { get; protected set; }
+    public GameObject[] PatrolRoute { get; private set; }
 
     //Events
     public Action<bool> OnDetect { get => _onDetect; set => _onDetect = value; } //Este modo me lo mostro el profe para poder hacer que tuvieran eventos las interfaces.. dejalo asi?
-
-    public Vector3 Destination { get; protected set; }
-
     private Action<bool> _onDetect = delegate { };
 
     protected override void Awake()
@@ -39,7 +36,6 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         _gun.SetGunCD(_actorStats.ShootCooldown);
         LineOfSight = GetComponent<LineOfSight>();
         Avoidance = new ObstacleAvoidance(this);
-        Destination = transform.position;
     }
 
     protected virtual void Start()
@@ -47,11 +43,8 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         GameManager.instance.OnPlayerInit += OnPlayerInit;
         LifeController.OnTakeDamage += TakeDamage;
         var patrol = GetComponentInChildren<PatrolRoute>();
-        if(patrol != null)
-        {
-            patrol?.Initialize();
-            PatrolRoute = patrol.PatrolNodes;
-        }
+        patrol.Initialize();
+        PatrolRoute = patrol.PatrolNodes;
     }
 
     protected virtual void OnPlayerInit(PlayerModel player)
@@ -99,9 +92,9 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         return distance <= IAStats.ShootDistance;
     }
 
-    public bool FarFromDestination()
+    public bool FarFromHome() //No soooy mega fan de este, pero lo agregue por el PathFinding
     {
-        var distance = Vector3.Distance(transform.position, Destination);
+        var distance = Vector3.Distance(transform.position, PatrolRoute[0].transform.position); //PatrolRoute[0] is alway starting position, and we are thinking that they will always have PatrolPoints, if not, then add spawning point vector to Model
         return distance >= IAStats.NearTargetRange;
     }
 

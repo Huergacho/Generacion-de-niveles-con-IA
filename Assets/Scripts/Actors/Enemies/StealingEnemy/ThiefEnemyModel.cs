@@ -2,53 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class ThiefEnemyModel : BaseEnemyModel, IThief
 {
     private IStealable _itemTarget;
     private IStealable _itemStolen;
     public IStealable ItemStolen => _itemStolen;
-    public IStealable NextTarget => _itemTarget; 
+    public IStealable ItemTarget => _itemTarget; 
 
     public void StealItem(IStealable item)
     {
-        if (_itemStolen != null) return;
-        _itemStolen = item;
+        if(_itemStolen == null)
+            _itemStolen = item;
 
-        _itemStolen.StealItem();
+        //TODO: maybe do a puff or animation or sound when de item is stolen?
+        ShowItem(false);
     }
 
     public void DropStolenItem()
     {
         if (_itemStolen == null) return;
-        _itemStolen.DropItem(transform.position);
+
+        //TODO: maybe do a puff or animation or sound when de item is dropped? 
+        _itemStolen.transform.position = transform.position;
+        ShowItem(true);
         _itemStolen = null;
     }
 
-    public bool IsThereAnItemToSteal() //if there is a item in the room to steal, check from level manager?
+    private void ShowItem(bool value)
     {
-        if( _itemStolen == null && NextTarget == null && LevelManager.instance.Items.Count > 0)
-        {
-            SetNextTarget(LevelManager.instance.Items[0]); //TODO rework this when facu finish with the rooms.
-        }
-
-        return NextTarget != null;
-    }
-
-    public void SetNextTarget(IStealable item)
-    {
-        _itemTarget = item;
-        Destination = item.transform.position;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        StealableScript item = collision.gameObject.GetComponent<StealableScript>();
-        if (item != null)
-        {
-            print("I stole a " + collision.gameObject.name);
-            StealItem(item);
-        }
+        _itemStolen.gameObject.SetActive(value);
     }
 
     protected override void OnDestroy()

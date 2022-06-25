@@ -16,7 +16,7 @@ public interface IThief
 
     //The main reason I did another interface:
     public IStealable ItemStolen { get; }
+    public IStealable ItemTarget { get; }
     public void StealItem(IStealable item);
     public void DropStolenItem();
-    public bool IsThereAnItemToSteal();
 }

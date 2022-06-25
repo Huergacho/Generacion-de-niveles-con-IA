@@ -6,7 +6,4 @@ public interface IStealable
 {
     GameObject gameObject { get; }
     Transform transform { get; }
-
-    void StealItem();
-    void DropItem(Vector3 position);
 }

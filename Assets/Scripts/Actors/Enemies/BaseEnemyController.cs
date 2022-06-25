@@ -51,7 +51,7 @@ public abstract class BaseEnemyController : EntityController
 
     protected bool HasTakenDamage() //If I have receive damage and I'm not doing something about it then... return true
     {
-        //Debug.Log("Do I have damage " + (_model.HasTakenDamage && !isReacting));
+        //Debug.Log("Do I have damage " + (_model.HasTakenDamage && !isChasing));
         return _model.HasTakenDamage && !isReacting;
     }
 
