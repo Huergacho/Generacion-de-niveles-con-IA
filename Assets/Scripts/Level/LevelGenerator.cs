@@ -8,12 +8,13 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private Room[] levels;
     [SerializeField] private List<Room> AstarLevel;
     [SerializeField] private float limitDistance;
-    private Astar<Room> _astar;
-    [SerializeField]private Room _finalPoint;
+    [SerializeField] private Room _finalPoint;
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject _victoryItem;
 
-    private void Start()
-    {
-    }
+    private Astar<Room> _astar;
+    private Room _startPoint;
+
     #region Bake
     public void RunLevel()
     {
@@ -32,13 +33,17 @@ public class LevelGenerator : MonoBehaviour
         MyEngine.MyRandom.Shuffle(levels);
     }
     #endregion
+
     public void RunLevelRoullete()
     {
-        var startPoint = levels[0];
+        _startPoint = levels[0];
         _finalPoint = levels[levels.Length - 1];
-        AstarLevel =_astar.GetPath(startPoint, CheckRoom, GetNeightbours, GetCost, GetHeuristic);
+        SetPlayerSpawnPoint();
+        SetVictoryItem();
+        AstarLevel =_astar.GetPath(_startPoint, CheckRoom, GetNeightbours, GetCost, GetHeuristic);
         ShowPath();
     }
+
     private void ShowPath()
     {
         for (int i = 0; i < levels.Length; i++)
@@ -50,6 +55,7 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
+
     #region PathFinding
     private bool CheckRoom(Room check)
     {
@@ -78,5 +84,14 @@ public class LevelGenerator : MonoBehaviour
 
     #endregion
 
+    public void SetVictoryItem()
+    {
+        _finalPoint.IsEndRoom = true;
+        _finalPoint.SetVictoryItem(_victoryItem);
+    }
 
+    public void SetPlayerSpawnPoint()
+    {
+        _startPoint.SetPlayer(player);
+    }
 }

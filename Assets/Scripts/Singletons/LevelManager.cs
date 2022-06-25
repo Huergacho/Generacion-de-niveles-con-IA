@@ -15,6 +15,9 @@ public class LevelManager : MonoBehaviour
     public Transform PatrolNodeParent => enemyNodesParent;
     public List<IStealable> Items => _itemsInLevel;
 
+    public Transform PlayerSpawnPoint { get; set; }
+    public GameObject victoryItem { get; set; }
+
     //Events
     public Action<int> OnCollectable;
 
@@ -27,7 +30,6 @@ public class LevelManager : MonoBehaviour
         else
         {
             instance = this;
-            //DontDestroyOnLoad(gameObject);
         }
     }
 

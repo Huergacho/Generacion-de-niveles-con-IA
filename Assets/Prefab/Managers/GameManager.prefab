@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5416df6f05cfae4c9370dbf10ce09ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shiftSpeed: 304
   attack: 323
   pause: 27
 --- !u!114 &7111269240658628343
@@ -59,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isGamePaused: 0
-  levelScene: TP Test
+  levelScene: LevelTest
   menuScene: MainMenu
   victoryScene: Victory
   gameOverScene: GameOver
