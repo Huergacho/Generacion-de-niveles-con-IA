@@ -17,10 +17,14 @@ public class HUDManager : MonoBehaviour
     [Header("Timer")]
     [SerializeField] private Text timerText;
 
-    void Start()
+    private void Awake()
     {
         GameManager.instance.OnPause += OnPause;
         GameManager.instance.OnPlayerInit += OnPlayerAssing;
+    }
+
+    void Start()
+    {
         GameManager.instance.Pause(false);
 
         LevelManager.instance.OnCollectable += UpdateCollectableCounter;

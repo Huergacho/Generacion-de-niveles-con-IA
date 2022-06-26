@@ -36,6 +36,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     protected override void Awake()
     {
         base.Awake();
+        GetComponentInChildren<UIBarController>().SetOwner(this);
         LineOfSight = GetComponent<LineOfSight>();
         Avoidance = new ObstacleAvoidance(this);
         roomActor = GetComponent<RoomActor>();
