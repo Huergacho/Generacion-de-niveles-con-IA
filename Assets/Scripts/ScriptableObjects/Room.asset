@@ -26,6 +26,6 @@ MonoBehaviour:
     objectToSpawn: {fileID: 8640187892706222255, guid: 4c81d93a91d42dc40a765b0870b9b34e, type: 3}
   - probability: 25
     objectToSpawn: {fileID: 7460643273639543670, guid: 2bc7083f901b84d40b4b7a6252485100, type: 3}
-  - probability: 90
+  - probability: 0
     objectToSpawn: {fileID: 1769047590062999063, guid: 1768acaf14f1b8c448c084d3472dd5ed, type: 3}
   _thief: {fileID: 2936971633799679075, guid: 13b0b4527e4840145866a4abe93bce10, type: 3}

@@ -75,3 +75,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyNodesParent: {fileID: 7139678388067952355}
+  timer: 180

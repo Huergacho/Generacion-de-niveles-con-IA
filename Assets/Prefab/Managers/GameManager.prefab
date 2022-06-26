@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isGamePaused: 0
-  levelScene: LevelTest
+  levelScene: Level Test
   menuScene: MainMenu
   victoryScene: Victory
   gameOverScene: GameOver

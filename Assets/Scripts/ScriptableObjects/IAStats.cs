@@ -5,6 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "IAStats", menuName = "Stats/IAStats", order = 2)]
 public class IAStats : ScriptableObject
 {
+    public GameObject CollectablePrefab => _collectablePrefab;
+    [SerializeField] private GameObject _collectablePrefab;
+
     public float ShootDistance => shootDistance;
     [SerializeField] private float shootDistance = 2f;
 
@@ -12,7 +15,7 @@ public class IAStats : ScriptableObject
     [SerializeField] float _timeRoot = 1f;
 
     public bool CanReversePatrol => _canReversePatrol;
-    [SerializeField] private bool _canReversePatrol;
+    [SerializeField] private bool _canReversePatrol = false;
 
     //STEERING
     public float MaxDistanceFromTarget => _maxDistanceFromTarget;

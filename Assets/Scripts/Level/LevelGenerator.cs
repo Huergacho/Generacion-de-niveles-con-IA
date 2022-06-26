@@ -18,6 +18,7 @@ public class LevelGenerator : MonoBehaviour
     {
         LevelManager.instance.SetLevelGenerator(this);
         LevelManager.instance.SetCurrentLastOpenedRoom(levels[0]);
+        SetVictoryItem(_finalPoint);
         print("Starting room " + levels[0]);
     }
 

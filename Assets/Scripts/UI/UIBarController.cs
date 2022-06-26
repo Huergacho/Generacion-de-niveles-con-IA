@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIBarController : MonoBehaviour
 {
+    [Header("LifeBar")]
     [SerializeField] private GameObject bar;
     [SerializeField] private Image barImage;
     [SerializeField] private Text percentaje;
@@ -54,6 +55,7 @@ public class UIBarController : MonoBehaviour
         IsVisible = value;
     }
 
+    #region Private
     private IEnumerator LifeBarAnimation()
     {
         GameManager.instance.IsSceneReadyToChange = false;
@@ -128,4 +130,5 @@ public class UIBarController : MonoBehaviour
         if(_owner != null)
            _owner.LifeController.UpdateLifeBar -= UpdateLifeBar;
     }
+    #endregion
 }

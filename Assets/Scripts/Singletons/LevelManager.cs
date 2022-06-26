@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance;
 
     [SerializeField] private Transform enemyNodesParent;
+    [SerializeField] private double timer = 180f;
     private Room _currentRoom;
     private int collectableItemCounter;
 
@@ -21,6 +22,7 @@ public class LevelManager : MonoBehaviour
 
     //Events
     public Action<int> OnCollectable;
+    public Action<double> OnTimerUpdate;
 
     private void Awake()
     {
@@ -32,6 +34,13 @@ public class LevelManager : MonoBehaviour
         {
             instance = this;
         }
+
+        timer += 1f; //cuz when it starts, there is always a little delay
+    }
+
+    private void Start()
+    {
+        StartCoroutine(RunTimer());
     }
 
     private void Update()
@@ -57,5 +66,20 @@ public class LevelManager : MonoBehaviour
     {
         _currentRoom = currentRoom;
         CurrentRoom.IsOpen = true;
+    }
+
+    private IEnumerator RunTimer()
+    {
+        Double count = timer;
+        while(count > 0)
+        {
+            count--;
+            OnTimerUpdate?.Invoke(count);
+            yield return new WaitForSeconds(1);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        GameManager.instance.IsSceneReadyToChange = true;
+        GameManager.instance.GameOver();
     }
 }

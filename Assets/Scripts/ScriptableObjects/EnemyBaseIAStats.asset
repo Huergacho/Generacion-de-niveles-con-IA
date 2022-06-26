@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c787a6cc08852ff4da14e7fefeac3131, type: 3}
   m_Name: EnemyBaseIAStats
   m_EditorClassIdentifier: 
+  _collectablePrefab: {fileID: 919132149155446097, guid: a1ca662bf1a9eac4da0ed0c084c3ff10, type: 3}
   shootDistance: 4
   _timeRoot: 1
   _canReversePatrol: 1
@@ -22,3 +23,4 @@ MonoBehaviour:
   _steeringWeight: 1
   _avoidanceWeight: 1
   predictionTime: 1
+  _rangeHome: 0.5

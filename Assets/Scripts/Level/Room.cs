@@ -93,13 +93,10 @@ public class Room : MonoBehaviour
     
     private void RemoveDoors()
     {
-        print("Removing all doors");
         foreach (var item in _doors)
         {
             if(item.asignatedNeighBour != null && item.asignatedNeighBour.gameObject.activeInHierarchy)
-            {
-                    item.door.SetActive(false);
-            }
+                item.door.SetActive(false);
         }
     }
 
@@ -138,17 +135,12 @@ public class Room : MonoBehaviour
 
     private void OpenNextRoom()
     {
-        if (IsEndRoom) return; //just in case.
-        print("open next room for me " +  gameObject.name);
+        if (IsEndRoom) return;
         foreach (var neighbour in neighbours)
         {
-            if (neighbour != null && neighbour.gameObject.activeInHierarchy && !neighbour.IsOpen)
-            {
-                neighbour.IsOpen = true;
-                neighbour.OpenNextRoomConectedDoor(); //Let´s call the next door rom. 
-                LevelManager.instance.SetCurrentLastOpenedRoom(neighbour);
-                print($"I´m the current one: {gameObject.name} and the next one is {neighbour.gameObject.name}");
-            } 
+            if (neighbour == null || !neighbour.gameObject.activeInHierarchy || neighbour.IsOpen) continue;
+            neighbour.OpenNextRoomConectedDoor(); //Let´s call the next door rom. 
+            LevelManager.instance.SetCurrentLastOpenedRoom(neighbour);
         }
     }
 
@@ -169,15 +161,12 @@ public class Room : MonoBehaviour
 
     public void OpenNextRoomConectedDoor()
     {
-        print("open next door");
+        IsOpen = true;
         foreach (var item in _doors)
         {
-            Debug.Log($"{gameObject.name} i should open myself? {item.asignatedNeighBour.gameObject.activeInHierarchy} & is open {item.asignatedNeighBour.IsOpen} ");
-            if (item.asignatedNeighBour != null && item.asignatedNeighBour.gameObject.activeInHierarchy && item.asignatedNeighBour.IsOpen) //Solo abrimos la puerta que nos contecta con el cuarto que YA esta abierto
-            {
-                item.door.SetActive(false);
-                break;
-            }
+            if (item.asignatedNeighBour == null || !item.asignatedNeighBour.gameObject.activeInHierarchy) continue;
+            if (!item.asignatedNeighBour.IsOpen) continue; //Solo abrimos la puerta que nos contecta con el cuarto que YA esta abierto
+            item.door.SetActive(false);
         }
     }
 
@@ -192,7 +181,7 @@ public class Room : MonoBehaviour
         _victoryItem = victoryItem;
         randomVictory = (int)MyEngine.MyRandom.Range(0, instatiateWayPoints.Count - 1);
         _victoryItem.transform.position = instatiateWayPoints[randomVictory].position;
-        //_victoryItem.SetActive(false);
+        _victoryItem.SetActive(false);
     }
 
     public void UpdateEnemyCounter(int value)
