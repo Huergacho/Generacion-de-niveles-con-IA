@@ -98,10 +98,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
+  m_Radius: 0.5246978
+  m_Height: 2.2517462
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0.000000059604645, y: 0.0569067, z: -0.02469778}
 --- !u!54 &2936971633799679389
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -166,9 +166,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f36d0c0526ee5184bb96f527bc932dbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _actorStats: {fileID: 0}
-  _iaStats: {fileID: 0}
-  _firePoint: {fileID: 0}
+  _actorStats: {fileID: 11400000, guid: 7d16c4545196e6a4a8d4a9c16e0fc731, type: 2}
+  _iaStats: {fileID: 11400000, guid: 7ad6c6d53eaabfe44bb906ed994a6385, type: 2}
+  _firePoint: {fileID: 2936971633799679385}
   drawGizmos: 0
 --- !u!114 &2936971633799679072
 MonoBehaviour:

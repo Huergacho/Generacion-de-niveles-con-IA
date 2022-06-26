@@ -18,7 +18,7 @@ MonoBehaviour:
   obstacleLayers:
     serializedVersion: 2
     m_Bits: 3072
-  maxLife: 100
+  maxLife: 10
   walkSpeed: 1
   runSpeed: 2
   rotationSpeed: 0.1

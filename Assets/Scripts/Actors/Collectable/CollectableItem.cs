@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(InteractableController), typeof(RoomActor))]
-public class CollectableItem : MonoBehaviour, IItem, IStealable
+public class CollectableItem : MonoBehaviour, IItem
 {
     [SerializeField] private int value = 1;
 

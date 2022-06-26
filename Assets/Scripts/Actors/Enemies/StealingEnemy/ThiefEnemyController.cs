@@ -84,13 +84,8 @@ public class ThiefEnemyController : BaseEnemyController
         return (_model as IThief).ItemStolen != null;
     }
 
-    protected bool IsThereAnItemToSteal() //if there is a item in the room to steal, check from level manager?
+    protected bool IsThereAnItemToSteal()
     {
-        return LevelManager.instance.Items.Count > 0; //definetly rework this when Facu adds the rooms.
-    }
-
-    private Vector3 GetItemToStealCommand() //TODO FACU fijate si esto se va a usar o no? pondria un public virtual void Idle()  en IArtificalMovement
-    {
-        return (_model as IThief).ItemTarget.transform.position;
+        return (_model as IThief).IsThereAnItemToSteal();
     }
 }

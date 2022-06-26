@@ -26,4 +26,7 @@ public class RoomProperties : ScriptableObject
     [SerializeField] private List<ObjectsToInstance> _instanciableObjects;
     public List<ObjectsToInstance> InstanciableObjects => _instanciableObjects;
 
+    [SerializeField] private GameObject _thief;
+    public GameObject Thief => _thief;
+
 }
