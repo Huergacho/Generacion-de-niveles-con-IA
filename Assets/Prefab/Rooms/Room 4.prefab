@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2084026324974856650}
   - component: {fileID: 652751313}
   - component: {fileID: 6027386016775234571}
-  m_Layer: 12
+  m_Layer: 11
   m_Name: Room 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,10 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436c852686900884495ab62cc85a01f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  neighBours: []
+  _doors: []
+  neighbours: []
   instatiateWayPoints: []
+  instancedGameObjects: []
+  _playerSpawnPoint: {fileID: 0}
   properties: {fileID: 0}
-  currentPreset: {fileID: 0}
+  RoomEnemyLimit: 2
 --- !u!65 &6027386016775234571
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -75,7 +78,7 @@ GameObject:
   - component: {fileID: 6043981910633211633}
   - component: {fileID: 9062915517287058731}
   - component: {fileID: 1314576911790716516}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: g (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +173,7 @@ GameObject:
   - component: {fileID: 4543133615564904228}
   - component: {fileID: 3472700159183080917}
   - component: {fileID: 2000650727017349527}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: g
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,7 +13,23 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private GameObject _victoryItem;
 
     private Astar<Room> _astar;
-    private Room _startPoint;
+
+    private void Start()
+    {
+        LevelManager.instance.SetLevelGenerator(this);
+        LevelManager.instance.SetCurrentLastOpenedRoom(levels[0]);
+        print("Starting room " + levels[0]);
+    }
+
+    public void RunLevelRoullete()
+    {
+        var startPoint = levels[0];
+        _finalPoint = levels[levels.Length - 1];
+        SetPlayerSpawnPoint(startPoint);
+        SetVictoryItem(_finalPoint);
+        AstarLevel =_astar.GetPath(startPoint, CheckRoom, GetNeightbours, GetCost, GetHeuristic);
+        ShowPath();
+    }
 
     #region Bake
     public void RunLevel()
@@ -22,6 +38,7 @@ public class LevelGenerator : MonoBehaviour
 
         RunLevelRoullete();
     }
+
     public void BakeLevels()
     {
         foreach (var item in levels)
@@ -34,21 +51,7 @@ public class LevelGenerator : MonoBehaviour
     }
     #endregion
 
-    private void Start()
-    {
-        LevelManager.instance.SetLevelGenerator(this);
-    }
-
-    public void RunLevelRoullete()
-    {
-        _startPoint = levels[0];
-        _finalPoint = levels[levels.Length - 1];
-        SetPlayerSpawnPoint();
-        SetVictoryItem();
-        AstarLevel =_astar.GetPath(_startPoint, CheckRoom, GetNeightbours, GetCost, GetHeuristic);
-        ShowPath();
-    }
-
+    #region PathFinding
     private void ShowPath()
     {
         for (int i = 0; i < levels.Length; i++)
@@ -61,22 +64,24 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    #region PathFinding
     private bool CheckRoom(Room check)
     {
         var distance = Vector3.Distance(check.transform.position, _finalPoint.transform.position);
         return distance < limitDistance;
     }
+
     private List<Room> GetNeightbours(Room curr)
     {
-        return curr.NeightBours;
+        return curr.Neightbours;
     }
+
     float GetCost(Room parent, Room child)
     {
         float cost = 0;
         cost += Vector3.Distance(parent.transform.position, child.transform.position);
         return cost;
     }
+
     float GetHeuristic(Room curr)
     {
         float distanceMultiplier = 2;
@@ -86,17 +91,16 @@ public class LevelGenerator : MonoBehaviour
 
         return h;
     }
-
     #endregion
 
-    public void SetVictoryItem()
+    public void SetVictoryItem(Room finalRoom)
     {
-        _finalPoint.IsEndRoom = true;
-        _finalPoint.SetVictoryItem(_victoryItem);
+        finalRoom.IsEndRoom = true;
+        finalRoom.SetVictoryItem(_victoryItem);
     }
 
-    public void SetPlayerSpawnPoint()
+    public void SetPlayerSpawnPoint(Room statingRoom)
     {
-        _startPoint.SetPlayer(player);
+        statingRoom.SetPlayer(player);
     }
 }

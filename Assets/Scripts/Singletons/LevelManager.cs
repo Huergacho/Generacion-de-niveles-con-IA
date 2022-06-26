@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance;
 
     [SerializeField] private Transform enemyNodesParent;
-    [SerializeField] private LevelGenerator _levelGenerator;
+    private Room _currentRoom;
     private int collectableItemCounter;
 
     //Propierties
@@ -17,7 +17,7 @@ public class LevelManager : MonoBehaviour
 
     public LevelGenerator LevelGenerator { get; private set; }
 
-    public Room CurrentRoom { get; private set; }
+    public Room CurrentRoom => _currentRoom;
 
     //Events
     public Action<int> OnCollectable;
@@ -34,6 +34,14 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CurrentRoom.OpenRoom();
+        }
+    }
+
     public void CollectablePickUp(int value)
     {
         collectableItemCounter += value;
@@ -42,11 +50,12 @@ public class LevelManager : MonoBehaviour
 
     public void SetLevelGenerator(LevelGenerator levelGenerator)
     {
-        _levelGenerator = levelGenerator;
+        LevelGenerator = levelGenerator;
     }
 
     public void SetCurrentLastOpenedRoom(Room currentRoom)
     {
-        CurrentRoom = currentRoom;
+        _currentRoom = currentRoom;
+        CurrentRoom.IsOpen = true;
     }
 }

@@ -17,7 +17,7 @@ public class VictoryTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 6)
+        if (other.gameObject.layer == 8)
         {
             GameManager.instance.Victory();
         }
@@ -25,7 +25,7 @@ public class VictoryTrigger : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == 6)
+        if (collision.gameObject.layer == 8)
         {
             GameManager.instance.Victory();
         }

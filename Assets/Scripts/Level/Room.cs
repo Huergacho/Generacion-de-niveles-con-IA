@@ -17,12 +17,13 @@ public class Room : MonoBehaviour
     }
 
     [SerializeField] private List<Doors> _doors;
-    [SerializeField] private List<Room> neighBours;
+    [SerializeField] private List<Room> neighbours;
     [SerializeField] private Dictionary<GameObject,float> objectsToInstatiate = new Dictionary<GameObject, float>();
     [SerializeField] private List<Transform> instatiateWayPoints;
     [SerializeField] private List<GameObject> instancedGameObjects;
     [SerializeField] private Transform _playerSpawnPoint;
     [SerializeField] private RoomProperties properties;
+    [SerializeField] private int RoomEnemyLimit = 2;
 
     private GameObject _victoryItem;
     private int randomVictory;
@@ -31,22 +32,30 @@ public class Room : MonoBehaviour
     private List<IStealable> _itemsInLevel = new List<IStealable>();
 
     public List<IStealable> Items => _itemsInLevel;
-    public List<Room> NeightBours => neighBours;
+    public List<Room> Neightbours => neighbours;
     public Transform PlayerSpawnPoint => _playerSpawnPoint;
     public bool IsEndRoom { get; set; }
+    public bool IsOpen { get; set; }
+    public bool ConditionToOpen => enemyCount <= 0;
 
     private void Awake()
     {
         InstantiateRandomEntities();
-        RemoveDoors();
-        
+       
+
+
+
+    }
+
+    private void Start()
+    {
         if (IsEndRoom)
         {
             Debug.Assert(_victoryItem != null, "The victory item was never assigned");
             _victoryItem.SetActive(false);
         }
 
-        CheckEnemyCount();    
+        //CheckEnemyCount();    
     }
 
     #region Private
@@ -60,23 +69,31 @@ public class Room : MonoBehaviour
 
         for (int i = 0; i < instatiateWayPoints.Count; i++)
         {
+            bool flag = false;
             if (IsEndRoom && randomVictory == i) continue; //We skipd the one with the assigned victory item IF it´s the end room.
 
             var spawnPos = instatiateWayPoints[i];
             var newObj = MyEngine.MyRandom.GetRandomWeight(objectsToInstatiate);
             if (newObj != null)
             {
+                if ((newObj.GetComponent<BaseEnemyModel>() != null) && RoomEnemyLimit <= enemyCount) //Let´s do a hard limit for enemies just in case
+                {
+                    flag = true;
+                    continue;
+                }
                 GameObject clone = Instantiate(newObj, spawnPos);
-
+                clone.GetComponent<RoomActor>()?.SetRoomReference(this);
                 instancedGameObjects.Add(clone);
             }
+
+            if (!flag);
             instatiateWayPoints.RemoveAt(i);
         }
     }
     
     private void RemoveDoors()
     {
-
+        print("Removing all doors");
         foreach (var item in _doors)
         {
             if(item.asignatedNeighBour != null && item.asignatedNeighBour.gameObject.activeInHierarchy)
@@ -84,8 +101,6 @@ public class Room : MonoBehaviour
                     item.door.SetActive(false);
             }
         }
-
-        //LevelManager.instance.SetCurrentLastOpenedRoom() //TODO: Add when RoomDoor is remove, move the current room in level manager to the next opened room for reference.
     }
 
     private void GetNeightbourd(Vector3 dir)
@@ -104,7 +119,7 @@ public class Room : MonoBehaviour
                         currDoor.asignatedNeighBour = room;
                     }
                 }
-                neighBours.Add(room);
+                neighbours.Add(room);
             }
 
         }
@@ -112,12 +127,28 @@ public class Room : MonoBehaviour
 
     private void CheckEnemyCount()
     {
-        if(enemyCount <= 0)
+        if(ConditionToOpen)
         {
             if (IsEndRoom)
                 _victoryItem.SetActive(true);
             else
-                RemoveDoors();
+                OpenRoom();
+        }
+    }
+
+    private void OpenNextRoom()
+    {
+        if (IsEndRoom) return; //just in case.
+        print("open next room for me " +  gameObject.name);
+        foreach (var neighbour in neighbours)
+        {
+            if (neighbour != null && neighbour.gameObject.activeInHierarchy && !neighbour.IsOpen)
+            {
+                neighbour.IsOpen = true;
+                neighbour.OpenNextRoomConectedDoor(); //Let´s call the next door rom. 
+                LevelManager.instance.SetCurrentLastOpenedRoom(neighbour);
+                print($"I´m the current one: {gameObject.name} and the next one is {neighbour.gameObject.name}");
+            } 
         }
     }
 
@@ -130,10 +161,30 @@ public class Room : MonoBehaviour
     #endregion
 
     #region Public
+    public void OpenRoom()
+    {
+        RemoveDoors();
+        OpenNextRoom();
+    }
+
+    public void OpenNextRoomConectedDoor()
+    {
+        print("open next door");
+        foreach (var item in _doors)
+        {
+            Debug.Log($"{gameObject.name} i should open myself? {item.asignatedNeighBour.gameObject.activeInHierarchy} & is open {item.asignatedNeighBour.IsOpen} ");
+            if (item.asignatedNeighBour != null && item.asignatedNeighBour.gameObject.activeInHierarchy && item.asignatedNeighBour.IsOpen) //Solo abrimos la puerta que nos contecta con el cuarto que YA esta abierto
+            {
+                item.door.SetActive(false);
+                break;
+            }
+        }
+    }
 
     public void SetPlayer(GameObject player)
     {
         player.transform.position = PlayerSpawnPoint.transform.position;
+        IsOpen = true; //cuz I'm the starting one
     }
 
     public void SetVictoryItem(GameObject victoryItem)
@@ -141,6 +192,7 @@ public class Room : MonoBehaviour
         _victoryItem = victoryItem;
         randomVictory = (int)MyEngine.MyRandom.Range(0, instatiateWayPoints.Count - 1);
         _victoryItem.transform.position = instatiateWayPoints[randomVictory].position;
+        //_victoryItem.SetActive(false);
     }
 
     public void UpdateEnemyCounter(int value)
@@ -173,7 +225,7 @@ public class Room : MonoBehaviour
 
     public void ClearData()
     {
-        neighBours.Clear();
+        neighbours.Clear();
         neightBoursWithDir.Clear();
     }
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[RequireComponent(typeof(LineOfSight), typeof(LazerGun), typeof(RoomActor))]
+[RequireComponent(typeof(LineOfSight), typeof(RoomActor))]
 public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
 {
     [SerializeField] protected IAStats _iaStats;
@@ -32,8 +32,6 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     protected override void Awake()
     {
         base.Awake();
-        _gun = GetComponent<LazerGun>();
-        _gun.SetGunCD(_actorStats.ShootCooldown);
         LineOfSight = GetComponent<LineOfSight>();
         Avoidance = new ObstacleAvoidance(this);
     }

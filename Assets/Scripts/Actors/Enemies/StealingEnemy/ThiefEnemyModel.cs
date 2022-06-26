@@ -7,7 +7,12 @@ public class ThiefEnemyModel : BaseEnemyModel, IThief
     private IStealable _itemTarget;
     private IStealable _itemStolen;
     public IStealable ItemStolen => _itemStolen;
-    public IStealable ItemTarget => _itemTarget; 
+    public IStealable ItemTarget => _itemTarget;
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 
     public void StealItem(IStealable item)
     {
@@ -15,7 +20,7 @@ public class ThiefEnemyModel : BaseEnemyModel, IThief
             _itemStolen = item;
 
         //TODO: maybe do a puff or animation or sound when de item is stolen?
-        ShowItem(false);
+        ShowItem(false); //TODO: Change so that it shows it´s in the head
     }
 
     public void DropStolenItem()

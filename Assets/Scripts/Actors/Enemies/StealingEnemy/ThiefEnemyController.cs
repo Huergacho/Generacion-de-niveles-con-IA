@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ThiefEnemyModel))]
 public class ThiefEnemyController : BaseEnemyController
 {
     protected override void Awake()
