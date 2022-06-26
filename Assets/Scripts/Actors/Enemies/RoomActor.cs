@@ -25,7 +25,7 @@ public class RoomActor : MonoBehaviour
             RoomReference.UpdateCollectableItem(collectableItem);
     }
 
-    public void OnDestroy()
+    public void OnDie()
     {
         if (baseEnemyModel != null)
             RoomReference.UpdateEnemyCounter(-1);
@@ -33,6 +33,4 @@ public class RoomActor : MonoBehaviour
         if (collectableItem != null)
             RoomReference.UpdateCollectableItem(collectableItem, true);
     }
-
-
 }

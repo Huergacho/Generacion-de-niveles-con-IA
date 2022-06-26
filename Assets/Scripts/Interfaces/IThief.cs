@@ -19,4 +19,5 @@ public interface IThief
     public void StealItem(IStealable item);
     public void DropStolenItem();
     public bool IsThereAnItemToSteal();
+    void ReturnHomeDestination();
 }

@@ -22,8 +22,9 @@ public class Room : MonoBehaviour
     [SerializeField] private List<Transform> instatiateWayPoints;
     [SerializeField] private List<GameObject> instancedGameObjects;
     [SerializeField] private Transform _playerSpawnPoint;
+    [SerializeField] private Transform _thiefSpawnPoint;
     [SerializeField] private RoomProperties properties;
-    [SerializeField] private int RoomEnemyLimit = 2;
+    //[SerializeField] private int RoomEnemyLimit = 2;
 
     private GameObject _victoryItem;
     private int randomVictory;
@@ -36,15 +37,10 @@ public class Room : MonoBehaviour
     public Transform PlayerSpawnPoint => _playerSpawnPoint;
     public bool IsEndRoom { get; set; }
     public bool IsOpen { get; set; }
-    public bool ConditionToOpen => enemyCount <= 0;
 
     private void Awake()
     {
         InstantiateRandomEntities();
-       
-
-
-
     }
 
     private void Start()
@@ -76,7 +72,7 @@ public class Room : MonoBehaviour
             var newObj = MyEngine.MyRandom.GetRandomWeight(objectsToInstatiate);
             if (newObj != null)
             {
-                if ((newObj.GetComponent<BaseEnemyModel>() != null) && RoomEnemyLimit <= enemyCount) //Let´s do a hard limit for enemies just in case
+                if ((newObj.GetComponent<BaseEnemyModel>() != null)  && properties.HardLimit && properties.LimitEnemies <= enemyCount) //Let´s do a hard limit for enemies just in case
                 {
                     flag = true;
                     continue;
@@ -87,7 +83,7 @@ public class Room : MonoBehaviour
             }
 
             if (!flag);
-            instatiateWayPoints.RemoveAt(i);
+                instatiateWayPoints.RemoveAt(i);
         }
     }
     
@@ -124,10 +120,10 @@ public class Room : MonoBehaviour
 
     private void CheckEnemyCount()
     {
-        if(ConditionToOpen)
+        if(enemyCount <= 0)
         {
             if (IsEndRoom)
-                _victoryItem.SetActive(true);
+                _victoryItem?.SetActive(true);
             else
                 OpenRoom();
         }
@@ -168,6 +164,15 @@ public class Room : MonoBehaviour
             if (!item.asignatedNeighBour.IsOpen) continue; //Solo abrimos la puerta que nos contecta con el cuarto que YA esta abierto
             item.door.SetActive(false);
         }
+    }
+
+    public void SpawnAThief()
+    {
+        var thief = Instantiate(properties.Thief, transform);
+        var thiefModel = thief.GetComponent<ThiefEnemyModel>();
+        thiefModel.SetEscapePoint(_thiefSpawnPoint);
+        thiefModel.RoomActor.SetRoomReference(this);
+        thief.transform.position = transform.position;
     }
 
     public void SetPlayer(GameObject player)

@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "IAStats", menuName = "Stats/IAStats", order = 2)]
 public class IAStats : ScriptableObject
 {
-    public GameObject CollectablePrefab => _collectablePrefab;
-    [SerializeField] private GameObject _collectablePrefab;
+    public CollectableItem CollectablePrefab => _collectablePrefab;
+    [SerializeField] private CollectableItem _collectablePrefab;
 
     public float ShootDistance => shootDistance;
     [SerializeField] private float shootDistance = 2f;
@@ -40,4 +40,7 @@ public class IAStats : ScriptableObject
 
     public float NearTargetRange => _rangeHome;
     [SerializeField] private float _rangeHome = 0.5f;
+
+    public float RandomAngleWandering => _randomAngleWandering;
+    [SerializeField] private float _randomAngleWandering = 35f;
 }

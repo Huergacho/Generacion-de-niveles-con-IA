@@ -4,48 +4,48 @@ using UnityEngine;
 
 public class EnemyWanderState<T> : State<T>
 {
-    private IThief _self;
-    private IArtificialMovement _ia;
+    private IArtificialMovement _self;
     private INode _root;
     private SteeringType _obsEnum;
 
     private float _randomAngle;
     private Vector3 _dir;
 
-    public EnemyWanderState(IThief self, INode root, SteeringType obsEnum, float randomAngle)
+    public EnemyWanderState(IArtificialMovement self, INode root, SteeringType obsEnum, float randomAngle)
     {
         _self = self;
         _root = root;
         _obsEnum = obsEnum;
-        _ia = (_self as IArtificialMovement);
         _randomAngle = randomAngle;
     }
 
     public override void Awake()
     {
-        _ia.LifeController.OnTakeDamage += TakeHit;
+        _self.LifeController.OnTakeDamage += TakeHit;
         _self.Avoidance.SetActualBehaviour(_obsEnum);
-        //_self.Avoidance.ActualBehaviour.SetTarget(_self.Target);
 
         _dir = Quaternion.Euler(0, Random.Range(-_randomAngle, _randomAngle), 0) * _self.transform.forward;
     }
+
     public override void Execute()
     {
-        if (_ia.IsTargetInSight()) //if we took damage or we saw the player....
+        if (_self.IsTargetInSight()) //if we took damage or we saw the player....
             _root.Execute();
 
+        //TODO: add that if it´s colliding with a wall, change in opposite direction
+
         _self.LookDir(_self.Avoidance.GetDir(_dir));
-        _self.Move(_self.transform.forward, _self.ActorStats.RunSpeed);
+        _self.Move(_self.transform.forward, _self.ActorStats.WalkSpeed);
     }
 
     private void TakeHit()
     {
-        _ia.TakeHit(true);
+        _self.TakeHit(true);
         _root.Execute();
     }
 
     public override void Sleep()
     {
-        _ia.LifeController.OnTakeDamage -= TakeHit;
+        _self.LifeController.OnTakeDamage -= TakeHit;
     }
 }

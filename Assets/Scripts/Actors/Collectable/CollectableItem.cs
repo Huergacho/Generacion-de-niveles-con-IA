@@ -6,6 +6,14 @@ using UnityEngine;
 public class CollectableItem : MonoBehaviour, IItem
 {
     [SerializeField] private int value = 1;
+    private RoomActor roomActor;
+
+    public RoomActor RoomActor => roomActor;
+
+    private void Start()
+    {
+        roomActor = GetComponent<RoomActor>();
+    }
 
     public void Interact(PlayerModel player)
     {

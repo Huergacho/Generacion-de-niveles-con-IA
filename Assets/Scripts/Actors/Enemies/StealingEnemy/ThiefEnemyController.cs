@@ -26,13 +26,10 @@ public class ThiefEnemyController : BaseEnemyController
         INode travelToItem = new ActionNode(TravelToItem);
         INode evade = new ActionNode(Evade);
         INode wander = new ActionNode(Wander);
+        INode returnToSpawnPoint = new ActionNode(TravelToEscape);
 
-        //LOGIC: Is Player dead? -> Have I Taken Damage-> Did I steal an item? -> Is there an item to steal? -> Wander if not, escape room if true.
-        
-        //INode QCanShoot = new QuestionNode(() => _model.IsInShootingRange(), shoot, chase); //if is range.... shoot, else chase. 
-        //INode QEscapeRoom = new QuestionNode(() => _model.FarFromHome(), travelHome, patrol); //if I am in starting pos, then patrol, else return home first
-        INode QItemToSteal = new QuestionNode(IsThereAnItemToSteal, travelToItem, wander);
-        INode QDoIHaveAnItem = new QuestionNode(DoIHaveStolenAnItem, wander, QItemToSteal);
+        //LOGIC: Is Player dead? -> Have I Taken Damage-> Did I steal an item? -> Is there an item to steal?
+        INode QDoIHaveAnItem = new QuestionNode(DoIHaveStolenAnItem, returnToSpawnPoint, travelToItem); //If I have an item, the return to base, else go to steal one cuz there is no other reason to be here. 
         INode QReceivedDamage = new QuestionNode(HasTakenDamage, evade, QDoIHaveAnItem); //if i have damage, then chase player, else check if I have seen him
         INode QPlayerAlive = new QuestionNode(IsPlayerDead, wander, QReceivedDamage); //if player is not dead
         _root = QPlayerAlive;
@@ -41,17 +38,17 @@ public class ThiefEnemyController : BaseEnemyController
     protected override void InitFSM()
     {
         var evade = new EnemyEvadeState<enemyStates>(_model, _root, SteeringType.Evade);
-        var wander = new EnemyWanderState<enemyStates>(_model as IThief, _root, SteeringType.Seek, 35f); //TODO: do something for the random angle? maybe a random number?
-        var travelToItem = new PathFindingState<enemyStates>(_model, _root, SteeringType.Seek, _model.IAStats.NearTargetRange); //TODO: rework this so that it has a target or something, not home range;
+        var wander = new EnemyWanderState<enemyStates>(_model, _root, SteeringType.Seek, _model.IAStats.RandomAngleWandering);
+        var travelToDestination = new PathFindingState<enemyStates>(_model, _root, SteeringType.Seek, _model.IAStats.NearTargetRange); 
 
-        travelToItem.AddTransition(enemyStates.Evade, evade);
-        travelToItem.AddTransition(enemyStates.Wander, wander);
+        travelToDestination.AddTransition(enemyStates.Evade, evade);
+        travelToDestination.AddTransition(enemyStates.Wander, wander);
 
-        evade.AddTransition(enemyStates.PathFinding, travelToItem);
+        evade.AddTransition(enemyStates.PathFinding, travelToDestination);
         evade.AddTransition(enemyStates.Wander, wander);
 
         wander.AddTransition(enemyStates.Evade, evade);
-        wander.AddTransition(enemyStates.PathFinding, travelToItem);
+        wander.AddTransition(enemyStates.PathFinding, travelToDestination);
 
         _fsm = new FSM<enemyStates>(wander);
     }
@@ -65,6 +62,13 @@ public class ThiefEnemyController : BaseEnemyController
     protected void TravelToItem() //Path Findind start
     {
         isReacting = false;
+        _fsm.Transition(enemyStates.PathFinding, showFSMTransitionInConsole);
+    }
+
+    protected void TravelToEscape()
+    {
+        isReacting = false;
+        (_model as IThief).ReturnHomeDestination();
         _fsm.Transition(enemyStates.PathFinding, showFSMTransitionInConsole);
     }
 

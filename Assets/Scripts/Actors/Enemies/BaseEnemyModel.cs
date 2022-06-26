@@ -16,6 +16,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     protected LazerGun _gun;
     protected Dictionary<SteeringType, ISteering> behaviours = new Dictionary<SteeringType, ISteering>();
     protected ObstacleAvoidance _obstacleAvoidance;
+    protected RoomActor roomActor;
 
     public Dictionary<SteeringType, ISteering> Behaviours => behaviours;
     public ObstacleAvoidance Avoidance { get; private set; }
@@ -24,8 +25,8 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     public LineOfSight LineOfSight { get; private set; }
     public bool HasTakenDamage => hasTakenDamage;
     public GameObject[] PatrolRoute { get; private set; }
-
     public Vector3 Destination { get; protected set; }
+    public RoomActor RoomActor => roomActor;
 
     //Events
     public Action<bool> OnDetect { get => _onDetect; set => _onDetect = value; } //Este modo me lo mostro el profe para poder hacer que tuvieran eventos las interfaces.. dejalo asi?
@@ -36,12 +37,13 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         base.Awake();
         LineOfSight = GetComponent<LineOfSight>();
         Avoidance = new ObstacleAvoidance(this);
+        roomActor = GetComponent<RoomActor>();
         Destination = transform.position;
+        GameManager.instance.OnPlayerInit += OnPlayerInit;
     }
 
     protected virtual void Start()
     {
-        GameManager.instance.OnPlayerInit += OnPlayerInit;
         LifeController.OnTakeDamage += TakeDamage;
         var patrol = GetComponentInChildren<PatrolRoute>();
         if (patrol != null)
@@ -82,6 +84,16 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         TakeHit(true);
     }
 
+    private void DropCollectable()
+    {
+        if(IAStats.CollectablePrefab != null)
+        {
+            var collectable = Instantiate(IAStats.CollectablePrefab);
+            collectable.GetComponent<RoomActor>().SetRoomReference(RoomActor.RoomReference);
+            collectable.transform.position = transform.position;
+        }
+    }
+
     public bool IsTargetInSight()
     {
         bool value = LineOfSight.CheckForOneTarget();
@@ -106,6 +118,18 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     {
         var distance = Vector3.Distance(transform.position, Target.transform.position);
         return distance >= IAStats.NearTargetRange;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        DropCollectable();
+        RoomActor.OnDie();
+        var patrol = GetComponentInChildren<PatrolRoute>();
+        if (patrol != null)
+        {
+            patrol.DestroyPatrolNodes();
+        }
     }
 
     protected override void OnDestroy()

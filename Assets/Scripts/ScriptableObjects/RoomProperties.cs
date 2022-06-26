@@ -7,26 +7,30 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Room", menuName = "Rooms/Default", order = 0)]
 public class RoomProperties : ScriptableObject
 {
-    [SerializeField] private GameObject[] _presets;
-    public GameObject[] Presets => _presets;
-    [SerializeField] private LayerMask _roomLayer;
-    public LayerMask RoomLayer => _roomLayer;
-    [SerializeField] private float _detectDistance;
-    public float DetectDistance => _detectDistance;
-
     [System.Serializable]
     public class ObjectsToInstance
     {
-        [SerializeField] private float probability;
         public float Probability => probability;
-        [SerializeField] private GameObject objectToSpawn;
+        [SerializeField] private float probability;
         public GameObject ObjectToSpawn => objectToSpawn;
+        [SerializeField] private GameObject objectToSpawn;
 
     }
-    [SerializeField] private List<ObjectsToInstance> _instanciableObjects;
+
+    public LayerMask RoomLayer => _roomLayer;
+    [SerializeField] private LayerMask _roomLayer;
+    public float DetectDistance => _detectDistance;
+    [SerializeField] private float _detectDistance;
+
+    public int LimitEnemies => _limitEnemies;
+    [SerializeField] private int _limitEnemies = 2;
+
+    public bool HardLimit => _checkHardLimit;
+    [SerializeField] private bool _checkHardLimit = true;
+    
     public List<ObjectsToInstance> InstanciableObjects => _instanciableObjects;
+    [SerializeField] private List<ObjectsToInstance> _instanciableObjects;
 
-    [SerializeField] private GameObject _thief;
-    public GameObject Thief => _thief;
-
+    public GameObject Thief => _thiefPrefab;
+    [SerializeField] private GameObject _thiefPrefab;
 }

@@ -43,7 +43,7 @@ public class PatrolRoute : MonoBehaviour
 
     }
 
-    private void OnDestroy() //Cuando se destruye, destruye los nodos tambien. 
+    public void DestroyPatrolNodes() //Cuando se destruye, destruye los nodos tambien. 
     {
         for (int i = patrolNodes.Length - 1; i >= 0; i--)
         {
