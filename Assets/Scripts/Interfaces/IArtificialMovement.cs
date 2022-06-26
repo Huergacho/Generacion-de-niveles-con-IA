@@ -17,6 +17,7 @@ public interface IArtificialMovement
     bool HasTakenDamage { get; }
     GameObject[] PatrolRoute { get; }
     Vector3 Destination { get; }
+    int RamdonizeTargetInPatrolRoute();
     void Move(Vector3 dir, float desiredSpeed);
     void TakeHit(bool value);
     void Shoot();

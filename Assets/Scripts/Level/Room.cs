@@ -24,6 +24,7 @@ public class Room : MonoBehaviour
     [SerializeField] private Transform _playerSpawnPoint;
     [SerializeField] private Transform _thiefSpawnPoint;
     [SerializeField] private RoomProperties properties;
+    [SerializeField] private PatrolRoute _patrolRoute;
     //[SerializeField] private int RoomEnemyLimit = 2;
 
     private GameObject _victoryItem;
@@ -34,6 +35,7 @@ public class Room : MonoBehaviour
 
     public List<IStealable> Items => _itemsInLevel;
     public List<Room> Neightbours => neighbours;
+    public GameObject[] PatrolRoute { get; private set; }
     public Transform PlayerSpawnPoint => _playerSpawnPoint;
     public bool IsEndRoom { get; set; }
     public bool IsOpen { get; set; }
@@ -41,6 +43,8 @@ public class Room : MonoBehaviour
     private void Awake()
     {
         InstantiateRandomEntities();
+        _patrolRoute.Initialize();
+        PatrolRoute = _patrolRoute.PatrolNodes;
     }
 
     private void Start()

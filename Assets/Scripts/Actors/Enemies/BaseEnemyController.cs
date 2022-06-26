@@ -41,22 +41,22 @@ public abstract class BaseEnemyController : EntityController
     {
         if(!GameManager.instance.IsGamePaused)
             _fsm?.UpdateState();
+
+        if (showFSMTransitionInConsole)
+            print(_fsm?.CurrentState);
     }
 
     protected bool IsPlayerDead()
     {
-        //Debug.Log("Player is Dead " + _model.IsPlayerDead());
+        if(showFSMTransitionInConsole)
+            Debug.Log("Player is Dead " + _model.IsPlayerDead());
         return _model.IsPlayerDead();
     }
 
     protected bool HasTakenDamage() //If I have receive damage and I'm not doing something about it then... return true
     {
-        //Debug.Log("Do I have damage " + (_model.HasTakenDamage && !isChasing));
+        //if (showFSMTransitionInConsole)
+        //    Debug.Log("Do I have damage " + (_model.HasTakenDamage && !isReacting));
         return _model.HasTakenDamage && !isReacting;
     }
-
-    //private void IdleCommand() //TODO FACU fijate si esto se va a usar o no? pondria un public virtual void Idle()  en IArtificalMovement
-    //{
-    //    _model.Move(transform.forward, 0);
-    //}
 }

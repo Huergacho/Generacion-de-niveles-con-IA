@@ -11,6 +11,7 @@ public abstract class EntityModel : MonoBehaviour
 
     //Propierties
     public ActorStats ActorStats => _actorStats;
+    public Rigidbody RB => _rb;
     public LifeController LifeController { get; private set; }
 
     protected virtual void Awake()

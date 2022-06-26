@@ -22,20 +22,32 @@ public class EnemyWanderState<T> : State<T>
     public override void Awake()
     {
         _self.LifeController.OnTakeDamage += TakeHit;
+        //_self.OnWallCollision += ChangeDirection;
         _self.Avoidance.SetActualBehaviour(_obsEnum);
 
-        _dir = Quaternion.Euler(0, Random.Range(-_randomAngle, _randomAngle), 0) * _self.transform.forward;
+        _dir = ChangeAngle();
     }
 
     public override void Execute()
     {
+        Debug.Log("i'm wandering");
         if (_self.IsTargetInSight()) //if we took damage or we saw the player....
             _root.Execute();
 
-        //TODO: add that if it´s colliding with a wall, change in opposite direction
-
         _self.LookDir(_self.Avoidance.GetDir(_dir));
         _self.Move(_self.transform.forward, _self.ActorStats.WalkSpeed);
+    }
+
+    private Vector3 ChangeAngle()
+    {
+        //var aux =  Quaternion.Euler(0, Random.Range(-_randomAngle, _randomAngle), 0) * _self.transform.forward;
+        var aux = Quaternion.Euler(0, Random.Range(-_randomAngle, _randomAngle), 0) * Vector3.one;
+        return aux;
+    }
+
+    private void ChangeDirection()
+    {
+        _root.Execute();
     }
 
     private void TakeHit()
@@ -48,4 +60,5 @@ public class EnemyWanderState<T> : State<T>
     {
         _self.LifeController.OnTakeDamage -= TakeHit;
     }
+
 }

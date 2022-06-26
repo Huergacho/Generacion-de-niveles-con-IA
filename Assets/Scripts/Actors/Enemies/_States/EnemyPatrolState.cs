@@ -8,6 +8,8 @@ public class EnemyPatrolState<T> : State<T>
     private SteeringType _obsEnum;
     private int currentPosition = 0;
     private bool isDoingReverse = false;
+    private Vector3 currentTarget;
+    private int currentRandom;
 
     public EnemyPatrolState(IArtificialMovement ia, INode root, SteeringType obsEnum)
     {
@@ -20,6 +22,7 @@ public class EnemyPatrolState<T> : State<T>
     {
         _self.LifeController.OnTakeDamage += TakeHit;
         _self.Avoidance.SetActualBehaviour(_obsEnum);
+        currentRandom =_self.RamdonizeTargetInPatrolRoute();
     }
 
     public override void Execute()
@@ -32,16 +35,17 @@ public class EnemyPatrolState<T> : State<T>
 
     private void Movement()
     {
-        Vector3 currentTarget = _self.PatrolRoute[currentPosition].transform.position;
+        currentTarget = _self.PatrolRoute[currentRandom].transform.position;
         Vector3 dir = (currentTarget - _self.transform.position).normalized;
         _self.Move(dir, _self.ActorStats.RunSpeed);
         _self.LookDir(dir);   
 
         var distance = Vector3.Distance(_self.transform.position, currentTarget);
-        if (distance <= 1f)
+        if (distance <= _self.IAStats.NearTargetRange)
         {
-            ChangeCurrentPosition();
-            //_root.Execute(); //Esto es si queremos que al llegar a cada waypoint recorra de nuevo el behaveiour tree (lo usaba para generar random animations en el tp1)
+            //ChangeCurrentPosition();
+            currentRandom = _self.RamdonizeTargetInPatrolRoute();
+            _root.Execute(); //Esto es si queremos que al llegar a cada waypoint recorra de nuevo el behaveiour tree (lo usaba para generar random animations en el tp1)
         }
     }
 

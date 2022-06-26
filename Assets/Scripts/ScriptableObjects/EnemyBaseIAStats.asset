@@ -24,4 +24,7 @@ MonoBehaviour:
   _avoidanceWeight: 1
   predictionTime: 1
   _rangeHome: 0.5
-  _randomAngleWandering: 35
+  _randomAngleWandering: 360
+  _wanderingObstacles:
+    serializedVersion: 2
+    m_Bits: 7680

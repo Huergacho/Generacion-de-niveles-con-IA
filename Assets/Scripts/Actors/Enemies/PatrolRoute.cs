@@ -5,6 +5,7 @@ using UnityEngine;
 public class PatrolRoute : MonoBehaviour
 {
     [SerializeField] Transform[] patrolPoints;
+    [SerializeField] bool AddComponentContainer;
     private GameObject[] patrolNodes;
     //public Transform[] PatrolPoints => patrolPoints;
     public GameObject[] PatrolNodes => patrolNodes;
@@ -20,11 +21,22 @@ public class PatrolRoute : MonoBehaviour
 
     private void ConvertToArray() //Toma del gameobject todos los transforms de los hijos y los pone en un array de transforms. Incluye el spawn point como transform. 
     {
-        patrolPoints = new Transform[this.transform.childCount + 1];
-        patrolPoints[0] = this.transform; //Tomamos como 0 el punto de partida.
-        for (int i = 0; i < this.transform.childCount; i++)
+        if (AddComponentContainer)
         {
-            patrolPoints[i + 1] = this.transform.GetChild(i).GetComponent<Transform>();
+            patrolPoints = new Transform[this.transform.childCount + 1];
+            patrolPoints[0] = this.transform; //Tomamos como 0 el punto de partida.
+            for (int i = 0; i < this.transform.childCount; i++)
+            {
+                patrolPoints[i + 1] = this.transform.GetChild(i).GetComponent<Transform>();
+            }
+        }
+        else
+        {
+            patrolPoints = new Transform[this.transform.childCount];
+            for (int i = 0; i < this.transform.childCount; i++)
+            {
+                patrolPoints[i] = this.transform.GetChild(i).GetComponent<Transform>();
+            }
         }
     }
 

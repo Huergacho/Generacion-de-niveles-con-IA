@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _contactLayer:
     serializedVersion: 2
-    m_Bits: 3841
-  _shootCooldown: 0.5
+    m_Bits: 7937
   _bulletTrail: {fileID: 3801340997333012015, guid: a6aa0a828606f0342bbbb7e90a4b9b45, type: 3}
   _bulletExplodeParticles: {fileID: 3168718373101738633, guid: 1d5191c89c839e349ae1bb6605d7b8bf, type: 3}
