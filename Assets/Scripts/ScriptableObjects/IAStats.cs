@@ -8,6 +8,12 @@ public class IAStats : ScriptableObject
     public CollectableItem CollectablePrefab => _collectablePrefab;
     [SerializeField] private CollectableItem _collectablePrefab;
 
+    public bool CanCallReinforcements => _callReinforments;
+    [SerializeField] bool _callReinforments;
+
+    public bool CanAnswerCall => _canAnswerCallToReinforcements;
+    [SerializeField] bool _canAnswerCallToReinforcements;
+
     public float ShootDistance => shootDistance;
     [SerializeField] private float shootDistance = 2f;
 

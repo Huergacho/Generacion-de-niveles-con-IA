@@ -16,7 +16,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   _detectDistance: 100
-  _limitEnemies: 2
+  _limitEnemies: 5
   _checkHardLimit: 1
   _instanciableObjects:
   - probability: 50
@@ -25,7 +25,7 @@ MonoBehaviour:
     objectToSpawn: {fileID: 8640187892706222255, guid: 62f24eaf8373ac3479573a4750a8f825, type: 3}
   - probability: 75
     objectToSpawn: {fileID: 1769047590062999063, guid: 1768acaf14f1b8c448c084d3472dd5ed, type: 3}
-  - probability: 50
+  - probability: 10
     objectToSpawn: {fileID: 8374169021864658410, guid: 763e96f66f8a5f64d9cd78fd4f121a94, type: 3}
   _thiefPrefab: {fileID: 2936971633799679073, guid: 13b0b4527e4840145866a4abe93bce10, type: 3}
-  _limitThief: 2
+  _limitThief: 0

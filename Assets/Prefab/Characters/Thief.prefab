@@ -451,7 +451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _actorStats: {fileID: 11400000, guid: 7d16c4545196e6a4a8d4a9c16e0fc731, type: 2}
-  _iaStats: {fileID: 11400000, guid: 7ad6c6d53eaabfe44bb906ed994a6385, type: 2}
+  _iaStats: {fileID: 11400000, guid: a9220a6a99ea7fa4180e554d667138f1, type: 2}
   _firePoint: {fileID: 2936971633799679385}
   drawGizmos: 0
   topOfHeadCoin: {fileID: 6292733522574691409}

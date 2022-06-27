@@ -29,12 +29,13 @@ public class Room : MonoBehaviour
     private GameObject _victoryItem;
     private int randomVictory;
     private Dictionary<Room, Vector3> neightBoursWithDir = new Dictionary<Room, Vector3>();
-    private int enemyCount;
+    private List<BaseEnemyModel> enemyList = new List<BaseEnemyModel>();
     private int thiefCount;
     private List<CollectableItem> _itemsInLevel = new List<CollectableItem>();
 
     public List<CollectableItem> Items => _itemsInLevel;
     public List<Room> Neightbours => neighbours;
+    public List<BaseEnemyModel> RoomEnemies => enemyList;
     public GameObject[] PatrolRoute { get; private set; }
     public Transform PlayerSpawnPoint => _playerSpawnPoint;
     public bool IsEndRoom { get; set; }
@@ -76,7 +77,7 @@ public class Room : MonoBehaviour
             var newObj = MyEngine.MyRandom.GetRandomWeight(objectsToInstatiate);
             if (newObj != null)
             {
-                if ((newObj.GetComponent<BaseEnemyModel>() != null)  && properties.HardLimit && properties.LimitEnemies <= enemyCount) //Let´s do a hard limit for enemies just in case
+                if ((newObj.GetComponent<BaseEnemyModel>() != null)  && properties.HardLimit && properties.LimitEnemies <= enemyList.Count) //Let´s do a hard limit for enemies just in case
                 {
                     flag = true;
                     continue;
@@ -124,7 +125,7 @@ public class Room : MonoBehaviour
 
     private void CheckEnemyCount()
     {
-        if(enemyCount <= 0)
+        if(enemyList.Count <= 0)
         {
             if (IsEndRoom)
                 _victoryItem?.SetActive(true);
@@ -141,7 +142,7 @@ public class Room : MonoBehaviour
             thief.SetEscapePoint(_thiefSpawnPoint);
             thief.RoomActor.SetRoomReference(this);
             thief.Initialize();
-            enemyCount++;
+            enemyList.Add(thief);
             thiefCount++;
         }
     }
@@ -197,9 +198,19 @@ public class Room : MonoBehaviour
         _victoryItem.SetActive(false);
     }
 
-    public void UpdateEnemyCounter(int value)
+    public void UpdateEnemyList(BaseEnemyModel enemy, bool isDestroyed = false)
     {
-        enemyCount += value;
+        if (!isDestroyed)
+        {
+            if (!enemyList.Contains(enemy))
+                enemyList.Add(enemy);
+        }
+        else
+        {
+            if (enemyList.Contains(enemy))
+                enemyList.Remove(enemy);
+        }
+
         CheckEnemyCount();
     }
 

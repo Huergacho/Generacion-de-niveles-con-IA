@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c787a6cc08852ff4da14e7fefeac3131, type: 3}
+  m_Name: EnemyBaseIAStats
+  m_EditorClassIdentifier: 
+  _collectablePrefab: {fileID: 8257261109911103437, guid: c37dc638c054d594287f52bc7c63698b, type: 3}
+  _callReinforments: 0
+  shootDistance: 4
+  _timeRoot: 1
+  _canReversePatrol: 1
+  _maxDistanceFromTarget: 7
+  steeringTime: 3
+  _angleAvoidance: 270
+  _rangeAvoidance: 1
+  _steeringWeight: 1
+  _avoidanceWeight: 1
+  predictionTime: 0.5
+  _rangeHome: 0.5
+  _randomAngleWandering: 360

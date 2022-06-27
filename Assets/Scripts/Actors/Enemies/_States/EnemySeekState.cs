@@ -11,8 +11,6 @@ public class EnemySeekState<T> : State<T>
     private IArtificialMovement _self;
     private IThief _thief;
     private Vector3 currentTarget;
-    private float _minDistance = 0.5f;
-
 
     public EnemySeekState(IArtificialMovement self, INode root, SteeringType obsEnum)
     {
@@ -32,7 +30,6 @@ public class EnemySeekState<T> : State<T>
         _self.Avoidance.SetActualBehaviour(_obsEnum);
         _thief.GetATarget();
         currentTarget = _self.Destination;
-        Debug.Log(" TARGET " + (currentTarget == _thief.NextTarget.transform.position));
         //_self.Avoidance.ActualBehaviour.SetTarget(_self.Target);
     }
 
@@ -55,6 +52,6 @@ public class EnemySeekState<T> : State<T>
         Vector3 dir = diff.normalized;
 
         float distance = diff.magnitude;
-        return (distance < _minDistance);
+        return (distance < _self.IAStats.NearTargetRange);
     }
 }

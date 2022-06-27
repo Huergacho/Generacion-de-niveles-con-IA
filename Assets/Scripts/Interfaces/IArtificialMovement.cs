@@ -14,6 +14,7 @@ public interface IArtificialMovement
     PlayerModel Target { get; }
     LineOfSight LineOfSight { get; }
     Action<bool> OnDetect { get; set; }
+    Action OnCallToArms { get; set; }
     bool HasTakenDamage { get; }
     GameObject[] PatrolRoute { get; }
     Vector3 Destination { get; }

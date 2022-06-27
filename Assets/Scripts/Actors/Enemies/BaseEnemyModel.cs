@@ -11,13 +11,15 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     [SerializeField] protected IAStats _iaStats;
     [SerializeField] protected Transform _firePoint;
     [SerializeField] protected bool drawGizmos;
+    
     protected bool hasTakenDamage;
-
     protected LazerGun _gun;
     protected Dictionary<SteeringType, ISteering> behaviours = new Dictionary<SteeringType, ISteering>();
     protected ObstacleAvoidance _obstacleAvoidance;
     protected RoomActor roomActor;
-
+    protected UIBarController lifeBar;
+    
+    //Propierties
     public Dictionary<SteeringType, ISteering> Behaviours => behaviours;
     public ObstacleAvoidance Avoidance { get; protected set; }
     public PlayerModel Target { get; protected set; }
@@ -32,11 +34,14 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     public Action<bool> OnDetect { get => _onDetect; set => _onDetect = value; } //Este modo me lo mostro el profe para poder hacer que tuvieran eventos las interfaces.. dejalo asi?
     private Action<bool> _onDetect = delegate { };
 
+    public Action OnCallToArms { get => _onCallToArms; set => _onCallToArms = value; }
+    private Action _onCallToArms = delegate { };
 
     protected override void Awake()
     {
         base.Awake();
-        GetComponentInChildren<UIBarController>()?.SetOwner(this, false);
+        lifeBar = GetComponentInChildren<UIBarController>();
+        lifeBar?.SetOwner(this, false);
         LineOfSight = GetComponent<LineOfSight>();
         Avoidance = new ObstacleAvoidance(this);
         roomActor = GetComponent<RoomActor>();
@@ -55,7 +60,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         Target = player;
     }
 
-    public virtual void Shoot() //TODO: Habria que determinar si esto se queda aca o no porque el player tambien lo tiene pero si no todos los enemgios van disparar...
+    public virtual void Shoot()
     {
         _gun.Shoot(_firePoint.position, _firePoint.forward);
     }
@@ -73,12 +78,22 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
 
     public void TakeHit(bool value)
     {
-        hasTakenDamage = value; 
+        lifeBar?.SetBarVisible(true);
+        hasTakenDamage = value;
     }
 
     private void TakeDamage()
     {
+        if (IAStats.CanCallReinforcements)
+            CallReinforcements();
+        
         TakeHit(true);
+    }
+
+    public void CalledToArms()
+    {
+        if(IAStats.CanAnswerCall)
+            OnCallToArms?.Invoke();
     }
 
     private void DropCollectable()
@@ -102,7 +117,6 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     public bool IsInShootingRange()
     {
         var distance = Vector3.Distance(transform.position, Target.transform.position);
-        //print($"Is in shooting range?: distance: {distance} Stats: {IAStats.ShootDistance} result: {distance <= IAStats.ShootDistance}");
         return distance <= IAStats.ShootDistance; 
     }
 
@@ -121,6 +135,11 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     public int RamdonizeTargetInPatrolRoute()
     {
         return (int)MyEngine.MyRandom.Range(0, PatrolRoute.Length - 1);
+    }
+
+    public void CallReinforcements()
+    {
+        RoomActor.CallReinforcements();
     }
 
     public override void Die()

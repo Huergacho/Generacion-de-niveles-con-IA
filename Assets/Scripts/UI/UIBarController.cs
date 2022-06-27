@@ -33,8 +33,7 @@ public class UIBarController : MonoBehaviour
     {
         if (barImage != null)
         {
-            if (currentHealth != maxHealth && !IsVisible)
-                SetBarVisible(true);
+            SetBarVisible(true);
 
             _nextHealth = currentHealth;
             _maxHealth = maxHealth;

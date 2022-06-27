@@ -15,7 +15,7 @@ public class RoomActor : MonoBehaviour
         baseEnemyModel = GetComponent<BaseEnemyModel>();
         if (baseEnemyModel != null)
         {
-            RoomReference.UpdateEnemyCounter(1);
+            RoomReference.UpdateEnemyList(baseEnemyModel);
             return;
         }
 
@@ -26,10 +26,19 @@ public class RoomActor : MonoBehaviour
         }
     }
 
+    public void CallReinforcements()
+    {
+        print("call help");
+        foreach (var enemy in RoomReference.RoomEnemies)
+        {
+            enemy.CalledToArms();
+        }
+    }
+
     public void OnDie()
     {
         if (baseEnemyModel != null)
-            RoomReference.UpdateEnemyCounter(-1);
+            RoomReference.UpdateEnemyList(baseEnemyModel, true);
 
         if (collectableItem != null)
             RoomReference.UpdateCollectableItem(collectableItem, true);

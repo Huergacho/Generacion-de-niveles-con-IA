@@ -59,7 +59,8 @@ public class ObstacleAvoidance
                 nearDistance = _self.IAStats.RangeAvoidance - 0.00001f;
 
             var point = closestObj.ClosestPoint(_self.transform.position);
-            Vector3 dir = ((_self.transform.position + _self.transform.right * 0.0000000001f) - point);
+            Vector3 dir = (_self.transform.position + _self.transform.right * 0.0000000001f) - point;
+            dir = dir * (_self.IAStats.RangeAvoidance - nearDistance / _self.IAStats.RangeAvoidance); 
             return dir.normalized;
         }
 

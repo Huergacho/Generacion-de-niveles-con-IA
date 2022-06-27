@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8102291c2dac8e418c10793c22d46ac, type: 3}
   m_Name: PlayerActorStats
   m_EditorClassIdentifier: 
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  maxLife: 50
   walkSpeed: 5
   runSpeed: 15
-  rotSpeed: 5
+  rotationSpeed: 0.1
   shootCooldown: 0.3
-  maxLife: 100
   _angleVision: 90
   _rangeVision: 5
-  _turnSpeed: 0.1

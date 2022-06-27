@@ -14,7 +14,6 @@ public class PathFindingState<T> : State<T>
     private Vector3 _target;
     private float _homeRange;
     private int _index;
-    private float _minDistance = 0.5f;
 
     public PathFindingState(IArtificialMovement self, INode root, SteeringType obsEnum, float homeRange)
     {
@@ -34,7 +33,6 @@ public class PathFindingState<T> : State<T>
        _self.LifeController.OnTakeDamage += TakeHit;
         _self.Avoidance.SetActualBehaviour(_obsEnum);
         _target = _self.Destination;
-        Debug.Log("destination " + _target);
         SetPath();
     }
 
@@ -65,7 +63,7 @@ public class PathFindingState<T> : State<T>
         Vector3 dir = diff.normalized;
 
         float distance = diff.magnitude;
-        if (distance < _minDistance && _index < (_path.Count - 1))
+        if (distance < _self.IAStats.NearTargetRange && _index < (_path.Count - 1))
             _index++;
 
         if (_index >= (_path.Count - 1))
@@ -128,6 +126,7 @@ public class PathFindingState<T> : State<T>
     public override void Sleep()
     {
         _self.LifeController.OnTakeDamage -= TakeHit;
+        _self.OnCallToArms -= TakeHit;
         _path = null;
     }
 }

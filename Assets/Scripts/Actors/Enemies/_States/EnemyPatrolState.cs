@@ -21,6 +21,7 @@ public class EnemyPatrolState<T> : State<T>
     public override void Awake()
     {
         _self.LifeController.OnTakeDamage += TakeHit;
+        _self.OnCallToArms += TakeHit;
         _self.Avoidance.SetActualBehaviour(_obsEnum);
         currentRandom =_self.RamdonizeTargetInPatrolRoute();
     }
@@ -93,5 +94,6 @@ public class EnemyPatrolState<T> : State<T>
     public override void Sleep()
     {
         _self.LifeController.OnTakeDamage -= TakeHit;
+        _self.OnCallToArms -= TakeHit;
     }
 }
