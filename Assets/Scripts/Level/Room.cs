@@ -25,15 +25,15 @@ public class Room : MonoBehaviour
     [SerializeField] private Transform _thiefSpawnPoint;
     [SerializeField] private RoomProperties properties;
     [SerializeField] private PatrolRoute _patrolRoute;
-    //[SerializeField] private int RoomEnemyLimit = 2;
 
     private GameObject _victoryItem;
     private int randomVictory;
     private Dictionary<Room, Vector3> neightBoursWithDir = new Dictionary<Room, Vector3>();
     private int enemyCount;
-    private List<IStealable> _itemsInLevel = new List<IStealable>();
+    private int thiefCount;
+    private List<CollectableItem> _itemsInLevel = new List<CollectableItem>();
 
-    public List<IStealable> Items => _itemsInLevel;
+    public List<CollectableItem> Items => _itemsInLevel;
     public List<Room> Neightbours => neighbours;
     public GameObject[] PatrolRoute { get; private set; }
     public Transform PlayerSpawnPoint => _playerSpawnPoint;
@@ -55,7 +55,7 @@ public class Room : MonoBehaviour
             _victoryItem.SetActive(false);
         }
 
-        //CheckEnemyCount();    
+        CheckEnemyCount();  
     }
 
     #region Private
@@ -133,6 +133,19 @@ public class Room : MonoBehaviour
         }
     }
 
+    private void SpawnAThief()
+    {
+        if (_itemsInLevel.Count > 0 && properties.LimitThiefsPerRoom > thiefCount)
+        {
+            var thief = Instantiate(properties.Thief, transform);
+            thief.SetEscapePoint(_thiefSpawnPoint);
+            thief.RoomActor.SetRoomReference(this);
+            thief.Initialize();
+            enemyCount++;
+            thiefCount++;
+        }
+    }
+
     private void OpenNextRoom()
     {
         if (IsEndRoom) return;
@@ -170,15 +183,6 @@ public class Room : MonoBehaviour
         }
     }
 
-    public void SpawnAThief()
-    {
-        var thief = Instantiate(properties.Thief, transform);
-        var thiefModel = thief.GetComponent<ThiefEnemyModel>();
-        thiefModel.SetEscapePoint(_thiefSpawnPoint);
-        thiefModel.RoomActor.SetRoomReference(this);
-        thief.transform.position = transform.position;
-    }
-
     public void SetPlayer(GameObject player)
     {
         player.transform.position = PlayerSpawnPoint.transform.position;
@@ -199,12 +203,15 @@ public class Room : MonoBehaviour
         CheckEnemyCount();
     }
 
-    public void UpdateCollectableItem(IStealable item, bool isDestroyed = false)
+    public void UpdateCollectableItem(CollectableItem item, bool isDestroyed = false)
     {
         if (!isDestroyed)
         {
             if (!_itemsInLevel.Contains(item)) //si el item no estaba ya en el listado... (cuenta los repetidos???? no deberia)
+            {
                 _itemsInLevel.Add(item);
+                SpawnAThief(); 
+            }
         }
         else
         {

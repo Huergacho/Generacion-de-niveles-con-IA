@@ -8,7 +8,7 @@ public class InteractableController : MonoBehaviour
 
     [SerializeField] private bool isTrigger = true;
 
-    private StealableScript stealable;
+    private CollectableItem stealable;
     private Collider _collider;
 
     private void Start()
@@ -19,7 +19,7 @@ public class InteractableController : MonoBehaviour
         else
             Debug.LogWarning($"{gameObject.name} Collider is missing!");
 
-        stealable = GetComponent<StealableScript>();
+        stealable = GetComponent<CollectableItem>();
         interactable = GetComponent<IItem>();
     }
 

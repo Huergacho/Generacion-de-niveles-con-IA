@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084026324974856649}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.36}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2294788931332549429}
@@ -50,8 +50,9 @@ MonoBehaviour:
   instatiateWayPoints: []
   instancedGameObjects: []
   _playerSpawnPoint: {fileID: 0}
+  _thiefSpawnPoint: {fileID: 0}
   properties: {fileID: 0}
-  RoomEnemyLimit: 2
+  _patrolRoute: {fileID: 0}
 --- !u!65 &6027386016775234571
 BoxCollider:
   m_ObjectHideFlags: 0

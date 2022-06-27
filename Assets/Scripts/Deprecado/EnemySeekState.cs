@@ -6,28 +6,55 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class EnemySeekState<T> : State<T>
 {
-    private Action _onSeek; //mhhh no me facina
     private INode _root;
     private SteeringType _obsEnum;
     private IArtificialMovement _self;
+    private IThief _thief;
+    private Vector3 currentTarget;
+    private float _minDistance = 0.5f;
 
-    public EnemySeekState(IArtificialMovement self, INode root, SteeringType obsEnum, Action onSeek)
+
+    public EnemySeekState(IArtificialMovement self, INode root, SteeringType obsEnum)
     {
         _self = self;
-        _onSeek = onSeek;
         _root = root;
         _obsEnum = obsEnum;
+
+
+        if (_self is IThief)
+        {
+            _thief = _self as IThief;
+        }
     }
 
     public override void Awake()
     {
         _self.Avoidance.SetActualBehaviour(_obsEnum);
-        _self.Avoidance.ActualBehaviour.SetTarget(_self.Target); //Lets set the player as target;
+        _thief.GetATarget();
+        currentTarget = _self.Destination;
+        Debug.Log(" TARGET " + (currentTarget == _thief.NextTarget.transform.position));
+        //_self.Avoidance.ActualBehaviour.SetTarget(_self.Target);
     }
 
     public override void Execute() //Si va a hacer algo, deberia hacer algo mas que lo que actualmente hace. 
     {
-        _onSeek?.Invoke();
-        _root.Execute();
+        if (_self.HasTakenDamage || _self.IsTargetInSight() || _thief?.ItemStolen != null || _thief?.NextTarget == null) //if we didn´t take damage AND player is not in sight or in shooting range then... 
+            _root.Execute();
+
+        if (CheckIfNearDestination())
+            _root.Execute();
+
+        _self.LookDir(_self.Avoidance.GetDir(currentTarget));
+        _self.Move(_self.transform.forward, _self.ActorStats.RunSpeed);
+    }
+
+    private bool CheckIfNearDestination()
+    {
+        currentTarget.y = _self.transform.position.y;
+        Vector3 diff = currentTarget - _self.transform.position;
+        Vector3 dir = diff.normalized;
+
+        float distance = diff.magnitude;
+        return (distance < _minDistance);
     }
 }

@@ -34,12 +34,13 @@ public class PathFindingState<T> : State<T>
        _self.LifeController.OnTakeDamage += TakeHit;
         _self.Avoidance.SetActualBehaviour(_obsEnum);
         _target = _self.Destination;
+        Debug.Log("destination " + _target);
         SetPath();
     }
 
     public override void Execute()
     {
-        if (_self.IsTargetInSight() || !_self.FarFromDestination() || _path == null || _path.Count < 2 || _thief?.ItemStolen != null) //If any of this are true then... 
+        if (_self.IsTargetInSight() || !_self.FarFromDestination() || _path == null || _path.Count < 2 || _thief?.ItemStolen != null || _thief?.NextTarget == null) //If any of this are true then... 
         {
             _root.Execute();
             return;

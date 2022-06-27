@@ -7,22 +7,23 @@ public class RoomActor : MonoBehaviour
     public Room RoomReference { get; private set; }
 
     private BaseEnemyModel baseEnemyModel;
-    private IStealable collectableItem;
-
-    private void Awake()
-    {
-        baseEnemyModel = GetComponent<BaseEnemyModel>();
-        collectableItem = GetComponent<IStealable>();
-    }
+    private CollectableItem collectableItem;
 
     public void SetRoomReference(Room room)
     {
         RoomReference = room;
+        baseEnemyModel = GetComponent<BaseEnemyModel>();
         if (baseEnemyModel != null)
+        {
             RoomReference.UpdateEnemyCounter(1);
+            return;
+        }
 
+        collectableItem = GetComponent<CollectableItem>();
         if (collectableItem != null)
+        {
             RoomReference.UpdateCollectableItem(collectableItem);
+        }
     }
 
     public void OnDie()

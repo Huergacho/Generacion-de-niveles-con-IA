@@ -19,10 +19,10 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     protected RoomActor roomActor;
 
     public Dictionary<SteeringType, ISteering> Behaviours => behaviours;
-    public ObstacleAvoidance Avoidance { get; private set; }
-    public PlayerModel Target { get; private set; }
+    public ObstacleAvoidance Avoidance { get; protected set; }
+    public PlayerModel Target { get; protected set; }
     public IAStats IAStats => _iaStats;
-    public LineOfSight LineOfSight { get; private set; }
+    public LineOfSight LineOfSight { get; protected set; }
     public bool HasTakenDamage => hasTakenDamage;
     public GameObject[] PatrolRoute => RoomActor.RoomReference.PatrolRoute;
     public Vector3 Destination { get; protected set; }
@@ -36,7 +36,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
     protected override void Awake()
     {
         base.Awake();
-        GetComponentInChildren<UIBarController>().SetOwner(this);
+        GetComponentInChildren<UIBarController>()?.SetOwner(this, false);
         LineOfSight = GetComponent<LineOfSight>();
         Avoidance = new ObstacleAvoidance(this);
         roomActor = GetComponent<RoomActor>();
@@ -54,6 +54,7 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         GameManager.instance.OnPlayerInit -= OnPlayerInit;
         Target = player;
     }
+
     public virtual void Shoot() //TODO: Habria que determinar si esto se queda aca o no porque el player tambien lo tiene pero si no todos los enemgios van disparar...
     {
         _gun.Shoot(_firePoint.position, _firePoint.forward);
@@ -85,7 +86,8 @@ public abstract class BaseEnemyModel : EntityModel, IArtificialMovement
         if(IAStats.CollectablePrefab != null)
         {
             var collectable = Instantiate(IAStats.CollectablePrefab);
-            collectable.GetComponent<RoomActor>().SetRoomReference(RoomActor.RoomReference);
+            var roomActor = collectable.GetComponent<RoomActor>();
+            roomActor.SetRoomReference(RoomActor.RoomReference);
             collectable.transform.position = transform.position;
         }
     }

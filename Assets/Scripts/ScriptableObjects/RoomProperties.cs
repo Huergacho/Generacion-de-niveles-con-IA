@@ -31,6 +31,9 @@ public class RoomProperties : ScriptableObject
     public List<ObjectsToInstance> InstanciableObjects => _instanciableObjects;
     [SerializeField] private List<ObjectsToInstance> _instanciableObjects;
 
-    public GameObject Thief => _thiefPrefab;
-    [SerializeField] private GameObject _thiefPrefab;
+    public ThiefEnemyModel Thief => _thiefPrefab;
+    [SerializeField] private ThiefEnemyModel _thiefPrefab;
+
+    public int LimitThiefsPerRoom => _limitThief;
+    [SerializeField] private int _limitThief = 2;
 }

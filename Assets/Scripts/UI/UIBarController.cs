@@ -20,18 +20,22 @@ public class UIBarController : MonoBehaviour
 
     public bool IsVisible { get; private set; }
 
-    public void SetOwner(EntityModel owner)
+    public void SetOwner(EntityModel owner, bool isVisible = true)
     {
         _owner = owner;
         _owner.LifeController.UpdateLifeBar += UpdateLifeBar;
         _maxHealth = _owner.LifeController.MaxLife;
         _currentHealth = _maxHealth;
+        SetBarVisible(isVisible);
     }
 
     public void UpdateLifeBar(float currentHealth, float maxHealth)
     {
         if (barImage != null)
         {
+            if (currentHealth != maxHealth && !IsVisible)
+                SetBarVisible(true);
+
             _nextHealth = currentHealth;
             _maxHealth = maxHealth;
             if(animated)

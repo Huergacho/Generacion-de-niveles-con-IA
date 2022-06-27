@@ -15,9 +15,11 @@ public interface IThief
     void LookDir(Vector3 dir);
 
     //The main reason I did another interface:
-    public IStealable ItemStolen { get; }
-    public void StealItem(IStealable item);
-    public void DropStolenItem();
-    public bool IsThereAnItemToSteal();
+    CollectableItem ItemStolen { get; }
+    CollectableItem NextTarget { get; }
+    void StealItem(CollectableItem item);
+    void DropStolenItem();
+    bool IsThereAnItemToSteal();
     void ReturnHomeDestination();
+    void GetATarget();
 }

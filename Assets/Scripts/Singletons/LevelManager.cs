@@ -14,7 +14,7 @@ public class LevelManager : MonoBehaviour
 
     //Propierties
     public Transform PatrolNodeParent => enemyNodesParent;
-    public List<IStealable> Items => CurrentRoom.Items;
+    public List<CollectableItem> Items => CurrentRoom.Items;
 
     public LevelGenerator LevelGenerator { get; private set; }
 

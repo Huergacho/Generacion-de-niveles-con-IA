@@ -30,7 +30,6 @@ public class EnemyWanderState<T> : State<T>
 
     public override void Execute()
     {
-        Debug.Log("i'm wandering");
         if (_self.IsTargetInSight()) //if we took damage or we saw the player....
             _root.Execute();
 

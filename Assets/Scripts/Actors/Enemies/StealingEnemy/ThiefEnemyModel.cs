@@ -8,18 +8,19 @@ public class ThiefEnemyModel : BaseEnemyModel, IThief
 
     private Transform escapePoint;
 
-    private IStealable _itemTarget;
-    private IStealable _itemStolen;
-    public IStealable ItemStolen => _itemStolen;
-    public IStealable NextTarget => _itemTarget;
+    private CollectableItem _itemTarget;
+    private CollectableItem _itemStolen;
+    public CollectableItem ItemStolen => _itemStolen;
+    public CollectableItem NextTarget => _itemTarget;
 
-    protected override void Awake()
+    public void Initialize()
     {
-        base.Awake();
         topOfHeadCoin.SetActive(false);
+        GameManager.instance.OnPlayerInit -= OnPlayerInit;
+        Target = GameManager.instance.Player;
     }
 
-    public void StealItem(IStealable item)
+    public void StealItem(CollectableItem item)
     {
         if (_itemStolen != null) return;
         _itemStolen = item;
@@ -38,15 +39,25 @@ public class ThiefEnemyModel : BaseEnemyModel, IThief
 
     public bool IsThereAnItemToSteal() //if there is a item in the room to steal
     {
-        if (_itemStolen == null && NextTarget == null && LevelManager.instance.Items.Count > 0)
-        {
-            SetNextTarget(LevelManager.instance.Items[0]);
-        }
-
+        GetATarget();
         return NextTarget != null;
     }
 
-    public void SetNextTarget(IStealable item)
+    public void GetATarget()
+    {
+        print("Let´s get a Target");
+        if (_itemStolen == null && NextTarget == null && LevelManager.instance.Items.Count > 0)
+        {
+            foreach (var item in LevelManager.instance.Items)
+            {
+                if(item.RoomActor.RoomReference == RoomActor.RoomReference)
+                    SetNextTarget(item);
+            }
+            print("SELECTED SOMETHING? " + NextTarget.transform.position);
+        }
+    }
+
+    public void SetNextTarget(CollectableItem item)
     {
         _itemTarget = item;
         Destination = item.transform.position;
@@ -55,6 +66,8 @@ public class ThiefEnemyModel : BaseEnemyModel, IThief
     public void SetEscapePoint(Transform location)
     {
         escapePoint = location;
+        transform.position = escapePoint.position;
+        ReturnHomeDestination();
     }
 
     public void ReturnHomeDestination()
@@ -64,7 +77,7 @@ public class ThiefEnemyModel : BaseEnemyModel, IThief
 
     private void OnCollisionEnter(Collision collision)
     {
-        StealableScript item = collision.gameObject.GetComponent<StealableScript>();
+        CollectableItem item = collision.gameObject.GetComponent<CollectableItem>();
         if (item != null)
         {
             print("I stole a " + collision.gameObject.name);
