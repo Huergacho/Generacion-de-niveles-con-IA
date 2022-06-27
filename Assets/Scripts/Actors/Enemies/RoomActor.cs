@@ -8,6 +8,7 @@ public class RoomActor : MonoBehaviour
 
     private BaseEnemyModel baseEnemyModel;
     private CollectableItem collectableItem;
+    private bool hasCalledToArms;
 
     public void SetRoomReference(Room room)
     {
@@ -28,7 +29,8 @@ public class RoomActor : MonoBehaviour
 
     public void CallReinforcements()
     {
-        print("call help");
+        if (hasCalledToArms) return;
+        hasCalledToArms = true;
         foreach (var enemy in RoomReference.RoomEnemies)
         {
             enemy.CalledToArms();

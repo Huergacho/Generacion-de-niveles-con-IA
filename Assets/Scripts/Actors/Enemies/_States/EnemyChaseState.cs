@@ -20,6 +20,7 @@ public class EnemyChaseState<T> : State<T>
 
     public override void Awake()
     {
+        _self.OnCallToArms += CallToArms;
         _counter = _self.IAStats.SteeringTime;
         _self.Avoidance.SetActualBehaviour(_obsEnum);
         _self.Avoidance.ActualBehaviour.SetTarget(_self.Target); //Lets set the player as target;
@@ -37,8 +38,14 @@ public class EnemyChaseState<T> : State<T>
         _self.Move(_self.transform.forward, _self.ActorStats.RunSpeed);
     }
 
+    private void CallToArms()
+    {
+        _self.TakeHit(true);
+    }
+
     public override void Sleep()
     {
+        _self.OnCallToArms -= CallToArms;
         _self.TakeHit(false); //We do a reset here for HasTakenDamge cuz he is already chasing it. 
     }
 }

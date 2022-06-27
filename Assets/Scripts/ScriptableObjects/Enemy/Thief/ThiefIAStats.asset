@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collectablePrefab: {fileID: 8257261109911103437, guid: c37dc638c054d594287f52bc7c63698b, type: 3}
   _callReinforments: 0
+  _canAnswerCallToReinforcements: 0
   shootDistance: 4
   _timeRoot: 1
-  _canReversePatrol: 1
+  _canReversePatrol: 0
   _maxDistanceFromTarget: 7
   steeringTime: 3
   _angleAvoidance: 270

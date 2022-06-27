@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: EnemyBaseIAStats
   m_EditorClassIdentifier: 
   _collectablePrefab: {fileID: 8257261109911103437, guid: c37dc638c054d594287f52bc7c63698b, type: 3}
-  _callReinforments: 0
+  _callReinforments: 1
+  _canAnswerCallToReinforcements: 1
   shootDistance: 4
   _timeRoot: 1
   _canReversePatrol: 1
